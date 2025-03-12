@@ -1,2 +1,2 @@
 # ds_assignments
-Repository of MCS Data Structures 1 Assignments
+Repository for assignments of MCS Data Structures 1, 2025 Spring.
