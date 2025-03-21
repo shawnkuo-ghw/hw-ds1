@@ -15,7 +15,8 @@ public interface DoubleStackOfInt {
 
 ## 2. Implementation
 
-
+```java
+```
 
 ## 3. Define `DoubleStackOfIntOnArray` in Java
 
