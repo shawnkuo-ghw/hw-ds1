@@ -12,7 +12,7 @@ public class sorting {
        for(k = h; k < n; k *=2){
             for(int j = 0; j < n-k; j += 2*k){
                 int high = Math.min(j + 2*k-1, n-1);
-                Merge(A, j, j+k+1, high);
+                Merge(A, j, j+k-1, high);
             }
        }
     }
@@ -54,6 +54,9 @@ public class sorting {
             result[i] = b[h];
             h++;
             i++;
+        }
+        for (i = 0; i < result.length; i++) {
+            b[low + i] = result[i];
         }
     }
 
