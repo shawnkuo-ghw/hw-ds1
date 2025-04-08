@@ -4,11 +4,11 @@ public class WarriorImplementation  implements Warrior {
     
     // Class attributes
     // To Do
-    Queue shields_queue;
+    Queue shieldsQueue;
 
     // Methods
     public WarriorImplementation() {
-        shields_queue = new ModifiedLinkedListQueue();
+        shieldsQueue = new ModifiedLinkedListQueue();
     }
 
     /**
@@ -17,7 +17,7 @@ public class WarriorImplementation  implements Warrior {
      */
     @Override
     public boolean alive() {
-        return !shields_queue.isEmpty();
+        return !shieldsQueue.isEmpty();
     }
 
     /**
@@ -29,12 +29,45 @@ public class WarriorImplementation  implements Warrior {
         if ( newShield <= 0 ) {
             throw new RuntimeException("New shield is not positive.");
         }
-        shields_queue.enqueue(newShield);
+        shieldsQueue.enqueue(newShield);
     }
 
+    /**
+     * Applies all attacks in the given strategy, one by one.
+     * Time Complexity: O(S + A)
+     * – The process stops if an attack cannot be repelled.
+     * – Returns true if the entire strategy is repelled, false otherwise.
+     * – This method modifies the warrior, removing destroyed shields.
+     * @param anAttackStrategy a sequence of attacks to apply
+     * @return true if the entire strategy is repelled, false otherwise. 
+     */
     @Override
     public boolean repel(AttackStrategy anAttackStrategy) {
-        throw new RuntimeException("Not implemented");
+        if ( anAttackStrategy.isEmpty() ) {
+            throw new RuntimeException("Attack Strategy is empty.");
+        }
+        
+        System.out.println(allInfo(anAttackStrategy));
+
+        while ( alive() && !anAttackStrategy.isEmpty() ) {
+
+            int topAttack = anAttackStrategy.getTopAttack();
+            int topShield = shieldsQueue.front();
+            
+            if ( topAttack > topShield ) {
+                anAttackStrategy.setTopAttack(topAttack - topShield);
+                shieldsQueue.dequeue();
+            } else if ( topShield > topAttack ) {
+                shieldsQueue.setFront(topShield - topAttack);
+                anAttackStrategy.popAttack();
+            } else {
+                shieldsQueue.dequeue();
+                anAttackStrategy.popAttack();
+            }
+
+            System.out.println(allInfo(anAttackStrategy));
+        }
+        return alive();
     }
 
     /**
@@ -43,7 +76,7 @@ public class WarriorImplementation  implements Warrior {
      */
     @Override
     public int shields() {
-        return shields_queue.elemNum();
+        return shieldsQueue.elemNum();
     }
 
     /**
@@ -52,23 +85,45 @@ public class WarriorImplementation  implements Warrior {
      */
     @Override
     public int remainingPower() {
-        return shields_queue.elemSum();
+        return shieldsQueue.elemSum();
     }
 
     /**
      * Applies an attack of the given power to the warrior.
-     * – Shields are removed until the attack is repelled.
-     * – This method modifies the warrior, meaning that after the attack, only remaining shields are kept.
      * Time Complexity: O(S)
-     * @param anAttack
+     * – Shields are removed until the attack is repelled.
+     * - Returns true if the attack is repelled, false if 
+     *   the warrior is defeated.
+     * – This method modifies the warrior, meaning that after the attack, 
+     *   only remaining shields are kept.
+     * @param anAttack an attack to apply
      * @return Returns true if the attack is repelled, false if the warrior is defeated.
      */
     private boolean repel(int anAttack) {
         if ( anAttack <= 0 ) {
             throw new RuntimeException("Attack is not positive");
         }
-        boolean result = true;
+        int topShield = shieldsQueue.front();
+        if ( topShield > anAttack ) {
+            shieldsQueue.setFront(topShield - anAttack);
+        } else {
+            shieldsQueue.dequeue();
+        }
+        return !shieldsQueue.isEmpty();
+    }
 
+    public String toString() {
+        String result = "w: ";
+        result += shieldsQueue.toString();
         return result;
+    }
+
+    public String allInfo(AttackStrategy anAttackStrategy) {
+        String allInfo = "";
+        allInfo += anAttackStrategy.toString() + "\n";
+        allInfo += toString() + "\n";
+        allInfo += "shields: " + shields() + "\n";
+        allInfo += "remainning power: " + remainingPower() + "\n\n";
+        return allInfo;
     }
 }

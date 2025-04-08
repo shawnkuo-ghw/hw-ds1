@@ -1,7 +1,6 @@
 package hw1;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
 
 public class LinkedListQueueTest {
 
@@ -81,5 +80,22 @@ public class LinkedListQueueTest {
         assertEquals(3, queue.elemSum());
         queue.dequeue();
         assertEquals(0, queue.elemSum());
+    }
+
+    @Test
+    public void toStringTest() {
+        assertEquals("[  ]", queue.toString());
+        queue.enqueue(1);
+        assertEquals("[ 1 ]", queue.toString());
+        queue.enqueue(2);
+        assertEquals("[ 1, 2 ]", queue.toString());
+        queue.enqueue(3);
+        assertEquals("[ 1, 2, 3 ]", queue.toString());
+        queue.dequeue();
+        assertEquals("[ 2, 3 ]", queue.toString());
+        queue.dequeue();
+        assertEquals("[ 3 ]", queue.toString());
+        queue.dequeue();
+        assertEquals("[  ]", queue.toString());
     }
 }

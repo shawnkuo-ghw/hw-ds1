@@ -41,7 +41,7 @@ public class ModifiedLinkedListQueue implements Queue {
     @Override
     public int dequeue() {
         if ( isEmpty() ) {
-            throw new RuntimeException("The queue is empty.");
+            throw new RuntimeException("Queue.dequeue(): The queue is empty.");
         } 
         int popedElem = head.data;
         if ( head == tail ) {
@@ -58,7 +58,7 @@ public class ModifiedLinkedListQueue implements Queue {
     @Override
     public int  front() {
         if ( isEmpty() ) {
-            throw new RuntimeException("The queue is empty.");
+            throw new RuntimeException("Queue.front(): The queue is empty.");
         }
         return head.data;
     }
@@ -66,8 +66,9 @@ public class ModifiedLinkedListQueue implements Queue {
     @Override
     public void setFront(int newData) {
         if ( isEmpty() ) {
-            throw new RuntimeException("The queue is empty.");
+            throw new RuntimeException("Queue.setFront(): The queue is empty.");
         }
+        sum += newData - head.data;
         head.data = newData;
     }
 
@@ -82,4 +83,19 @@ public class ModifiedLinkedListQueue implements Queue {
 
     @Override
     public int elemSum() { return sum; }
+
+    @Override
+    public String toString() {
+        String result = "[ ";
+        Node itr = head;
+        while ( itr != null ) {
+            result += itr.data;
+            if ( itr.next != null ) {
+                result += ", ";
+            }
+            itr = itr.next;
+        }
+        result += " ]";
+        return result;
+    }
 }

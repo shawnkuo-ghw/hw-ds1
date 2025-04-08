@@ -53,4 +53,11 @@ public interface Queue {
      * @return the sum of all elements
      */
     public int elemSum();
+
+    /**
+     * Return the String representation of queue
+     * Time Complexity: O(E), where E is the number of elements
+     * @return string rep of queue
+     */
+    public String toString();
 }

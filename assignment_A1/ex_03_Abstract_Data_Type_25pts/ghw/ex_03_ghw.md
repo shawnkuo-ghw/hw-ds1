@@ -14,6 +14,7 @@ public interface DoubleStackOfInt {
 	boolean empty_tail();     // checks the tail-side stack is empty
     int top_head(); 		  // consult the top element of head-side stack without popping it
     int top_tail(); 		  // consult the top element of tail-side stack without popping it
+    boolean isFull();         // check whether the stack is full
 }
 ```
 

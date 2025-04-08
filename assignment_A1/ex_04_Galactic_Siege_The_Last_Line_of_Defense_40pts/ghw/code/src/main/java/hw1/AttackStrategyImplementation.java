@@ -4,11 +4,11 @@ public class AttackStrategyImplementation implements AttackStrategy {
 
     // Class attributes
     // To Do
-    Queue attacks_queue;
+    public Queue attacksQueue;
 
     // Methods
     public AttackStrategyImplementation() {
-        attacks_queue = new ModifiedLinkedListQueue();
+        attacksQueue = new ModifiedLinkedListQueue();
     }
 
     @Override
@@ -16,11 +16,42 @@ public class AttackStrategyImplementation implements AttackStrategy {
         if ( newAttack <= 0 ) {
             throw new RuntimeException("New Attack is not positive.");
         }
-        attacks_queue.enqueue(newAttack);
+        attacksQueue.enqueue(newAttack);
     }
 
     @Override
     public boolean isEmpty() {
-        return attacks_queue.isEmpty();
+        return attacksQueue.isEmpty();
+    }
+
+    @Override
+    public void setTopAttack(int newAttack) {
+        if ( isEmpty() ) {
+            throw new RuntimeException("Attack strategy is empty.");
+        }
+        attacksQueue.setFront(newAttack);
+    }
+
+    @Override
+    public int getTopAttack() {
+        if ( isEmpty() ) {
+            throw new RuntimeException("Attack strategy is empty.");
+        }
+        return attacksQueue.front();
+    }
+    
+
+    @Override
+    public int popAttack() {
+        if ( isEmpty() ) {
+            throw new RuntimeException("Attack strategy is empty.");
+        }
+        return attacksQueue.dequeue();
+    }
+
+    public String toString() {
+        String result = "a: ";
+        result += attacksQueue.toString();
+        return result;
     }
 }
