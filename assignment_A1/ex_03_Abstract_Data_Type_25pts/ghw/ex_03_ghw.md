@@ -6,16 +6,23 @@
 
 ```java
 public interface DoubleStackOfInt {
-	void push(int elem) // an integer onto the stack.
-	void pop()  	    // an integer from the stack.
-	boolean empty()     // checks the stack is empty.
-	int top() 		    // consult the top element without popping it.   
+	void push_head(int elem); // push an integer onto the stack from the head of array
+	void push_tail(int elem); // push an integer onto the stack from the tail of array
+	void pop_head();  	      // pop an integer from the stack from the head of array
+    void pop_tail();  	      // pop an integer from the stack from the tail of arry
+	boolean empty_head();     // checks the head-side stack is empty
+	boolean empty_tail();     // checks the tail-side stack is empty
+    int top_head(); 		  // consult the top element of head-side stack without popping it
+    int top_tail(); 		  // consult the top element of tail-side stack without popping it
+    boolean isFull();         // check whether the stack is full
 }
 ```
 
 ## 2. Implementation
 
-
+```java
+public 
+```
 
 ## 3. Define `DoubleStackOfIntOnArray` in Java
 
