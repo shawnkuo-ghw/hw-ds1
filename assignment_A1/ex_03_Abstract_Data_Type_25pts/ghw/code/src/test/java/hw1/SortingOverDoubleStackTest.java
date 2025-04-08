@@ -58,7 +58,7 @@ public class SortingOverDoubleStackTest {
         arr = new int[DEFAULT_SIZE];
         for ( int i = 0; i < arr.length; i++ )
         {
-            arr[i] = i + 1; 
+            arr[i] = i; 
         }
         shuffleArray(arr);
         dsSort = new SortingOverDoubleStack(arr.length);
@@ -67,6 +67,7 @@ public class SortingOverDoubleStackTest {
     @Test
     public void sortTest_One()
     {
+        System.out.println(arrStringRep(arr));
         dsSort.sort(arr);
         assertTrue(isSortedAscendingly(arr));
         System.out.println(arrStringRep(arr));
@@ -75,6 +76,7 @@ public class SortingOverDoubleStackTest {
     @Test
     public void sortTest_Two()
     {
+        System.out.println(arrStringRep(arr));
         dsSort.sort(arr);
         assertTrue(isSortedAscendingly(arr));
         System.out.println(arrStringRep(arr));
@@ -83,6 +85,7 @@ public class SortingOverDoubleStackTest {
     @Test
     public void sortTest_Three()
     {
+        System.out.println(arrStringRep(arr));
         dsSort.sort(arr);
         assertTrue(isSortedAscendingly(arr));
         System.out.println(arrStringRep(arr));
@@ -91,6 +94,7 @@ public class SortingOverDoubleStackTest {
     @Test
     public void sortTest_Four()
     {
+        System.out.println(arrStringRep(arr));
         dsSort.sort(arr);
         assertTrue(isSortedAscendingly(arr));
         System.out.println(arrStringRep(arr));
@@ -99,6 +103,49 @@ public class SortingOverDoubleStackTest {
     @Test
     public void sortTest_Five()
     {
+        System.out.println(arrStringRep(arr));
+        dsSort.sort(arr);
+        assertTrue(isSortedAscendingly(arr));
+        System.out.println(arrStringRep(arr));
+    }
+    
+    @Test
+    public void sortTest_Six()
+    {
+        System.out.println(arrStringRep(arr));
+        dsSort.sort(arr);
+        assertTrue(isSortedAscendingly(arr));
+        System.out.println(arrStringRep(arr));
+    }
+    
+    @Test
+    public void sortTest_Seven()
+    {
+        System.out.println(arrStringRep(arr));
+        dsSort.sort(arr);
+        assertTrue(isSortedAscendingly(arr));
+        System.out.println(arrStringRep(arr));
+    }
+
+    @Test
+    public void sortTest_bestCase()
+    {
+        for ( int i = 0; i < arr.length; i++ ) {
+            arr[i] = i;
+        }
+        System.out.println(arrStringRep(arr));
+        dsSort.sort(arr);
+        assertTrue(isSortedAscendingly(arr));
+        System.out.println(arrStringRep(arr));
+    }
+
+    @Test
+    public void sortTest_worstCase()
+    {
+        for ( int i = 0; i < arr.length; i++ ) {
+            arr[i] = arr.length - 1 - i;
+        }
+        System.out.println(arrStringRep(arr));
         dsSort.sort(arr);
         assertTrue(isSortedAscendingly(arr));
         System.out.println(arrStringRep(arr));

@@ -112,6 +112,11 @@ public class DoubleStackOfIntOnArray implements DoubleStackOfInt {
     @Override
     public int tailIdx() { return tail; }
 
+    /**
+     * Check whether the head-side stack is sorted descendingly
+     * Time Complexity: O(n)
+     * @return true if it is, false otherwise
+     */
     public boolean isSortedDescendinglyHead() {
         boolean isSorted = true;
         int i = 0;

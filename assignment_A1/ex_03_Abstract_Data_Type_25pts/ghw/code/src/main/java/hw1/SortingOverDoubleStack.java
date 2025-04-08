@@ -59,9 +59,9 @@ public class SortingOverDoubleStack {
     {
         int aux = 0;
 
-        // 1. push all the element into the head-side stack
+        // 1. push all the element into the tail-side stack
         for (int elem: arr) {
-            s.pushHead(elem);
+            s.pushTail(elem);
         }
 
         // 2. sort
@@ -93,7 +93,7 @@ public class SortingOverDoubleStack {
             System.out.println(s.toString());
         }
 
-        // 3. pop all sorted elements to array
+        // 3. pop sorted elements back to array in ascending order
         int i = 0;
         while ( !s.isEmptyHead() )
         {

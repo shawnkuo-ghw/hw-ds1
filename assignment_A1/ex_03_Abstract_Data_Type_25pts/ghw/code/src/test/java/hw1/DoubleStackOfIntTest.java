@@ -66,6 +66,4 @@ public class DoubleStackOfIntTest {
         assertThrows(RuntimeException.class, () -> ds.popHead());
         assertThrows(RuntimeException.class, () -> ds.popTail());
     }
-
-
 }
