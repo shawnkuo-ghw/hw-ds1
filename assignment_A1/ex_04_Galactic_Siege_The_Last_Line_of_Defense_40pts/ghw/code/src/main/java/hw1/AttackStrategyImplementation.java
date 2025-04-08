@@ -32,6 +32,10 @@ public class AttackStrategyImplementation implements AttackStrategy {
         attacksQueue.setFront(newAttack);
     }
 
+    /**
+     * Consult the top attack without poping it.
+     * @return top attack
+     */
     @Override
     public int getTopAttack() {
         if ( isEmpty() ) {

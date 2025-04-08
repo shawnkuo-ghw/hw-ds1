@@ -27,28 +27,26 @@ public class DoubleStackOfIntOnArray implements DoubleStackOfInt {
     }
     
     @Override
-    public void push_head(int elem) {
+    public void pushHead(int elem) {
         if ( isFull() ) {
             throw new RuntimeException("Stack is full.");
         }
         head ++;
         arr[head] = elem;
-        System.out.println(toString());
     }
     
     @Override
-	public void push_tail(int elem) {
+	public void pushTail(int elem) {
         if ( isFull() ) {
             throw new RuntimeException("Stack is full.");
         }
         tail --;
         arr[tail] = elem;
-        System.out.println(toString());
     }
     
     @Override
-	public int pop_head() {
-        if ( empty_head() ) {
+	public int popHead() {
+        if ( isEmptyHead() ) {
             throw new RuntimeException("Head-side stack is empty.");
         }
         int poped = arr[head];
@@ -57,8 +55,8 @@ public class DoubleStackOfIntOnArray implements DoubleStackOfInt {
     }
     
     @Override
-    public int pop_tail() {
-        if ( empty_tail() ) {
+    public int popTail() {
+        if ( isEmptyTail() ) {
             throw new RuntimeException("Tail-side stack is empty.");
         }
         int poped = arr[tail];
@@ -67,22 +65,22 @@ public class DoubleStackOfIntOnArray implements DoubleStackOfInt {
     }
     
     @Override
-	public boolean empty_head() { return head == -1; }
+	public boolean isEmptyHead() { return head == -1; }
     
     @Override
-	public boolean empty_tail() { return tail == size; }
+	public boolean isEmptyTail() { return tail == size; }
     
     @Override
-    public int top_head() {
-        if ( empty_head() ) {
+    public int topHead() {
+        if ( isEmptyHead() ) {
             throw new RuntimeException("Head-side stack is empty.");
         }
         return arr[head];
     }
     
     @Override
-    public int top_tail() {
-        if ( empty_head() ) {
+    public int topTail() {
+        if ( isEmptyTail() ) {
             throw new RuntimeException("Tail-side stack is empty.");
         }
         return arr[tail];
@@ -108,4 +106,23 @@ public class DoubleStackOfIntOnArray implements DoubleStackOfInt {
 
     @Override
     public boolean isFull() { return head == tail - 1; }
+
+    @Override
+    public int headIdx() { return head; }
+    @Override
+    public int tailIdx() { return tail; }
+
+    public boolean isSortedDescendinglyHead() {
+        boolean isSorted = true;
+        int i = 0;
+        while ( head > 0 && isSorted && i < head )
+        {
+            if ( arr[i] < arr[i+1] ) {
+                isSorted = false;
+            } else {
+                i ++;
+            }
+        }
+        return isSorted;
+    }
 }

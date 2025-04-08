@@ -59,6 +59,26 @@ public class WarriorTest {
     }
 
     @Test
+    public void unsuccessfulAttackTest_Three() {
+    
+        // shields = [10, 50, 100]
+        w.addShield(10);
+        w.addShield(50);
+        w.addShield(100);
+    
+        // attacks = [60, 99]
+        a.add(60);
+        a.add(99);
+    
+        assertEquals(160, w.remainingPower());
+        assertEquals(3, w.shields());
+        assertTrue(w.repel(a));
+        assertEquals(1, w.remainingPower());
+        assertEquals(1, w.shields());
+        assertTrue(w.alive());
+    }
+
+    @Test
     public void successfulAttackTest_One() {
 
         // shields = [10, 50]
@@ -100,65 +120,21 @@ public class WarriorTest {
     }
 
     @Test
-    public void repelAnUnsuccessfulAttackTest_One() {
-        
-        // w = [10, 20]
-        w.addShield(10);
-        w.addShield(20);
+    public void successfulAttackTest_Three() {
 
-        // a = 5
-        int anAttack = 5;
+        // shields = [50, 100, 49]
+        w.addShield(50);
+        w.addShield(100);
+        w.addShield(49);
 
-        assertEquals(30, w.remainingPower());
-        assertEquals(2, w.shields());
-        assertTrue(w.repel(anAttack));
-        assertEquals(25, w.remainingPower());
-        assertEquals(2, w.shields());
-        assertTrue(w.alive());    
+        // attacks = [200]
+        a.add(200);
+
+        assertEquals(199, w.remainingPower());
+        assertEquals(3, w.shields());
+        assertFalse(w.repel(a));
+        assertEquals(0, w.remainingPower());
+        assertEquals(0, w.shields());
+        assertFalse(w.alive());
     }
-
-
-    @Test
-    public void repelAnUnsuccessfulAttackTest_Two() {
-        
-        // w = [10, 20]
-        w.addShield(10);
-        w.addShield(20);
-
-        // a = 10
-        a.add(10);
-
-        assertEquals(30, w.remainingPower());
-        assertEquals(2, w.shields());
-        assertTrue(w.repel(a));
-        assertEquals(20, w.remainingPower());
-        assertEquals(1, w.shields());
-        assertTrue(w.alive());    
-    }
-
-    @Test
-    public void repelAnUnsuccessfulAttackTest_Three() {
-        
-        // w = [10, 20]
-        w.addShield(10);
-        w.addShield(20);
-
-        // a = 15
-        a.add(15);
-
-        assertEquals(30, w.remainingPower());
-        assertEquals(2, w.shields());
-        assertTrue(w.repel(a));
-        assertEquals(15, w.remainingPower());
-        assertEquals(1, w.shields());
-        assertTrue(w.alive());    
-    }
-
-    @Test
-    public void repelAnSuccessfulAttackTest() {
-        
-
-    }
-
-
 }

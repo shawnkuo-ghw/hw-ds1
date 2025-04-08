@@ -17,54 +17,54 @@ public class DoubleStackOfIntTest {
     @Test
     public void pushTest() {
 
-        assertTrue(ds.empty_head());
-        assertTrue(ds.empty_tail());
+        assertTrue(ds.isEmptyHead());
+        assertTrue(ds.isEmptyTail());
 
-        ds.push_head(1);
-        ds.push_tail(11);
-        assertEquals(1, ds.top_head());;
-        assertEquals(11, ds.top_tail());;
+        ds.pushHead(1);
+        ds.pushTail(11);
+        assertEquals(1, ds.topHead());;
+        assertEquals(11, ds.topTail());;
 
-        ds.push_head(2);
-        ds.push_tail(22);
-        assertEquals(2, ds.top_head());;
-        assertEquals(22, ds.top_tail());;
+        ds.pushHead(2);
+        ds.pushTail(22);
+        assertEquals(2, ds.topHead());;
+        assertEquals(22, ds.topTail());;
         
-        ds.push_head(3);
-        ds.push_tail(33);
-        assertEquals(3, ds.top_head());;
-        assertEquals(33, ds.top_tail());;
+        ds.pushHead(3);
+        ds.pushTail(33);
+        assertEquals(3, ds.topHead());;
+        assertEquals(33, ds.topTail());;
 
-        ds.push_head(4);
-        ds.push_tail(44);
-        ds.push_head(5);
-        ds.push_tail(55);
+        ds.pushHead(4);
+        ds.pushTail(44);
+        ds.pushHead(5);
+        ds.pushTail(55);
         assertTrue(ds.isFull());
-        assertThrows(RuntimeException.class, () -> ds.push_head(6));
-        assertThrows(RuntimeException.class, () -> ds.push_head(66));
+        assertThrows(RuntimeException.class, () -> ds.pushHead(6));
+        assertThrows(RuntimeException.class, () -> ds.pushHead(66));
     }
 
     @Test
     public void popTest() {
 
-        ds.push_head(1);
-        ds.push_head(2);
-        ds.push_head(3);
-        ds.push_tail(4);
-        ds.push_tail(5);
-        ds.push_tail(6);
+        ds.pushHead(1);
+        ds.pushHead(2);
+        ds.pushHead(3);
+        ds.pushTail(4);
+        ds.pushTail(5);
+        ds.pushTail(6);
         
-        assertEquals(3, ds.pop_head());
-        assertEquals(2, ds.pop_head());
-        assertEquals(1, ds.pop_head());
-        assertEquals(6, ds.pop_tail());
-        assertEquals(5, ds.pop_tail());
-        assertEquals(4, ds.pop_tail());
-        assertTrue(ds.empty_head());
-        assertTrue(ds.empty_tail());
+        assertEquals(3, ds.popHead());
+        assertEquals(2, ds.popHead());
+        assertEquals(1, ds.popHead());
+        assertEquals(6, ds.popTail());
+        assertEquals(5, ds.popTail());
+        assertEquals(4, ds.popTail());
+        assertTrue(ds.isEmptyHead());
+        assertTrue(ds.isEmptyTail());
 
-        assertThrows(RuntimeException.class, () -> ds.pop_head());
-        assertThrows(RuntimeException.class, () -> ds.pop_tail());
+        assertThrows(RuntimeException.class, () -> ds.popHead());
+        assertThrows(RuntimeException.class, () -> ds.popTail());
     }
 
 

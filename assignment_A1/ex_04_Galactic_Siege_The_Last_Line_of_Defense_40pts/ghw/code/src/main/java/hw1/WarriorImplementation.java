@@ -27,7 +27,7 @@ public class WarriorImplementation  implements Warrior {
     @Override
     public void addShield(int newShield) {
         if ( newShield <= 0 ) {
-            throw new RuntimeException("New shield is not positive.");
+            throw new RuntimeException("addShield(): New shield is not positive.");
         }
         shieldsQueue.enqueue(newShield);
     }
@@ -44,28 +44,10 @@ public class WarriorImplementation  implements Warrior {
     @Override
     public boolean repel(AttackStrategy anAttackStrategy) {
         if ( anAttackStrategy.isEmpty() ) {
-            throw new RuntimeException("Attack Strategy is empty.");
+            throw new RuntimeException("repel(): Attack Strategy is empty.");
         }
-        
-        System.out.println(allInfo(anAttackStrategy));
-
         while ( alive() && !anAttackStrategy.isEmpty() ) {
-
-            int topAttack = anAttackStrategy.getTopAttack();
-            int topShield = shieldsQueue.front();
-            
-            if ( topAttack > topShield ) {
-                anAttackStrategy.setTopAttack(topAttack - topShield);
-                shieldsQueue.dequeue();
-            } else if ( topShield > topAttack ) {
-                shieldsQueue.setFront(topShield - topAttack);
-                anAttackStrategy.popAttack();
-            } else {
-                shieldsQueue.dequeue();
-                anAttackStrategy.popAttack();
-            }
-
-            System.out.println(allInfo(anAttackStrategy));
+            repel( anAttackStrategy.popAttack() );
         }
         return alive();
     }
@@ -92,8 +74,7 @@ public class WarriorImplementation  implements Warrior {
      * Applies an attack of the given power to the warrior.
      * Time Complexity: O(S)
      * – Shields are removed until the attack is repelled.
-     * - Returns true if the attack is repelled, false if 
-     *   the warrior is defeated.
+     * - Returns true if the attack is repelled, false if the warrior is defeated.
      * – This method modifies the warrior, meaning that after the attack, 
      *   only remaining shields are kept.
      * @param anAttack an attack to apply
@@ -101,15 +82,26 @@ public class WarriorImplementation  implements Warrior {
      */
     private boolean repel(int anAttack) {
         if ( anAttack <= 0 ) {
-            throw new RuntimeException("Attack is not positive");
+            throw new RuntimeException("repel(): Attack is not positive");
         }
-        int topShield = shieldsQueue.front();
-        if ( topShield > anAttack ) {
-            shieldsQueue.setFront(topShield - anAttack);
-        } else {
-            shieldsQueue.dequeue();
+
+        while ( !shieldsQueue.isEmpty() && anAttack > 0 ) {
+
+            int topShield = shieldsQueue.front();
+
+            if ( anAttack > topShield ) {
+                anAttack -= topShield;
+                shieldsQueue.dequeue();
+            } else if ( topShield > anAttack ) {
+                shieldsQueue.setFront(topShield - anAttack);
+                anAttack = 0;
+            } else {
+                shieldsQueue.dequeue();
+                anAttack = 0;
+            }    
         }
-        return !shieldsQueue.isEmpty();
+        
+        return alive();
     }
 
     public String toString() {
@@ -118,7 +110,7 @@ public class WarriorImplementation  implements Warrior {
         return result;
     }
 
-    public String allInfo(AttackStrategy anAttackStrategy) {
+    private String allInfo(AttackStrategy anAttackStrategy) {
         String allInfo = "";
         allInfo += anAttackStrategy.toString() + "\n";
         allInfo += toString() + "\n";
