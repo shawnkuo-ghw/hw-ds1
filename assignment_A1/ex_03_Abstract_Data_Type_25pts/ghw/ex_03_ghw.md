@@ -55,15 +55,19 @@ public interface DoubleStackOfInt
 
 ## 3. Define `DoubleStackOfIntOnArray` in Java
 
-Check 
+Check file `DoubleStackOfIntOnArray.java`.
 
 
 
 ## 4. Provide meaningful test cases
 
+Check file `DoubleStackOfIntTest.java`.
+
 
 
 ## 5.Sorting algorithm using `DoubleStackOfIntOnArray`
+
+Check files `SortingOverDoubleStack.java` and `SortingOverDoubleStackTest.java`.
 
 
 
