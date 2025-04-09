@@ -47,9 +47,34 @@ public interface DoubleStackOfInt
 
 
 
-## 2. Implementation
+## 2. Implementation of `DoubleStackOfInt`
 
--   Representation
+Let $Q$ denote the abstract data type of **Queue**.
+
+-   **Abstract Data Type**: `DoubleStackOfInt`, $DS = (Q_1, Q_2)$
+
+-   **Representation**: 
+    $$
+    R = <S: \text{array},\ head: \text{int},\ tail: \text{int}>
+    $$
+
+-   **Representation Invariant**: 
+    $$
+    RI(R) = (R\ \text{is acyclic})\ 
+    \and\ (0 \leq head \leq |R.S|)\ 
+    \and\ (1 \leq tail \leq |R.S| + 1)\ 
+    \and\ (head < tail)
+    $$
+
+-   **Abstraction Function**: 
+    $$
+    AF(R) = DS \iff \\
+    \big(head = 0\ \or\ R.S\big[0\ldots R.head \big] = Q_1 \big)\ 
+    \and\
+    \big(tail=|R.S| + 1\ \or\ R.S.\big[R.tail\ldots |R.S|\big] = Q_2 \big)
+    $$
+
+-   
 
 
 
