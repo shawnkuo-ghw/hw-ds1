@@ -24,8 +24,11 @@ public class AttackStrategyTest {
 
         assertFalse(a.isEmpty());
         assertEquals(1, a.getTopAttack());
+        assertEquals(1, a.popAttack());
         assertEquals(2, a.getTopAttack());
+        assertEquals(2, a.popAttack());
         assertEquals(3, a.getTopAttack());
+        assertEquals(3, a.popAttack());
         assertTrue(a.isEmpty());
     }
 }

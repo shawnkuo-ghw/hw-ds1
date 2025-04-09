@@ -56,7 +56,7 @@ public class ModifiedLinkedListQueue implements Queue {
     }
 
     @Override
-    public int  front() {
+    public int front() {
         if ( isEmpty() ) {
             throw new RuntimeException("Queue.front(): The queue is empty.");
         }
