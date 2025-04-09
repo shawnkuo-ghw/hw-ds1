@@ -3,8 +3,7 @@ package hw1;
 public class AttackStrategyImplementation implements AttackStrategy {
 
     // Class attributes
-    // To Do
-    public Queue attacksQueue;
+    private Queue attacksQueue;
 
     // Methods
     public AttackStrategyImplementation() {
@@ -19,12 +18,10 @@ public class AttackStrategyImplementation implements AttackStrategy {
         attacksQueue.enqueue(newAttack);
     }
 
-    @Override
     public boolean isEmpty() {
         return attacksQueue.isEmpty();
     }
 
-    @Override
     public void setTopAttack(int newAttack) {
         if ( isEmpty() ) {
             throw new RuntimeException("Attack strategy is empty.");
@@ -36,7 +33,6 @@ public class AttackStrategyImplementation implements AttackStrategy {
      * Consult the top attack without poping it.
      * @return top attack
      */
-    @Override
     public int getTopAttack() {
         if ( isEmpty() ) {
             throw new RuntimeException("Attack strategy is empty.");
@@ -45,7 +41,6 @@ public class AttackStrategyImplementation implements AttackStrategy {
     }
     
 
-    @Override
     public int popAttack() {
         if ( isEmpty() ) {
             throw new RuntimeException("Attack strategy is empty.");

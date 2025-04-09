@@ -5,30 +5,41 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AttackStrategyTest {
     // To Do
-    AttackStrategy a;
+    AttackStrategy attackStrategy;
+    AttackStrategyImplementation strategy;
 
     @BeforeEach
     public void initAttack() {
-        a = new AttackStrategyImplementation();
+        attackStrategy = new AttackStrategyImplementation();
+        strategy = (AttackStrategyImplementation) attackStrategy;
     }
 
     @Test
     public void Test() {
 
-        assertTrue(a.isEmpty());
-        
-        // a = [1, 2, 3]
-        a.add(1);
-        a.add(2);
-        a.add(3);
+        assertTrue(strategy.isEmpty());
+        assertThrows(RuntimeException.class, () -> strategy.getTopAttack());
+        assertThrows(RuntimeException.class, () -> strategy.setTopAttack(1));
+        assertThrows(RuntimeException.class, () -> strategy.popAttack());
 
-        assertFalse(a.isEmpty());
-        assertEquals(1, a.getTopAttack());
-        assertEquals(1, a.popAttack());
-        assertEquals(2, a.getTopAttack());
-        assertEquals(2, a.popAttack());
-        assertEquals(3, a.getTopAttack());
-        assertEquals(3, a.popAttack());
-        assertTrue(a.isEmpty());
+        // attackStrategy = [1, 2, 3]
+        attackStrategy.add(1);
+        assertThrows(RuntimeException.class, () -> attackStrategy.add(-2));
+        attackStrategy.add(2);
+        assertThrows(RuntimeException.class, () -> attackStrategy.add(-3));
+        attackStrategy.add(3);
+        
+        assertFalse(strategy.isEmpty());
+        assertEquals(1, strategy.getTopAttack());
+        assertEquals(1, strategy.popAttack());     // q = [2, 3]
+        strategy.setTopAttack(20);                // q = [20, 3]
+        assertEquals(20, strategy.getTopAttack()); 
+        assertEquals(20, strategy.popAttack());    // q = [3]
+        assertEquals(3, strategy.getTopAttack());
+        assertEquals(3, strategy.popAttack());     // q = []
+        assertThrows(RuntimeException.class, () -> strategy.getTopAttack());
+        assertThrows(RuntimeException.class, () -> strategy.setTopAttack(1));
+        assertThrows(RuntimeException.class, () -> strategy.popAttack());
+        assertTrue(strategy.isEmpty());
     }
 }

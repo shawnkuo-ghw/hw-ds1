@@ -13,6 +13,7 @@ public class LinkedListQueueTest {
 
     @Test
     public void testEnque() {
+        assertThrows(RuntimeException.class, () -> queue.front());
         queue.enqueue(1);
         queue.enqueue(2);
         queue.enqueue(3);
@@ -21,26 +22,27 @@ public class LinkedListQueueTest {
 
     @Test
     public void testDeque() {
-        queue.enqueue(1);
-        queue.enqueue(2);
-        queue.enqueue(3);
-        assertEquals(1, queue.dequeue());
-        assertEquals(2, queue.dequeue());
-        assertEquals(3, queue.dequeue());
-        assertThrows(RuntimeException.class, () -> queue.dequeue());   
+        queue.enqueue(1);                        // q = [1]
+        queue.enqueue(2);                        // q = [1, 2]
+        queue.enqueue(3);                        // q = [1, 2, 3]
+        assertEquals(1, queue.dequeue());    // q = [2, 3]
+        assertEquals(2, queue.dequeue());    // q = [3]
+        assertEquals(3, queue.dequeue());    // q = []
+        assertThrows(RuntimeException.class, () -> queue.dequeue());
     }
 
     @Test
     public void testSetFront() {
-        queue.enqueue(1);
-        queue.enqueue(2);
-        queue.enqueue(3);
-        queue.setFront(10);
-        assertEquals(10, queue.dequeue());
-        queue.setFront(20);
-        assertEquals(20, queue.dequeue());
-        queue.setFront(30);
-        assertEquals(30, queue.dequeue());
+        assertThrows(RuntimeException.class, () -> queue.setFront(10));
+        queue.enqueue(1);                        // q = [1]
+        queue.enqueue(2);                        // q = [1, 2]
+        queue.enqueue(3);                        // q = [1, 2, 3]
+        queue.setFront(10);                   // q = [10, 2, 3]
+        assertEquals(10, queue.dequeue());   // q = [2, 3]
+        queue.setFront(20);                   // q = [20, 3]
+        assertEquals(20, queue.dequeue());   // q = [3]
+        queue.setFront(30);                   // q = [30]
+        assertEquals(30, queue.dequeue());   // q = []
     }
 
     @Test
