@@ -3,8 +3,7 @@ package hw1;
 public class WarriorImplementation  implements Warrior {
     
     // Class attributes
-    // To Do
-    Queue shieldsQueue;
+    private Queue shieldsQueue;
 
     // Methods
     public WarriorImplementation() {
@@ -43,11 +42,12 @@ public class WarriorImplementation  implements Warrior {
      */
     @Override
     public boolean repel(AttackStrategy anAttackStrategy) {
-        if ( anAttackStrategy.isEmpty() ) {
+        AttackStrategyImplementation strategy = (AttackStrategyImplementation) anAttackStrategy;
+        if ( strategy.isEmpty() ) {
             throw new RuntimeException("repel(): Attack Strategy is empty.");
         }
-        while ( alive() && !anAttackStrategy.isEmpty() ) {
-            repel( anAttackStrategy.popAttack() );
+        while ( alive() && !strategy.isEmpty() ) {
+            repel( strategy.popAttack() );
         }
         return alive();
     }
