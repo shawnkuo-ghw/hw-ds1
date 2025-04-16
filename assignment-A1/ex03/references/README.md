@@ -10,3 +10,11 @@ About Representation invariants and Abstraction functions
 -   [CSE331: Software Design and Implementation](https://courses.cs.washington.edu/courses/cse331/)
     -   [Index of /courses/cse331/11wi/conceptual-info](https://courses.cs.washington.edu/courses/cse331/11wi/conceptual-info/?C=N;O=D)
         -   [Writing Abstraction Functions & Rep Invariants](https://courses.cs.washington.edu/courses/cse331/11wi/conceptual-info/abstraction-functions-and-rep-invariants.html#AbstractionFunctions)
+
+-   [**6.031: Software Construction**](https://web.mit.edu/6.031/www/sp18/)
+    -   [Reading 11: Abstraction Functions & Rep Invariants](https://web.mit.edu/6.031/www/sp18/classes/11-abstraction-functions-rep-invariants/)
+
+-   [Michael Clarkson](https://sites.coecis.cornell.edu/clarkson)
+    -   [Youtube](https://www.youtube.com/@MichaelRyanClarkson/playlists)
+    -   [OCaml Programming: Correct + Efficient + Beautiful](https://cs3110.github.io/textbook/cover.html)
+        -   [6.3. Module Documentation](https://cs3110.github.io/textbook/chapters/correctness/module_docs.html)
