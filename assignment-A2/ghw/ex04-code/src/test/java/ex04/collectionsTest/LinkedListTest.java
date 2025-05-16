@@ -1,10 +1,10 @@
 package ex04.collectionsTest;
 
-import ex04.collections.implementations.LinkedList;
-import ex04.collections.interfaces.List;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.NoSuchElementException;
+import ex04.collections.interfaces.List;
+import ex04.collections.implementations.LinkedList;
 
 public class LinkedListTest
 {
@@ -12,6 +12,19 @@ public class LinkedListTest
 
     @BeforeEach
     public void init() { l = new LinkedList<Integer>(); }
+
+    @Test
+    public void copyConstructorTest() {
+        List<Integer> emptyList = new LinkedList<Integer>((LinkedList<Integer>) l);
+        assertTrue(emptyList.empty());
+        l.append(1);
+        l.append(2);
+        l.append(3);
+        l.append(5);
+        // l = [1, 2, 3, 5]
+        List<Integer> newList = new LinkedList<Integer>((LinkedList<Integer>) l);
+        assertEquals("[1, 2, 3, 5]", newList.toString());
+    }
 
     @Test
     public void addTest() {
@@ -23,8 +36,10 @@ public class LinkedListTest
         assertEquals("[1, 2, 3]", l.toString());
         l.insertAt(0, 4);
         assertEquals("[4, 1, 2, 3]", l.toString());
-        l.append(5);
-        assertEquals("[4, 1, 2, 3, 5]", l.toString());
+        l.insertAt(4, 5);
+        assertEquals("[4, 1, 2, 3, 5]", l.toString());        
+        l.insertAt(2, 6);
+        assertEquals("[4, 1, 6, 2, 3, 5]", l.toString());
     }
 
     @Test

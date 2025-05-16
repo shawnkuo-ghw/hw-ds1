@@ -16,8 +16,18 @@ public class maxPriorityQueueTest {
     }
 
     @Test
-    public void enqueueTest()
-    {
+    public void copyConstructorTest() {
+        Queue<Integer> emptyMaxPQ = new maxPriorityQueue<Integer>((maxPriorityQueue<Integer>) maxPQ);
+        assertTrue(emptyMaxPQ.empty());
+        maxPQ.enqueue(1);
+        maxPQ.enqueue(2);
+        maxPQ.enqueue(3);
+        Queue<Integer> sameMaxPQ = new maxPriorityQueue<Integer>((maxPriorityQueue<Integer>) maxPQ);
+        assertEquals("[3, 1, 2]", sameMaxPQ.toString());
+    }
+
+    @Test
+    public void enqueueTest() {
         maxPQ.enqueue(2);
         maxPQ.enqueue(3);
         assertEquals(3, maxPQ.top());
@@ -30,8 +40,7 @@ public class maxPriorityQueueTest {
     }
 
     @Test
-    public void dequeueTest()
-    {
+    public void dequeueTest() {
         maxPQ.enqueue(1);
         assertEquals(1, maxPQ.dequeue());
         maxPQ.enqueue(2);
@@ -48,8 +57,7 @@ public class maxPriorityQueueTest {
     }
 
     @Test
-    public void setTopTest()
-    {
+    public void setTopTest() {
         assertThrows(NoSuchElementException.class, () -> maxPQ.top());
         assertThrows(NoSuchElementException.class, () -> maxPQ.setTop(1));
         maxPQ.enqueue(2);
@@ -63,5 +71,14 @@ public class maxPriorityQueueTest {
         assertEquals(6, maxPQ.top());
         maxPQ.setTop(4);
         assertEquals(5, maxPQ.top());
+    }
+
+    @Test
+    public void toStringTest() {
+        maxPQ.enqueue(1);
+        maxPQ.enqueue(2);
+        maxPQ.enqueue(3);
+        maxPQ.enqueue(4);
+        assertEquals("[4, 3, 2, 1]", maxPQ.toString());
     }
 }

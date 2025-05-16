@@ -19,8 +19,7 @@ public class minHeap<T extends Comparable<T> > implements Heap<T> {
     private boolean greater(int i, int j)
     { return heap.get(i).compareTo(heap.get(j)) > 0; }
 
-    private boolean minHeapPropertyCheck()
-    {
+    private boolean minHeapPropertyCheck() {
         boolean checkResult = true;
         if ( !heap.empty() && heap.size() > 1 ) {
             int i = 1;
@@ -37,16 +36,14 @@ public class minHeap<T extends Comparable<T> > implements Heap<T> {
         return checkResult;
     }
 
-    private void swim(int k)
-    {   
+    private void swim(int k) {   
         while ( k > 0 && this.greater(PARENT(k), k) ) {
             heap.swap(PARENT(k), k);
             k = PARENT(k);
         }
     }
 
-    private void sink(int k)
-    {
+    private void sink(int k) {
         boolean hasChildren = true;
         boolean lessThanChildren = true;
         while ( hasChildren & lessThanChildren )
@@ -69,11 +66,16 @@ public class minHeap<T extends Comparable<T> > implements Heap<T> {
         }
     }
 
-    public minHeap() { heap = new LinkedList<T>(); }
+    public minHeap() {
+        heap = new LinkedList<T>();
+    }
+
+    public minHeap(minHeap<T> otherHeap) {
+        heap = new LinkedList<T>((LinkedList<T>) otherHeap.heap);
+    }
 
     @Override
-    public void push(T newElem)
-    {
+    public void push(T newElem) {
         heap.append(newElem);
         this.swim(heap.size() - 1);
         if ( !minHeapPropertyCheck() ) {
@@ -99,13 +101,12 @@ public class minHeap<T extends Comparable<T> > implements Heap<T> {
         if ( !minHeapPropertyCheck() ) {
             throw new IllegalStateException("minHeap.pop(): min-heap property is not satisfied.");
         }
-        printAsTree();
+        // printAsTree();
         return popedElem;
     }
 
     @Override
-    public T top()
-    {
+    public T top() {
         if ( heap.empty() ) {
             throw new NoSuchElementException("minHeap.top(): heap is empty.");
         }
@@ -113,8 +114,7 @@ public class minHeap<T extends Comparable<T> > implements Heap<T> {
     }
     
     @Override
-    public void setTop(T newTop)
-    {
+    public void setTop(T newTop) {
         if ( heap.empty() ) {
             throw new NoSuchElementException("minHeap.setTop(): heap is empty.");
         }
@@ -135,16 +135,24 @@ public class minHeap<T extends Comparable<T> > implements Heap<T> {
     @Override
     public int size() { return heap.size(); }
 
-    public void printAsTree() {
-        System.out.println("Heap:");
-        printHeapAsTree(0, "");
-        System.out.println("\n");
-    }
+    @Override
+    public String toString() { return heap.toString(); }
+    
     private void printHeapAsTree(int i, String prefix) {
         if (i < heap.size()) {
             printHeapAsTree(RIGHT(i), prefix + "    ");
             System.out.println(prefix + heap.get(i));
             printHeapAsTree(LEFT(i), prefix + "    ");
         }
+    }
+
+    public void printAsTree() {
+        System.out.println("Heap:");
+        printHeapAsTree(0, "");
+        System.out.println("\n");
+    }
+    
+    public void printAsArray() {
+        System.out.println(this.heap.toString());
     }
 }

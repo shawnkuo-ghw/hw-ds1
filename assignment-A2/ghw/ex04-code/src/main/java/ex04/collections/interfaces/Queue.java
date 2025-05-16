@@ -4,16 +4,17 @@ import java.util.NoSuchElementException;
 
 /**
  * The interface of queue
+ * @param <T> the type of elements in the queue
  * <p>
  * A queue is a collection of elements that supports the following operations:
  * <ul>
- * <li> enqueue: add a new element to the queue </li>
- * <li> dequeue: remove and return the “next in line” element of the queue </li>
- * <li> top: return the “next in line” element in the queue without removing it </li>
- * <li> setTop: set the value of “next in line” element in the queue </li>
- * <li> size: return the number of elements in the queue </li>
- * <li> empty: check whether the queue is empty </li>
- * <li> toString: return a string representation of the queue </li>
+ * <li> {@code enqueue} : add a new element to the queue </li>
+ * <li> {@code dequeue} : remove and return the “next in line” element of the queue </li>
+ * <li> {@code top} : return the “next in line” element in the queue without removing it </li>
+ * <li> {@code setTop} : set the value of “next in line” element in the queue </li>
+ * <li> {@code size} : return the number of elements in the queue </li>
+ * <li> {@code empty} : check whether the queue is empty </li>
+ * <li> {@code toString} : return a string representation of the queue </li>
  * </ul>
  */
 public interface Queue<T> {

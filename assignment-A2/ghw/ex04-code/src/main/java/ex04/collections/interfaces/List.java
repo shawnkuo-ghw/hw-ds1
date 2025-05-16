@@ -7,20 +7,20 @@ import java.util.NoSuchElementException;
  * <p>
  * A list is a collection of elements that supports the following operations:
  * <ul>
- * <li> insertAt: insert a new element at a given position </li>
- * <li> append: add a new element to the end of the list </li>
- * <li> prepend: add a new element to the beginning of the list </li>
- * <li> removeAt: remove an element at a given position </li>
- * <li> removeFirst: remove the first element of the list </li>
- * <li> removeLast: remove the last element of the list </li>
- * <li> swapElem: swap two elements </li>
- * <li> get: get an element at a given position </li>
- * <li> setFirst: set the first element of the list </li>
- * <li> first: get the first element of the list </li>
- * <li> last: get the last element of the list </li>
- * <li> size: get the size of the list </li>
- * <li> empty: check whether the list is empty </li>
- * <li> toString: return a string representation of the list </li>
+ * <li> {@code insertAt} : insert a new element at a given position </li>
+ * <li> {@code append} : add a new element to the end of the list </li>
+ * <li> {@code prepend} : add a new element to the beginning of the list </li>
+ * <li> {@code removeAt} : remove an element at a given position </li>
+ * <li> {@code removeFirst} : remove the first element of the list </li>
+ * <li> {@code removeLast} : remove the last element of the list </li>
+ * <li> {@code swapElem} : swap two elements </li>
+ * <li> {@code get} : get an element at a given position </li>
+ * <li> {@code setFirst} : set the first element of the list </li>
+ * <li> {@code first} : get the first element of the list </li>
+ * <li> {@code last} : get the last element of the list </li>
+ * <li> {@code size} : get the size of the list </li>
+ * <li> {@code empty} : check whether the list is empty </li>
+ * <li> {@code toString} : return a string representation of the list </li>
  * </ul>
  */
 public interface List<T> {

@@ -10,17 +10,10 @@ public interface ArmySquadron {
     /**
      * Add new warrior to the army squadron
      * @param w new warrior
-     * @throws IllegalStateException if the number of warriors exceed the maximun number (100)
+     * @throws IllegalStateException if the number of warriors exceed the maximun number allowd (100)
      */
-    void addWarrior(Warrior w);
-
-    /**
-     * 
-     * @return
-     * @throws
-     */
-    Warrior popWarrior();
-
+    void add(Warrior w);
+    
     /**
      * Return the healthiest warrior in the squadron.
      * <ul>
@@ -31,6 +24,16 @@ public interface ArmySquadron {
      * @throws NoSuchElemeentException if squadron is empty
      */
     Warrior next();
+
+    /**
+     * Return the healthiest warrior in the squadron without removing it.
+     * <ul>
+     * <li> Time Complexity: {@code O(1)}
+     * </ul>
+     * @return the healthiest warrior in the squadron
+     * @throws NoSuchElemeentException if squadron is empty
+     */
+    Warrior peek();
 
     /**
      * Iteratively selects the healthiest warrior (highest remaining shield power)
@@ -44,4 +47,10 @@ public interface ArmySquadron {
      * @return the count of defeated warriors
      */
     int repel(AttackStrategy[] attackStrategies);
+
+    /**
+     * Return the string representation of all information of army squadron
+     * @return string rep of army squadron
+     */
+    String toString();
 }

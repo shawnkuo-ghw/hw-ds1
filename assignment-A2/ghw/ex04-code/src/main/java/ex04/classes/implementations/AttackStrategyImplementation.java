@@ -1,5 +1,7 @@
 package ex04.classes.implementations;
 
+import java.util.NoSuchElementException;
+
 import ex04.classes.interfaces.AttackStrategy;
 import ex04.collections.interfaces.Queue;
 import ex04.collections.implementations.LinkedListQueue;;
@@ -14,7 +16,7 @@ public class AttackStrategyImplementation implements AttackStrategy {
     public void add(int newAttack)
     {
         if ( !(newAttack > 0) ) {
-            throw new IllegalArgumentException("AttackStrategyImplementation.add(): new attack is not positive");
+            throw new IllegalArgumentException("AttackStrategyImplementation.add(): new attack is not positive.");
         }
         attacks.enqueue(newAttack);
     }
@@ -22,11 +24,12 @@ public class AttackStrategyImplementation implements AttackStrategy {
     @Override
     public int pop()
     {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'pop'");
+        if ( attacks.empty() ) {
+            throw new NoSuchElementException("AttackStrategyImplementation.pop(): attack strategy is empty.");
+        }
+        return attacks.dequeue();
     }
 
     @Override
     public boolean empty() { return attacks.empty(); }
-
 }

@@ -11,10 +11,18 @@ public class maxPriorityQueue<T extends Comparable<T> > implements Queue<T> {
 
     private maxHeap<T> heap;
 
-    public maxPriorityQueue() { heap = new maxHeap<T>(); }
+    public maxPriorityQueue() {
+        heap = new maxHeap<T>();
+    }
+
+    public maxPriorityQueue(maxPriorityQueue<T> otMaxPQ) {
+        this.heap = new maxHeap<T>(otMaxPQ.heap);
+    }
 
     @Override
-    public void enqueue(T newElem) { heap.push(newElem); }
+    public void enqueue(T newElem) {
+        heap.push(newElem);
+    }
 
     @Override
     public T dequeue()
@@ -47,4 +55,7 @@ public class maxPriorityQueue<T extends Comparable<T> > implements Queue<T> {
 
     @Override
     public boolean empty() { return heap.empty(); }
+
+    @Override
+    public String toString() { return heap.toString(); }
 }
