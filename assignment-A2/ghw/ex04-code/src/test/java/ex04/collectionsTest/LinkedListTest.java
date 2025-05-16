@@ -1,9 +1,10 @@
-package ex04.myCollectionsTest;
-import ex04.collections.implementations.LinkedList;
-import ex04.collections.interfaces.List;
+package ex04.collectionsTest;
+
 import org.junit.jupiter.api.*;
-import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.NoSuchElementException;
+import ex04.collections.interfaces.List;
+import ex04.collections.implementations.LinkedList;
 
 public class LinkedListTest
 {
@@ -11,6 +12,19 @@ public class LinkedListTest
 
     @BeforeEach
     public void init() { l = new LinkedList<Integer>(); }
+
+    @Test
+    public void copyConstructorTest() {
+        List<Integer> emptyList = new LinkedList<Integer>((LinkedList<Integer>) l);
+        assertTrue(emptyList.empty());
+        l.append(1);
+        l.append(2);
+        l.append(3);
+        l.append(5);
+        // l = [1, 2, 3, 5]
+        List<Integer> newList = new LinkedList<Integer>((LinkedList<Integer>) l);
+        assertEquals("[1, 2, 3, 5]", newList.toString());
+    }
 
     @Test
     public void addTest() {
@@ -22,8 +36,10 @@ public class LinkedListTest
         assertEquals("[1, 2, 3]", l.toString());
         l.insertAt(0, 4);
         assertEquals("[4, 1, 2, 3]", l.toString());
-        l.append(5);
-        assertEquals("[4, 1, 2, 3, 5]", l.toString());
+        l.insertAt(4, 5);
+        assertEquals("[4, 1, 2, 3, 5]", l.toString());        
+        l.insertAt(2, 6);
+        assertEquals("[4, 1, 6, 2, 3, 5]", l.toString());
     }
 
     @Test
@@ -50,18 +66,18 @@ public class LinkedListTest
     @Test
     public void swapElemTest() {
         l.append(1);
-        assertThrows(NoSuchElementException.class, () -> l.swapElem(0, 1));
+        assertThrows(NoSuchElementException.class, () -> l.swap(0, 1));
         l.append(2);
         l.append(3);
         l.append(4);
         // l = [1, 2, 3, 4]
-        l.swapElem(1, 3);
+        l.swap(1, 3);
         assertEquals("[1, 4, 3, 2]", l.toString());
-        l.swapElem(0, 1);
+        l.swap(0, 1);
         assertEquals("[4, 1, 3, 2]", l.toString());
-        l.swapElem(0, 2);
+        l.swap(0, 2);
         assertEquals("[3, 1, 4, 2]", l.toString());
-        l.swapElem(0, 3);
+        l.swap(0, 3);
         assertEquals("[2, 1, 4, 3]", l.toString());
     }
 

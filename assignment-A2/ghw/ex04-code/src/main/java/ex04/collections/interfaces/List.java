@@ -2,6 +2,27 @@ package ex04.collections.interfaces;
 
 import java.util.NoSuchElementException;
 
+/**
+ * The interface of List
+ * <p>
+ * A list is a collection of elements that supports the following operations:
+ * <ul>
+ * <li> {@code insertAt} : insert a new element at a given position </li>
+ * <li> {@code append} : add a new element to the end of the list </li>
+ * <li> {@code prepend} : add a new element to the beginning of the list </li>
+ * <li> {@code removeAt} : remove an element at a given position </li>
+ * <li> {@code removeFirst} : remove the first element of the list </li>
+ * <li> {@code removeLast} : remove the last element of the list </li>
+ * <li> {@code swapElem} : swap two elements </li>
+ * <li> {@code get} : get an element at a given position </li>
+ * <li> {@code setFirst} : set the first element of the list </li>
+ * <li> {@code first} : get the first element of the list </li>
+ * <li> {@code last} : get the last element of the list </li>
+ * <li> {@code size} : get the size of the list </li>
+ * <li> {@code empty} : check whether the list is empty </li>
+ * <li> {@code toString} : return a string representation of the list </li>
+ * </ul>
+ */
 public interface List<T> {
 
     /**
@@ -55,7 +76,7 @@ public interface List<T> {
      * @throws NoSuchElementException if there are less than two elements in the list
      * @throws IllegalArgumentException if 0 <= {@code lhs} < {@code rhs} < size does not hold
      */
-    void swapElem(int lhs, int rhs);
+    void swap(int lhs, int rhs);
 
     /**
      * Get the element at position {@code idx}
@@ -72,6 +93,13 @@ public interface List<T> {
      * @throws NoSuchElementException if the list is empty
      */
     T first();
+
+    /**
+     * Set the first element of the list
+     * @param newElem the new element to set
+     * @throws NoSuchElementException if the list is empty
+     */
+    void setFirst(T newElem);
 
     /**
      * Get the last element of the list
