@@ -1,9 +1,10 @@
-package ex04.myCollectionsTest;
+package ex04.collectionsTest;
+
 import ex04.collections.implementations.LinkedList;
 import ex04.collections.interfaces.List;
 import org.junit.jupiter.api.*;
-import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.NoSuchElementException;
 
 public class LinkedListTest
 {
@@ -50,18 +51,18 @@ public class LinkedListTest
     @Test
     public void swapElemTest() {
         l.append(1);
-        assertThrows(NoSuchElementException.class, () -> l.swapElem(0, 1));
+        assertThrows(NoSuchElementException.class, () -> l.swap(0, 1));
         l.append(2);
         l.append(3);
         l.append(4);
         // l = [1, 2, 3, 4]
-        l.swapElem(1, 3);
+        l.swap(1, 3);
         assertEquals("[1, 4, 3, 2]", l.toString());
-        l.swapElem(0, 1);
+        l.swap(0, 1);
         assertEquals("[4, 1, 3, 2]", l.toString());
-        l.swapElem(0, 2);
+        l.swap(0, 2);
         assertEquals("[3, 1, 4, 2]", l.toString());
-        l.swapElem(0, 3);
+        l.swap(0, 3);
         assertEquals("[2, 1, 4, 3]", l.toString());
     }
 

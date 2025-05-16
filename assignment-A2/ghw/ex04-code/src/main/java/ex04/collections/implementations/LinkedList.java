@@ -1,7 +1,7 @@
 package ex04.collections.implementations;
+
 import ex04.collections.interfaces.List;
 import java.util.NoSuchElementException;
-
 
 /**
  * Linked list implementation of interface {@code List}
@@ -45,10 +45,12 @@ public class LinkedList<T> implements List<T> {
     }
 
     @Override
-    public void append(T newElem) { this.insertAt(this.size, newElem); }
+    public void append(T newElem)
+    { this.insertAt(this.size, newElem); }
 
     @Override
-    public void prepend(T newElem) { this.insertAt(0, newElem); }
+    public void prepend(T newElem)
+    { this.insertAt(0, newElem); }
 
     @Override
     public void removeAt(int idx)
@@ -70,21 +72,23 @@ public class LinkedList<T> implements List<T> {
             itr.setNext(itr.getNext().getNext());
         }
         size --;
-        System.out.println(toString());
     }
 
     @Override
-    public void removeFirst() { removeAt(0); }
+    public void removeFirst()
+    { removeAt(0); }
 
     @Override
-    public void removeLast() { removeAt(size - 1);}
+    public void removeLast()
+    { removeAt(size - 1); }
     
     @Override
-    public void swapElem(int lhs, int rhs) {
+    public void swap(int lhs, int rhs)
+    {
         if ( size() < 2 ) {
-            throw new NoSuchElementException("LinkedList.swapElem(): there are less than two elements in the list.");
+            throw new NoSuchElementException("LinkedList.swap(): there are less than two elements in the list.");
         } else if ( !( 0 <= lhs & lhs < rhs & rhs < size() ) ) {
-            throw new IllegalArgumentException("LinkedList.swapElem(): 0 <= lhs & lhs < rhs & rhs < size() does not hold.");
+            throw new IllegalArgumentException("LinkedList.swap(): 0 <= lhs & lhs < rhs & rhs < size() does not hold.");
         }
         T lhsValue = this.get(lhs);
         T rhsValue = this.get(rhs);
@@ -95,7 +99,8 @@ public class LinkedList<T> implements List<T> {
     }
 
     @Override
-    public T get(int idx) {
+    public T get(int idx)
+    {
         if ( this.empty() ) {
             throw new NoSuchElementException("LinkedList.get(): the list is empty.");
         } else if ( !(0 <= idx & idx < size()) ) {
@@ -111,7 +116,17 @@ public class LinkedList<T> implements List<T> {
     }
 
     @Override
-    public T first() {
+    public void setFirst(T newElem)
+    {
+        if ( this.empty() ) {
+            throw new NoSuchElementException("LinkedList.setFirst(): the list is empty");
+        }
+        this.head.setValue(newElem);
+    }
+
+    @Override
+    public T first()
+    {
         if ( this.empty() ) {
             throw new NoSuchElementException("LinkedList.first(): the list is empty.");
         }
@@ -130,10 +145,12 @@ public class LinkedList<T> implements List<T> {
     }
 
     @Override
-    public int size() { return this.size; }
+    public int size()
+    { return this.size; }
     
     @Override
-    public boolean empty() { return size == 0; }
+    public boolean empty()
+    { return this.size == 0; }
 
     @Override
     public String toString()
