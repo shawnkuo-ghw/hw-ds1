@@ -4,7 +4,6 @@ import ex04.classes.interfaces.AttackStrategy;
 import ex04.classes.interfaces.Warrior;
 import ex04.collections.interfaces.Heap;
 import ex04.collections.interfaces.Stack;
-import ex04.collections.implementations.maxHeap;
 import ex04.collections.implementations.minHeap;
 import ex04.collections.implementations.LinkedListStack;
 
@@ -23,9 +22,7 @@ public class WarriorImplementation implements Warrior {
     }
 
     @Override
-    public boolean alive() { 
-        return ! shieldsHeap.empty(); 
-    }
+    public boolean alive() { return !shieldsHeap.empty(); }
 
     @Override
     public void addShield(int newShield) { 
@@ -83,14 +80,10 @@ public class WarriorImplementation implements Warrior {
     }
 
     @Override
-    public int shields() { 
-        return shieldsHeap.size();
-    }
+    public int shields() { return shieldsHeap.size(); }
 
     @Override
-    public int remainingPower() { 
-        return totalPower;
-    }
+    public int remainingPower() { return totalPower; }
     
     @Override
     public int compareTo(Warrior otheWarrior) { 

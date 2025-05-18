@@ -1,7 +1,5 @@
 package ex04.classes.interfaces;
 
-import ex04.classes.interfaces.Warrior;
-
 /**
  * The interface of Army Squadron
  */
@@ -44,7 +42,9 @@ public interface ArmySquadron {
      *      are discarded. However, subsequent strategies in the sequence continue to be 
      *      applied until either the sequence completes or no warriors remain in the squadron. </li>
      * </ul>
+     * @param attackStrategies the attack strategies to apply
      * @return the count of defeated warriors
+     * @throws Ille
      */
     int repel(AttackStrategy[] attackStrategies);
 

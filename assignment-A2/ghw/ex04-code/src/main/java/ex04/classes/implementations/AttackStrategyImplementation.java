@@ -32,4 +32,6 @@ public class AttackStrategyImplementation implements AttackStrategy {
 
     @Override
     public boolean empty() { return attacks.empty(); }
+
+    public String toString() { return attacks.toString(); }
 }
