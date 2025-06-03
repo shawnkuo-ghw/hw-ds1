@@ -112,4 +112,29 @@ public class LinkedListTest {
         l.setAt(2, 7);
         assertEquals("[5, NIL, 7, 1, 2, 3, 6]", l.toString());
     }
+
+    @Test
+    public void largestPrimaryClusterTest() {
+        l.append(1);
+        l.append(2);
+        l.append(3);
+        l.append(4);
+        l.swap(1, 3);
+        l.swap(3, 6);
+        l.swap(0, 4);
+        l.swap(1, 2);
+
+        assertEquals("[2, NIL, 1, 4, NIL, 3, NIL]", l.toString());
+        assertEquals(2, l.largestPrimaryCluster());
+        
+        l.insertAt(3, 5);
+        assertEquals("[2, NIL, 1, 5, 4, NIL, 3, NIL]", l.toString());
+        assertEquals(3, l.largestPrimaryCluster());
+        
+        l.insertAt(6, 6);
+        l.insertAt(6, 7);
+        l.insertAt(6, 8);
+        assertEquals("[2, NIL, 1, 5, 4, NIL, 8, 7, 6, 3, NIL]", l.toString());
+        assertEquals(4, l.largestPrimaryCluster());
+    }
 }

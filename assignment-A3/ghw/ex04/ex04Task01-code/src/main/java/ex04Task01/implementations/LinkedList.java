@@ -197,9 +197,25 @@ public class LinkedList<T> implements List<T> {
     public boolean empty() { return this.size == 0; }
 
     public int largestPrimaryCluster() {
-        int max = 0;
-        
-        return max;
+        int maxLength  = 0;
+        int currLength = 0;
+        Node<T> lhs = this.head;
+        Node<T> rhs = null;
+        while ( lhs != null ) {
+            if ( lhs.getValue() != null ) {
+                rhs = lhs;
+                currLength = 0;
+                while ( rhs != null && rhs.getValue() != null ) {
+                    currLength ++;
+                    rhs = rhs.getNext();
+                }
+                maxLength = currLength > maxLength ? currLength : maxLength;
+                lhs = rhs;
+            } else {
+                lhs = lhs.getNext();
+            }
+        }
+        return maxLength;
     }
 
     @Override
@@ -225,5 +241,4 @@ public class LinkedList<T> implements List<T> {
         strRep += "]";
         return strRep;
     }
-
 }

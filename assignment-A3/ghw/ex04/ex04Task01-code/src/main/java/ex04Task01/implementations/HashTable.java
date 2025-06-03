@@ -58,7 +58,7 @@ public class HashTable<K, V> implements Dictionary<K, V>{
     public int search(Object key) {
         if ( !keyClass.isInstance(key) ) { throw new IllegalArgumentException("HashTable.search(): key must be of type " + keyClass.getName()); }
         K typedKey = keyClass.cast(key);
-        int i = 0; // probe number 
+        int i = 1; // probe number 
         int q = 0; // index of hash table associated with key w.r.t. hash function 
         boolean ifFound = false;
         do {
@@ -68,14 +68,14 @@ public class HashTable<K, V> implements Dictionary<K, V>{
             } else {
                 i ++;
             }
-        } while ( !ifFound && hashTable.get(q) != null && i < tableSize );
+        } while ( !ifFound && hashTable.get(q) != null && i <= tableSize );
         return ifFound ? q : -1;
     }
 
     public int searchCount(Object key) {
         if ( !keyClass.isInstance(key) ) { throw new IllegalArgumentException("HashTable.search(): key must be of type " + keyClass.getName()); }
         K typedKey = keyClass.cast(key);
-        int i = 0; // probe number 
+        int i = 1; // probe number 
         int q = 0; // index of hash table associated with key w.r.t. hash function 
         boolean ifFound = false;
         do {
@@ -85,7 +85,7 @@ public class HashTable<K, V> implements Dictionary<K, V>{
             } else {
                 i ++;
             }
-        } while ( !ifFound && hashTable.get(q) != null && i < tableSize );
+        } while ( !ifFound && hashTable.get(q) != null && i <= tableSize );
         return i;
     }
 
