@@ -1,36 +1,37 @@
-package ex04Task01;
+package ex04Task01.implementations;
+import java.util.function.BiFunction;
 
 public class HashFunctions {
 
-    public static int hash1(int key, int tableSize) {
+    public static final BiFunction<Integer, Integer, Integer> hash1 = (key, tableSize) -> {
         double A = 0.6180339887; // (√5 - 1) / 2, golden ratio fraction
         double frac = (key * A) % 1;
         return (int) (tableSize * frac);
-    }
+    };
 
-    public static int hash2(int key, int tableSize) {
+    public static final BiFunction<Integer, Integer, Integer> hash2 = (key, tableSize) -> {
         int prime = 31; // A small prime multiplier
         return (key * prime) % tableSize;
-    }
+    };
 
-    public static int hash3(int key, int tableSize) {
+    public static final BiFunction<Integer, Integer, Integer> hash3 = (key, tableSize) -> {
         key ^= (key >>> 20) ^ (key >>> 12);
         key = key ^ (key >>> 7) ^ (key >>> 4);
         return key % tableSize;
-    }
+    };
     
-    public int hashBest(int key,int tableSize) {
+    static public final BiFunction<Integer, Integer, Integer> hashBest = (key, tableSize) -> {
         key ^= (key >>> 16); // Scramble lower and higher bits
         return Math.abs(key) % tableSize; // Prime table size
-    }
+    };
 
-    public int hashMul(int key, int tableSize) {
+    static public final BiFunction<Integer, Integer, Integer> hashMul = (key, tableSize) -> {
         double A = 0.61803398875; // (√5 - 1)/2 (Knuth's golden ratio)
         double product = key * A;
         return (int) Math.abs(tableSize * (product - (int) product));
-    }
+    };
 
-    public int hashDiv(int key, int tableSize) {
+    static public final BiFunction<Integer, Integer, Integer> hashDiv = (key, tableSize) -> {
         return Math.abs(key) % tableSize; // Must use a prime size!
-    }
+    };
 }
