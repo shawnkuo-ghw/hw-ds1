@@ -46,13 +46,9 @@ public class Trie {
         return null;
     }
 
-    // Find next word lex greater than the exact word, from the given node
+    // Find next word lex greater than the exact word, in the same branch
     public String findNextWordFromNode(TrieNode node, String prefix) {
-        if (node.isWordEnd) {
-            return prefix;
-        }
-
-        String min = findMinWordHelper(node, new StringBuilder());
+        String min = findMinWord(node);
         return min != null ? prefix + min : null;
     }
 
@@ -79,6 +75,7 @@ public class Trie {
         }
 
         // Case 1: fully matched word and is word end
+        // 'app' --> 'apple'
         if (i == word.length()) {
             // Try to find next word lex after this exact word
             String next = findNextWordFromNode(node, "");
@@ -92,13 +89,15 @@ public class Trie {
 
         // Case 2: partial match or word not ending here
         // prefix matched up to i
+        // 'appl' --> 'apple'
+        // 'appb' --> 'apple'
         String prefix = word.substring(0, i);
-        char c = (i < word.length()) ? word.charAt(i) : 0;
+        char c = (i < word.length()) ? (char)(word.charAt(i)+1) : 'a';
 
         TrieNode current = (i == 0) ? root : node;
 
         // Try children with character > c
-        for (char nextChar = (i < word.length() ? (char)(c + 1) : 'a'); nextChar <= 'z'; nextChar++) {
+        for (char nextChar = c; nextChar <= 'z'; nextChar++) {
             int idx = nextChar - 'a';
             if (current.children[idx] != null) {
                 String suffix = findMinWord(current.children[idx]);
@@ -109,8 +108,8 @@ public class Trie {
         }
 
         // Case 3: Backtrack up path to find next larger sibling
-        for (int j = path.size() - 2; j >= 0; j--) {
-            TrieNode parent = path.get(j);
+        for (int j = path.size() - 1; j >= 0; j--) {
+            TrieNode parent = j == 0 ? root : path.get(j - 1);
             int idxInWord = indexes.get(j);
             char curChar = word.charAt(idxInWord);
             for (char nextChar = (char)(curChar + 1); nextChar <= 'z'; nextChar++) {
@@ -127,5 +126,4 @@ public class Trie {
         // No next word found
         return null;
     }
-
 }
