@@ -6,7 +6,7 @@ import ex04Task01.interfaces.List;
 /**
  * The hash table implementation of interface {@code Dictionary}.
  */
-public class HashTable<K, V> implements Dictionary<K, V>{
+public class HashTableLinearProbing<K, V> implements Dictionary<K, V>{
     
     private int tableSize;
     private int elemCount;
@@ -15,7 +15,7 @@ public class HashTable<K, V> implements Dictionary<K, V>{
     private List<Element<K, V>> hashTable;
     private final BiFunction<K, Integer, Integer> hashFunction;
 
-    public HashTable(int tableSize, Class<K> keyClass, Class<V> valClass,  BiFunction<K, Integer, Integer> hashFunction) {
+    public HashTableLinearProbing(int tableSize, Class<K> keyClass, Class<V> valClass,  BiFunction<K, Integer, Integer> hashFunction) {
         this.keyClass = keyClass;
         this.valClass = valClass;
         this.tableSize = tableSize;
@@ -34,11 +34,11 @@ public class HashTable<K, V> implements Dictionary<K, V>{
     @Override
     public int insert(Object key, Object value) {
         if ( this.elemCount == this.tableSize ) { throw new IllegalStateException("HashTable.insert(): hash table overflow."); }
-        if ( !keyClass.isInstance(key) )        { throw new IllegalArgumentException("HashTable.insert(): key must be of type " + keyClass.getName()); }
-        if ( !valClass.isInstance(value) )      { throw new IllegalArgumentException("HashTable.insert(): value must be of type " + valClass.getName()); }
-        boolean ifProbing = true;
+        if ( !keyClass.isInstance(key) ) { throw new IllegalArgumentException("HashTable.insert(): key must be of type " + keyClass.getName()); }
+        if ( !valClass.isInstance(value) ) { throw new IllegalArgumentException("HashTable.insert(): value must be of type " + valClass.getName()); }
         K typedKey = keyClass.cast(key);
         V typedVal = valClass.cast(value);
+        boolean ifProbing = true;
         int i = 0; // probe number
         int q = 0; // index of hash table associated with key w.r.t. hash function
         do {

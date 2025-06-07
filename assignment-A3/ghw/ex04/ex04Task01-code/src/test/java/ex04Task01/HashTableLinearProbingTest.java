@@ -1,21 +1,18 @@
 package ex04Task01;
 import org.junit.jupiter.api.*;
-
 import static org.junit.jupiter.api.Assertions.*;
-
 import ex04Task01.implementations.HashFunctions;
-import ex04Task01.implementations.HashTable;
-import ex04Task01.implementations.HashFunctions.*;
+import ex04Task01.implementations.HashTableLinearProbing;
 import ex04Task01.interfaces.Dictionary;
 
-public class HashTableTest {
+public class HashTableLinearProbingTest {
     
     private final int SIZE = 6;
     private Dictionary<Integer, String> ht;
 
     @BeforeEach
     public void init() {
-        ht = new HashTable<Integer, String>(SIZE, Integer.class,String.class, HashFunctions.hash1);
+        ht = new HashTableLinearProbing<Integer, String>(SIZE, Integer.class,String.class, HashFunctions.hash1);
     }
 
     @Test

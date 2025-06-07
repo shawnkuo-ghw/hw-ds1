@@ -1,4 +1,4 @@
-# Data Structures 1 - Spring 2025 - Assignment A1
+# Data Structures 1 - Spring 2025 - Assignment A2
 
 Group Members: 
 
@@ -215,7 +215,7 @@ $\Rightarrow$ All acBST are AVL trees.
 
 ##### 4. Rotation-Free AVL Construction
 
-```
+```java
 AVLNode build2(int[] A):
 	n = length(A)
 	if (n = 0) :
