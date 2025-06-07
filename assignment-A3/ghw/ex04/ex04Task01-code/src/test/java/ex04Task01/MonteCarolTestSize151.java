@@ -1,6 +1,6 @@
 package ex04Task01;
 import ex04Task01.implementations.HashFunctions;
-import ex04Task01.implementations.HashTable;
+import ex04Task01.implementations.HashTableLinearProbing;
 import ex04Task01.interfaces.Dictionary;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.*;
@@ -21,9 +21,9 @@ public class MonteCarolTestSize151 {
     public void init() {
 
         // initialize hash tables w.r.t. different hash functions
-        htBest = new HashTable<Integer, String >(SIZE, Integer.class, String.class, HashFunctions.hashBest);
-        htMul  = new HashTable<Integer, String >(SIZE, Integer.class, String.class, HashFunctions.hashMul);
-        htDiv  = new HashTable<Integer, String >(SIZE, Integer.class, String.class, HashFunctions.hashDiv);
+        htBest = new HashTableLinearProbing<Integer, String >(SIZE, Integer.class, String.class, HashFunctions.hashBest);
+        htMul  = new HashTableLinearProbing<Integer, String >(SIZE, Integer.class, String.class, HashFunctions.hashMul);
+        htDiv  = new HashTableLinearProbing<Integer, String >(SIZE, Integer.class, String.class, HashFunctions.hashDiv);
 
         // generate an array with shuffled integers
         keysArray = new int[UNIVERSE_KEYS];
@@ -56,9 +56,9 @@ public class MonteCarolTestSize151 {
         int successSum3 = 0;    
         for ( int i = 0; i < ACTUAL_KEYS; i ++ ) {
             int keyToSearch = keysArray[i];            
-            int probeNum1 = ((HashTable<Integer, String>) htBest).searchCount(keyToSearch);
-            int probeNum2 = ((HashTable<Integer, String>) htMul).searchCount(keyToSearch);
-            int probeNum3 = ((HashTable<Integer, String>) htDiv).searchCount(keyToSearch);
+            int probeNum1 = ((HashTableLinearProbing<Integer, String>) htBest).searchCount(keyToSearch);
+            int probeNum2 = ((HashTableLinearProbing<Integer, String>) htMul).searchCount(keyToSearch);
+            int probeNum3 = ((HashTableLinearProbing<Integer, String>) htDiv).searchCount(keyToSearch);
             successSum1 += probeNum1;
             successSum2 += probeNum2;
             successSum3 += probeNum3;            
@@ -79,9 +79,9 @@ public class MonteCarolTestSize151 {
             assertEquals(-1, htBest.search(keyToSearch));
             assertEquals(-1, htMul.search(keyToSearch));
             assertEquals(-1, htDiv.search(keyToSearch));
-            int probeNum1 = ((HashTable<Integer, String>) htBest).searchCount(keyToSearch);
-            int probeNum2 = ((HashTable<Integer, String>) htMul).searchCount(keyToSearch);
-            int probeNum3 = ((HashTable<Integer, String>) htDiv).searchCount(keyToSearch);
+            int probeNum1 = ((HashTableLinearProbing<Integer, String>) htBest).searchCount(keyToSearch);
+            int probeNum2 = ((HashTableLinearProbing<Integer, String>) htMul).searchCount(keyToSearch);
+            int probeNum3 = ((HashTableLinearProbing<Integer, String>) htDiv).searchCount(keyToSearch);
             unsuccessSum1 += probeNum1;
             unsuccessSum2 += probeNum2;
             unsuccessSum3 += probeNum3;
