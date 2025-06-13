@@ -59,8 +59,8 @@ public class Solution {
         if ( currStation.equals(target2) ) { ifTar2Visited = true; }
         // if target1 and target2 have both been visited, then current path is a possible valid path
         if ( ifTar1Visited && ifTar2Visited ) {
-            System.out.println("current panth enqueue!");
-            paths.enqueue((List<Station>) new LinkedList<Station>((LinkedList<Station>) currPath));
+            System.out.println("current path enqueue!");
+            paths.enqueue(new LinkedList<Station>((LinkedList<Station>) currPath));
         }
         // DFS algorithm
         List<Station> currNeighbours = graph.neighbours(currStation);

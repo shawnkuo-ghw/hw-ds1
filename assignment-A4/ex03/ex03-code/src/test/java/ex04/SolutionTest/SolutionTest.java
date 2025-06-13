@@ -73,7 +73,6 @@ public class SolutionTest {
         graph.addEdge(stationD, stationY);
         graph.addEdge(stationX, stationC);
         graph.showGraphInfo();
-
         // get the connvinient path
         List<Station> sol = Solution.convenientPath(graph, stationA, stationX, stationY);
         assertEquals("[0:A, 4:X, 2:C, 5:Y]", sol.toString());
