@@ -1,10 +1,11 @@
 package main.java;
+
 /*
  * Pre-condition
  * 1. array A is not null
- * 2. the range of elements in array A are in [0,9]
- * 3. 
+ * 2. the range of elements in array A are in [0,9] otherwise the index of B will out of bound
  */
+
 public class problem2 {
     public static final int MaxValue = 9;
     public static final int MinValue = 0;
@@ -16,7 +17,7 @@ public class problem2 {
 
         //check Pre-condition 2
         for(int i = 0; i < A.length; i++) {
-            if (A[i] < 0 || A[i] > 9) {
+            if (A[i] < MinValue || A[i] > MaxValue) {
                 throw new IllegalArgumentException("Elements in array A should be in [0,9]");
             }
         }
