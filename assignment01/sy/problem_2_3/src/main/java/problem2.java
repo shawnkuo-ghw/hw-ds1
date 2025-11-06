@@ -1,14 +1,30 @@
 package main.java;
 /*
  * Pre-condition
- * 1. the range of elements in array A should be in [0,9]
+ * 1. array A is not null
+ * 2. the range of elements in array A are in [0,9]
+ * 3. 
  */
 public class problem2 {
     public static final int MaxValue = 9;
     public static final int MinValue = 0;
 
     public static void sort(int[] A) {
+        //check Pre-condition 1
+        if(A == null)
+            throw new IllegalArgumentException("array A should not be null");
+
+        //check Pre-condition 2
+        for(int i = 0; i < A.length; i++) {
+            if (A[i] < 0 || A[i] > 9) {
+                throw new IllegalArgumentException("Elements in array A should be in [0,9]");
+            }
+        }
+
+        //Algorithm starts
+        //set B[i] := 0 for every i between 0 and 9 using the simplest way
         int B[] = new int[]{0,0,0,0,0,0,0,0,0,0};
+        //The following code totally follow the pseudo-code
         for(int i = 0; i < A.length; i++) {
             int index = A[i];
             B[index] = B[index] + 1;
