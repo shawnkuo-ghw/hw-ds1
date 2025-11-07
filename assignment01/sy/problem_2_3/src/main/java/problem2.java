@@ -1,5 +1,3 @@
-package main.java;
-
 /*
  * Pre-condition
  * 1. array A is not null
@@ -39,13 +37,5 @@ public class problem2 {
                 j = j + 1;
             }
         }
-    }
-    public static void main(String[] args) {
-        int A[] = new int[]{1,5,3,6,3,8,9,4,1,0,6,2,4,6,7};
-        sort(A);
-        for(int i = 0; i < A.length; i++) {
-            System.out.println(A[i]);
-        }
-        
     }
 }
