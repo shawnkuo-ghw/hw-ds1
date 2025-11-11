@@ -127,6 +127,18 @@ public class PalindromeCollectorImp implements PalindromeCollectorofChar {
     }
 
     /**
+     * This method will help run the test
+     * return the content of the collector in an array
+     */
+    public char[] toArray() {
+        char[] result = new char[size];
+        for (int i = 0; i < size; i++) {
+            result[i] = collector[indexFromFront(i)];
+        }
+        return result;
+    }
+
+    /**
      * Representation invariant: 
      * 1. capacity > 0 
      * 2. the length of collector is capacity
