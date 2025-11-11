@@ -37,7 +37,7 @@ public interface PalindromeCollectorofChar {
      * Precondition: the collector is not empty
      * Postcondition: 
      * 1. the length of new collector decrease by 1
-     * 2. the last element of new collector = the previous of last elementelement of original collector
+     * 2. the last element of new collector = the previous of last elemente of original collector
      * 3. the new collector equals the original collector range from the second elements to the end
      * 4. return the character that is the last element of collector
      */
@@ -46,7 +46,7 @@ public interface PalindromeCollectorofChar {
     /*
      * Precondition: None
      * Postcondition:
-     * 1. return true iff the sequence reads the same forward and backward
+     * 1. return true iff the collector reads the same forward and backward
      * 2. the collector is not modified
      */
     public boolean isPalindrome();

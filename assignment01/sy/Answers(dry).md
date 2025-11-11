@@ -261,3 +261,107 @@
     There are two precondition, so I create two negative test to test if the precondition works well
 
     Then I create a positive test to test if this algorithm can sort the array well
+
+
+### Problem 3
+
+1. **<u>*Document pre-/post-conditions in clear English without revealing any internal representation*</u>**
+    1. `addFirst`
+
+        Precondition:
+        1. input char should be lower case and be in [a,z] 
+        2. collector should not be full
+
+        Postcondition: 
+        1. the length of new collector increase by 1 after adding
+        2. the first element of new collector becomes ch
+        3. from the second element to the last element of the new collector equals the elements in original collector in order
+
+    2. `addLast`
+
+        Precondition:
+        1. input char should be lower case and be in [a,z] 
+        2. collector should not be full
+
+        Postcondition: 
+        1. the length of new collector increase by 1 after adding
+        2. the last element of new collector becomes ch
+        3. from the first element to the previous one of the last element of the new collector equals the elements in original collector in order 
+
+    3. `removeFirst`
+
+        Precondition:
+        1. collector should not be empty
+
+        Postcondition: 
+        1. the length of new collector decrease by 1 after removing
+        2. the first element of new collector becomes the second element of original collector
+        3. from the second element to the last element of the original collector equals the elements in new collector in order 
+        4. return the character that is the first element of original collector
+
+    4. `removeLast`
+
+        Precondition:
+        1. collector should not be empty
+
+        Postcondition: 
+        1. the length of new collector decrease by 1 after removing
+        2. the last element of new collector becomes the previous element of the last element of original collector
+        3. from the first element to the previous element of the last element of the original collector equals the elements in new collector in order 
+        4. return the character that is the last element of original collector
+
+    5. `isPalindrome`
+
+        Precondition:
+        None
+
+        Postcondition: 
+        1. return true iff the collector reads the same forward and backward
+        2. the collector is not modified
+
+    6. `isEmpty`
+
+        Precondition:
+        None
+
+        Postcondition: 
+        1. return true iff the size of collector is 0
+        2. the collector is not modified
+
+    7. `size`
+
+        Precondition:
+        None
+
+        Postcondition: 
+        1. return the number of characters in the collector
+        2. the collector is not modified
+
+2.  **<u>*Declare all fields needed to guarantee O(1) time for every operation except for isPalindrome*</u>**
+    1. A char array `char[] collector` that represents the collector, since the collector is a fixed-size circular char arrya
+    2. Capacity of collector `int capacity` that fixes the max number of characters that the collector can have
+    3. DEFAULT_CAPACITY `final int DEFAULT_CAPACITY` that is a constant capacity and is used when we construct the collector without passing parameter: capacity
+    4. The head of the collector `int head` that indicate the first element in the collector, since the array is circular and we will do insertion and removal, then head will move, then we need its position
+    5. The tail of the collector `int tail` that indicate the last element in the collector, since the array is circular and we will do insertion and removal, then tail will move, then we need its position
+    6. The size of the collector `int size` that tell us the currently used size of collector, since we need to know if the collector is full
+
+    If we have those fields, then we will have a collector that is similar to double-ended queue
+    1. `addFirst`
+    
+        This method is O(1) since we know the position of first element: `head`, then we just move `head` forward one step and add element in that position and increase the `size`
+    2. `addLast`
+
+        This method is O(1) since we know the position of last element: `tail`, then we just move `tail` backward one step and add element in that position and increase the `size`
+    3. 'removeFirst'
+
+        This method is O(1) since we know the position of last element: `head`, then we can read the first element and return it. To remove it, we move `head` backward one step and decrease the `size`
+    4. 'removeLast'
+
+        This method is O(1) since we know the position of last element: `tail`, then we can read the last element and return it. To remove it, we move `tail` forward one step and decrease the `size`
+    5. 'isEmpty'
+
+        This method is O(1) since we have the field `size` , then just check if the `size` is 0
+    6. 'size()`
+        This method is O(1) since we directly return the field `size`
+
+3. 

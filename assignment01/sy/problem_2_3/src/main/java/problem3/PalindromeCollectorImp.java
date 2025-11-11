@@ -9,7 +9,7 @@ public class PalindromeCollectorImp implements PalindromeCollectorofChar {
     private int capacity;
     // index of the first element
     private int head; 
-    // index one past the last element
+    // index of the last element
     private int tail;
     // current used size of the collector
     private int size;
@@ -100,15 +100,15 @@ public class PalindromeCollectorImp implements PalindromeCollectorofChar {
     /*
      * return the index = head + index in a circular way
      */
-    private int indexFromFront(int index) {
+    private int indexFromHead(int index) {
         return (head + index) % capacity;
     }
 
     @Override
     public boolean isPalindrome() {
         for (int i = 0; i < size / 2; i++) {
-            char left = collector[indexFromFront(i)];
-            char right = collector[indexFromFront(size - 1 - i)];
+            char left = collector[indexFromHead(i)];
+            char right = collector[indexFromHead(size - 1 - i)];
             if (left != right) {
                 return false;
             }
@@ -133,7 +133,7 @@ public class PalindromeCollectorImp implements PalindromeCollectorofChar {
     public char[] toArray() {
         char[] result = new char[size];
         for (int i = 0; i < size; i++) {
-            result[i] = collector[indexFromFront(i)];
+            result[i] = collector[indexFromHead(i)];
         }
         return result;
     }
@@ -161,7 +161,7 @@ public class PalindromeCollectorImp implements PalindromeCollectorofChar {
             return false;
         }
         for (int i = 0; i < size; i++) {
-            char ch = collector[indexFromFront(i)];
+            char ch = collector[indexFromHead(i)];
             if (ch < 'a' || ch > 'z') {
                 return false;
             }
