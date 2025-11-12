@@ -337,7 +337,7 @@
         1. return the number of characters in the collector
         2. the collector is not modified
 
-2.  **<u>*Declare all fields needed to guarantee O(1) time for every operation except for isPalindrome*</u>**
+2. **<u>*Declare all fields needed to guarantee O(1) time for every operation except for isPalindrome*</u>**
     1. A char array `char[] collector` that represents the collector, since the collector is a fixed-size circular char arrya
     2. Capacity of collector `int capacity` that fixes the max number of characters that the collector can have
     3. DEFAULT_CAPACITY `final int DEFAULT_CAPACITY` that is a constant capacity and is used when we construct the collector without passing parameter: capacity
@@ -364,4 +364,24 @@
     6. 'size()`
         This method is O(1) since we directly return the field `size`
 
-3. 
+3. **<u>*Provide a representation invariant expressed in English and describe an abstract function that explains, in terms of the ADT, what the concrete state means*</u>**
+
+    Representation invariant
+
+    1. Capacity is positive and not null
+    2. The length of collector equals capacity
+    3. Size is bounded by 0(included) and capacity(included)
+    4. Head and tail are valid: ranging from 0(included) to capacity(exculded)
+    5. Head, tail and size satisfy the property of circular array
+    6. Every character in collector is lowercase letter from 'a' to 'z'
+    --- 
+    Abstraction function
+    The abstract value is a finite sequence A of lowercase characters from 'a' to 'z' with size |A| = size and a fixed maximum capacity.
+    
+    Given the concrete state (collector, capacity, head, tail, size), A is defined by
+    For each i with 0 ≤ i < size, S[i] = collector[(head + i) mod capacity].
+    
+    All other elements in array that are not in these size positions are irrelevant to the abstract value.
+
+
+
