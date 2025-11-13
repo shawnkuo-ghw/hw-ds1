@@ -374,14 +374,18 @@
     4. Head and tail are valid: ranging from 0(included) to capacity(exculded)
     5. Head, tail and size satisfy the property of circular array
     6. Every character in collector is lowercase letter from 'a' to 'z'
+
+    `RI(R) = capacity > 0 ∧ collector.length = capacity ∧ 0 ≤ size ≤ capacity ∧ 0 ≤ head,tail < capacity ∧ tail = (head + size) mod capacity ∧ ∀i < size: 'a' ≤ collector[(head+i) mod capacity] ≤ 'z'`
+
     --- 
     Abstraction function
-    The abstract value is a finite sequence A of lowercase characters from 'a' to 'z' with size |A| = size and a fixed maximum capacity.
-    
-    Given the concrete state (collector, capacity, head, tail, size), A is defined by
-    For each i with 0 ≤ i < size, S[i] = collector[(head + i) mod capacity].
-    
-    All other elements in array that are not in these size positions are irrelevant to the abstract value.
+    - Abstract values (A): finite sequences of lowercase characters `['a'..'z']`
+    - Representation values (R): `R = ⟨collector : char[capacity], capacity : int, head : int, tail : int, size : int⟩`
+    - Abstraction Function 
+
+        Let `AF : R ⇒ A` s.t. $(AF(R) = L \iff |L| = R.\text{size} \ \land\ \forall k \in \{1,\dots,R.\text{size}\}:\ L[k] = R.\text{collector}[(R.\text{head} + k - 1) \bmod R.\text{capacity}])$
+        
+        In English: the abstract list `L` is the `size` elements starting at `head` in `collector`, max size limited by `capacity`
 
 
 
