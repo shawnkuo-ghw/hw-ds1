@@ -435,21 +435,21 @@ If we have those fields, then we will have a collector that is similar to double
 2. `addLast`
 
     This method is O(1) since we know the position of last element: `tail`, then we just move `tail` backward one step and add element in that position and increase the `size`
-3. 'removeFirst'
+3. `removeFirst`
 
     This method is O(1) since we know the position of last element: `head`, then we can read the first element and return it. To remove it, we move `head` backward one step and decrease the `size`
-4. 'removeLast'
+4. `removeLast`
 
     This method is O(1) since we know the position of last element: `tail`, then we can read the last element and return it. To remove it, we move `tail` forward one step and decrease the `size`
-5. 'isEmpty'
+5. `isEmpty`
 
     This method is O(1) since we have the field `size` , then just check if the `size` is 0
-6. 'size()`
+6. `size()`
     This method is O(1) since we directly return the field `size`
 
 ### (c) **<u>*Provide a representation invariant expressed in English and describe an abstract function that explains, in terms of the ADT, what the concrete state means*</u>**
 
-Representation invariant
+**Representation invariant :**
 
 1. Capacity is positive and not null
 2. The length of collector equals capacity
@@ -461,7 +461,8 @@ Representation invariant
 `RI(R) = capacity > 0 ∧ collector.length = capacity ∧ 0 ≤ size ≤ capacity ∧ 0 ≤ head,tail < capacity ∧ tail = (head + size) mod capacity ∧ ∀i < size: 'a' ≤ collector[(head+i) mod capacity] ≤ 'z'`
 
 ---
-Abstraction function
+**Abstraction function :**
+
 - Abstract values (A): finite sequences of lowercase characters `['a'..'z']`
 - Representation values (R): `R = ⟨collector : char[capacity], capacity : int, head : int, tail : int, size : int⟩`
 - Abstraction Function 
@@ -469,8 +470,8 @@ Abstraction function
     Let `AF : R ⇒ A` s.t. $(AF(R) = L \iff |L| = R.\text{size} \ \land\ \forall k \in \{1,\dots,R.\text{size}\}:\ L[k] = R.\text{collector}[(R.\text{head} + k - 1) \bmod R.\text{capacity}])$
     
     In English: the abstract list `L` is the `size` elements starting at `head` in `collector`, max size limited by `capacity`
-
-
+    
+    
 
 ## Problem 04: Basic Blockchain System
 
