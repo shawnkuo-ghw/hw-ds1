@@ -58,8 +58,8 @@ public class SBlockchain implements Blockchain
     @Override
     public void addBlock()
     {
-        if(size() != transactionsPerBlock) {
-            throw new IllegalStateException("the block is not full");
+        if( !currBlock.isFull() ) {
+            throw new IllegalStateException("SBlockchain.addBlock(): the current block is not full");
         }
         // 1. Execute all transactions in current block
         Transaction[] currTransactions = currBlock.getTransactions();
@@ -77,10 +77,10 @@ public class SBlockchain implements Blockchain
             if (blocks.length() == 0) { // currBlock is the genesis block
                 balances.updateBalance("0", initialBalance);
             } else if (transactionAmount <= fromAddressBalance) {
-                if (!fromAddress.equals(toAddress)) {
+                if (!fromAddress.equals(toAddress) || (fromAddress == "0" && toAddress == "0")) {
                     balances.updateBalance(fromAddress, fromAddressBalance - transactionAmount); // O(|A|)
                     balances.updateBalance(toAddress, toAddressBalance + transactionAmount); // O(|A|)
-                }
+                } 
             } else {
                 t.revert();
             }
@@ -104,9 +104,9 @@ public class SBlockchain implements Blockchain
         String[] allAddresses = balances.getAllAddresses();
         for (String address: allAddresses) { sumOfBalances += balances.getBalance(address); }
         checkItem01 = (initialBalance == sumOfBalances);
-        if ( !checkItem01 ) {
-            System.out.println("01 is false.");
-        }
+        // if ( !checkItem01 ) {
+        //     System.out.println("01 is false.");
+        // }
         
         // 2) Check: correct hash linking (previousHash == currentHash - 1)
         boolean checkItem02 = true;
@@ -128,9 +128,9 @@ public class SBlockchain implements Blockchain
         int lastHash = blocks.at(length-1).getBlockHash();
         int currBlockHash = currBlock.getBlockHash();
         checkItem02 = checkItem02 && (lastHash == currBlockHash - 1);
-        if ( !checkItem02 ) {
-            System.out.println("02 is false.");
-        }        
+        // if ( !checkItem02 ) {
+        //     System.out.println("02 is false.");
+        // }        
 
         // 3) Check: all blocks have same transaction capacity
         boolean checkItem03 = true;
@@ -147,9 +147,9 @@ public class SBlockchain implements Blockchain
                 }
             }
         }
-        if ( !checkItem03 ) {
-            System.out.println("03 is false.");
-        }
+        // if ( !checkItem03 ) {
+        //     System.out.println("03 is false.");
+        // }
 
         // 4) Check: block numbers are strictly increasing
         boolean checkItem04 = true;
@@ -169,9 +169,9 @@ public class SBlockchain implements Blockchain
         prevBlockNumber = blocks.at(i-1).getBlockNumber();
         currBlockNumber = currBlock.getBlockNumber();
         checkItem04 = checkItem04 && (currBlockNumber > prevBlockNumber);
-        if ( !checkItem04 ) {
-            System.out.println("04 is false.");
-        }
+        // if ( !checkItem04 ) {
+        //     System.out.println("04 is false.");
+        // }
 
         // The overall result of repOK
         return checkItem01 && checkItem02 && checkItem03 && checkItem04;

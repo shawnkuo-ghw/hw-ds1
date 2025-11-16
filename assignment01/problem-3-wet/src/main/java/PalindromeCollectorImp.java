@@ -5,14 +5,10 @@ public class PalindromeCollectorImp implements PalindromeCollectorofChar {
     private static final int DEFAULT_CAPACITY = 16;
 
     private char[] collector;
-    // max number of characters that the collector can have
-    private int capacity;
-    // index of the first element
-    private int head; 
-    // index of the last element
-    private int tail;
-    // current used size of the collector
-    private int size;
+    private int capacity; // max number of characters that the collector can have
+    private int head; // index of the first element
+    private int tail; // index of the last element
+    private int size; // current used size of the collector
 
     /**
      * create a collector with a given capacity
