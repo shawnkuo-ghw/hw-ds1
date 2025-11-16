@@ -58,6 +58,9 @@ public class SBlockchain implements Blockchain
     @Override
     public void addBlock()
     {
+        if(size() != transactionsPerBlock) {
+            throw new IllegalStateException("the block is not full");
+        }
         // 1. Execute all transactions in current block
         Transaction[] currTransactions = currBlock.getTransactions();
         String fromAddress = "";
@@ -74,8 +77,10 @@ public class SBlockchain implements Blockchain
             if (blocks.length() == 0) { // currBlock is the genesis block
                 balances.updateBalance("0", initialBalance);
             } else if (transactionAmount <= fromAddressBalance) {
-                balances.updateBalance(fromAddress, fromAddressBalance - transactionAmount); // O(|A|)
-                balances.updateBalance(toAddress, toAddressBalance + transactionAmount); // O(|A|)
+                if (!fromAddress.equals(toAddress)) {
+                    balances.updateBalance(fromAddress, fromAddressBalance - transactionAmount); // O(|A|)
+                    balances.updateBalance(toAddress, toAddressBalance + transactionAmount); // O(|A|)
+                }
             } else {
                 t.revert();
             }
@@ -179,7 +184,7 @@ public class SBlockchain implements Blockchain
     public Block getBlock(int index)
     {
         if ( index < 0 || index >= size() ) {
-            throw new IllegalArgumentException("SBlockchain.getBlock(): index is invalid.");
+            throw new IndexOutOfBoundsException("SBlockchain.getBlock(): index is invalid.");
         }
         if ( index == size() - 1 ) {
             return currBlock;

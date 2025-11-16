@@ -24,6 +24,13 @@ public class Transaction
         if (amount <= 0) {
             throw new IllegalArgumentException("Transaction(): amount should be greater than zero.");
         }
+        else if (fromAddress == null || toAddress == null) {
+            throw new IllegalArgumentException("Address should not be null");
+        }
+        else if (fromAddress == "" || toAddress == "") {
+            throw new IllegalArgumentException("Address should not be empty");
+        }
+
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
