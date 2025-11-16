@@ -48,10 +48,13 @@ public class SBlockchain implements Blockchain
         }
         // 1. Adds transaction to current block
         Transaction newTransaction = new Transaction(fromAddress, toAddress, amount);
-        currBlock.addTransaction(newTransaction);
+        currBlock.addTransaction(newTransaction); // Time Complexity: O(1)
         // 2. If block becomes full, automatically calls addBlock()
         if ( currBlock.isFull() ) {
-            addBlock();
+            addBlock(); // Time Complexity: O(T|A|)
+        }
+        if ( !repOK() ) {
+            throw new IllegalStateException("SBlockchain.processTransaction(): repOK() is false.");
         }
     }
 
@@ -86,7 +89,7 @@ public class SBlockchain implements Blockchain
             }
         }
         // 2. Append current block to chain
-        blocks.insertRear(currBlock);
+        blocks.insertRear(currBlock); // O(1)
         // 3. Contruct a new current block
         currBlock = new Block(currBlock.getBlockHash(), transactionsPerBlock, currBlock.getBlockNumber() + 1);
         if ( !repOK() ) {

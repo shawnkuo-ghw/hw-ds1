@@ -7,6 +7,8 @@
 |      01      | 999027873 |   Yue, SHI   |
 |      02      | 999014780 | Hongwei, GUO |
 
+[TOC]
+
 ## Problem 01: Big-O Simplification
 
 >    Simplify each expression to **Big-O notation**. Justify your answer using the definition of Big-O and/or its properties.
@@ -80,7 +82,7 @@ $$
 O(n!) + O(2^n) \cdot O(n^3) = O(n!) + O(2^n \cdot n^3) = O(n!).
 $$
 
-## Problem 2
+## Problem 2: Sorting Algorithm Analysis
 ### (a) **<u>*State the precondition required for correctness*</u>**
 
 Pre-condition:
@@ -470,3 +472,76 @@ Abstraction function
 
 
 
+## Problem 04: Basic Blockchain System
+
+### Method `updateBalance(String, int)` and `getBalance(String)`
+
+````java
+// File: BalanceImp.java
+
+// private final Sequence<AddressBalancePair> addBalPairs;
+
+public void updateBalance(String address, int newBalance)
+{
+    AddressBalancePair newPair = new AddressBalancePair(address, newBalance);
+    int index = addBalPairs.indexOf(newPair); // Time Complexity: O(|A|)
+    if (index == -1) {
+        addBalPairs.insertRear(newPair); // add new pair, O(1)
+    } else {
+        addBalPairs.updateAt(index, newPair); // update address-balance pair, O(|A|)
+    }
+}
+
+public int getBalance(String address)
+{
+    int balanceOfAddress;
+    AddressBalancePair target = new AddressBalancePair(address, 0);
+    int index = addBalPairs.indexOf(target); // Time Complexity: O(|A|)
+    if (index != -1) {
+        balanceOfAddress = addBalPairs.at(index).getBalance(); // Time Complexity: O(|A|)
+    } else {
+        balanceOfAddress = 0; // address not found
+    }
+    return balanceOfAddress;
+}
+````
+
+Time Complexity: `O(|A|)`
+
+Explaination: 
+
+-   `|A|` is the number of distinct addresses that currently hold a balance, which is also equal to the number of addresses stored in `addBalPairs`.
+
+-   Methods `indexOf()`, `at()` and `updateAt()` of class `Sequence` all require iterating the whole linear structure used to implement the class, so the (worst-case) time complexities of them are `O(|A|)`.
+-   In the implementation of methods `updateBalance(String, int)` and `getBalance(String address)` in class `BalanceImp`, methods  `indexOf()`, `at()` and `updateAt()` are involved (line `8`, `12`, `20` and `22`). 
+-   Therefore, the time complexities of these two methods are both `O(|A|)`.
+
+
+
+### Method `addBlock()`
+
+![image-20251116224510216](./assets/addBlock.png)
+
+Time Complexity: `O(T|A|)`
+
+Explaination:
+
+-   `T` is the number of transactions stored in a block and `|A|` is the number of distinct addresses that currently hold a balance.
+-   The first step of method `addBlock` is to execute all transactions stored in the current block (i.e. `currBlock`).
+-   In the execution of each transaction, to get access to the balances of `fromAddress` and `toAddress`, we call methods `getBalance()` of class `Balance` (line `17` and `18`), which has been analysed above, and its time complexity is `O(|A|)`.
+-   Also in the exeution of each transaction, if the transaction is valid (`transactionAmount <= fromAddressBalance`), method `updateBalance()` will be called, whose time complexity is `O(|A|)`.
+-   Hence, the time complexity of executing each transaction is `O(|A|)`.
+-   Overall, the time complexity of excuting of all `T` many transactions is `T.O(|A|) = O(T|A|)`.
+
+
+
+### Method `processTransaction(String, String, int)`
+
+![image-20251116233413136](./assets/processTransaction.png)
+
+Time Complexity: `O(T|A|)`
+
+Explaination:
+
+-   The time complexity of all lines in `processTransaction`  is `O(1)` except line `11`, where method `addBlock()` is called, and the time complexity of this method is `O(T|A|)` , as analysed above.
+-   Therefore, the time complexity of `processTransaction()` is `O(T|A|)`.

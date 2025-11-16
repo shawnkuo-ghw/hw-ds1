@@ -56,6 +56,9 @@ public class PalindromeCollectorImp implements PalindromeCollectorofChar {
         head = dec(head);
         collector[head] = ch;
         size++;
+        if(!repOK()) {
+            throw new IllegalStateException("collector doesn't satisfy repok()");
+        }
     }
 
     @Override
@@ -69,6 +72,9 @@ public class PalindromeCollectorImp implements PalindromeCollectorofChar {
         collector[tail] = ch;
         tail = inc(tail);
         size++;
+        if(!repOK()) {
+            throw new IllegalStateException("collector doesn't satisfy repok()");
+        }
     }
 
     @Override
@@ -79,6 +85,9 @@ public class PalindromeCollectorImp implements PalindromeCollectorofChar {
         char value = collector[head];
         head = inc(head);
         size--;
+        if(!repOK()) {
+            throw new IllegalStateException("collector doesn't satisfy repok()");
+        }
         return value;
     }
 
@@ -90,6 +99,9 @@ public class PalindromeCollectorImp implements PalindromeCollectorofChar {
         tail = dec(tail);
         char value = collector[tail];
         size--;
+        if(!repOK()) {
+            throw new IllegalStateException("collector doesn't satisfy repok()");
+        }
         return value;
     }
 
