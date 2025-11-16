@@ -1,4 +1,4 @@
-package problem3;
+
 
 public class PalindromeCollectorImp implements PalindromeCollectorofChar {
 
