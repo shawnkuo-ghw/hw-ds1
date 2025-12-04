@@ -9,11 +9,13 @@ public class FibonacciNode {
     }
 
     // get the left child of this node
+    //O(1)
     FibonacciNode getLeft() {
         return left;
     }
 
     //get the right child of this node
+    //O(1)
     FibonacciNode getRight() {
         return right;
     }

@@ -16,16 +16,20 @@ public class FibonacciTree {
     }
 
     // build the ith Fibonacci tree recursively
-    public FibonacciNode buildFibonacciTree(int i) {
+    //O(n)
+    private FibonacciNode buildFibonacciTree(int i) {
+        //O(1)
         if (i == 0) {
             return null;
         }
+        //O(1)
         else if (i == 1) {
             FibonacciNode rootNode = new FibonacciNode();
             rootNode.left = null;
             rootNode.right = null;
             return rootNode;
         }
+        //O(n) since we recurse every node
         else {
             FibonacciNode rootNode = new FibonacciNode();
             rootNode.left = buildFibonacciTree(i - 1);
@@ -35,17 +39,21 @@ public class FibonacciTree {
     }
 
     // get the root of the Fibonacci tree
+    //O(1)
     public FibonacciNode getRoot() {
         return root;
     }
 
     // compute the height of the Fibonacci tree
+    //O(n)
     public int height() {
         return height(root);
     }
 
     // compute the height of the tree with root curr
-    public int height(FibonacciNode curr) {
+    //O(n) in worst case since it recurse every node
+    //and the work for each level call is just O(1)
+    private int height(FibonacciNode curr) {
         if (curr == null)
             return 0;
         else
@@ -53,6 +61,8 @@ public class FibonacciTree {
     }
 
     //compute balance factor of a node
+    //O(n) in the worst case since height is O(n) and we need recurse every node
+    //and the work for each level call is just O(1)
     public int balanceFactor(FibonacciNode curr) {
         if (curr == null) {
             return 0;
@@ -61,56 +71,77 @@ public class FibonacciTree {
     }
 
     // count the number of nodes
+    //O(n)
     public int countNodes() {
         return countNodes(root);
     }
 
-    //count the number of nodes in tree with root curr
-    public int countNodes(FibonacciNode curr) {
+    //count the number of nodes in tree with root curr recursively
+    //O(n) in the worst case
+    private int countNodes(FibonacciNode curr) {
+        //O(1)
         if (curr == null)
             return 0;
+        //O(1) * n = O(n) in the worst case since we need recurse all node
+        //and the work for each level call is just O(1)
         return 1 + countNodes(curr.left) + countNodes(curr.right);
     }
 
-    // print the balance factor of each node of the Fibonacci tree
-    public void printBalanceFactors() {
-        System.out.println("Balance factors of Fibonacci Tree is:");
-        printBalanceFactors(root, "root");
-    }
-
     // get balance factors as anarray
+    // O(n log n)
     public int[] getBalanceFactorsArray() {
+        //O(n)
         int count = countNodes();
         if (count == 0)
             return new int[0];
         int[] balanceFactors = new int[count];
-        int[] index = {0};
+        int index = 0;
+        // O(n log n)
         collectBalanceFactors(root, balanceFactors, index);
         return balanceFactors;
     }
 
     // collect balance factors in preorder
-    public void collectBalanceFactors(FibonacciNode curr, int[] balanceFactors, int[] index) {
+    //O(n) * log n = O(n log n)
+    private void collectBalanceFactors(FibonacciNode curr, int[] balanceFactors, int index) {
         if (curr != null) {
-            balanceFactors[index[0]++] = balanceFactor(curr);
+            //O(n)
+            balanceFactors[index++] = balanceFactor(curr);
+            //For each level call the work is O(n), and 
+            // we need to call it for the height of tree(log n) times
+            // That is O(n) * log n = O(n log n)
             collectBalanceFactors(curr.left, balanceFactors, index);
+            //Same reasone O(n) * log n = O(n log n)
             collectBalanceFactors(curr.right, balanceFactors, index);
         }
     }
 
-
-    // print the balance factor of each node in the tree with toot curr
-    public void printBalanceFactors(FibonacciNode curr, String position) {
-        if (curr != null) {
-            int balanceFactor = balanceFactor(curr);
-            System.out.println("node at " + position + ": balance factor is " + balanceFactor);
-            printBalanceFactors(curr.left, position + " .left");
-            printBalanceFactors(curr.right, position + " .right");
-        }
-    }
-    
+    //O(1)
     public boolean isEmpty() {
         return root == null;
+    }
+
+    // print the balance factor of each node of the Fibonacci tree
+    //O(n logn)
+    public void printBalanceFactors() {
+        System.out.println("Balance factors of Fibonacci Tree is:");
+        printBalanceFactors(root, "root");
+    }
+
+    // print the balance factor of each node in the tree with toot curr
+    //O(n log n) in the worst case
+    public void printBalanceFactors(FibonacciNode curr, String position) {
+        if (curr != null) {
+            //O(n)
+            int balanceFactor = balanceFactor(curr);
+            System.out.println("node at " + position + ": balance factor is " + balanceFactor);
+            //For each level call the work is O(n), and 
+            // we need to call it for the height of tree(log n) times
+            // That is O(n) * log n = O(n log n)
+            printBalanceFactors(curr.left, position + " .left");
+            //same reason O(n) * log n = O(n log n)
+            printBalanceFactors(curr.right, position + " .right");
+        }
     }
 }
 

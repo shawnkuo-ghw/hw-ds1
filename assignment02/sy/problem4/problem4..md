@@ -15,6 +15,3 @@
             rootNode.right = FibonacciTree(i - 2)
             return rootNode
     ```
-2. Implement the algorithm in Java and provide meaningful tests.
-
-3. Write a method in Java that prints the balance factor of each node of the ith Fibonacci tree.

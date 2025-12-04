@@ -48,11 +48,11 @@ Then the height of the AVL tree is $\log n$
                 AVLNode succ = findSuccessor(curr);
                 //O(1)
                 curr.val = succ.val;
-                /* For this recursive call we do O(1) work per level,
+                /* For this recursive method we do O(1) work per level,
                  * then go down, and the height of the tree starting
                  * at curr.right is less or equal to log (n).
-                 * Thus in the worst case this call to delete visits (the height of the tree) levels,
-                 * so its complexity is O(1) * log (n) = O(log n).
+                 * Thus in the worst case we need visits (the height of the tree) levels,
+                 * Thus complexity is O(1) * log (n) = O(log n).
                  */
                 curr.right = delete(curr.right, succ.val);
             }
