@@ -88,7 +88,7 @@ public class FibonacciTree {
     }
 
     // get balance factors as anarray
-    // O(n log n)
+    // O(n^2)
     public int[] getBalanceFactorsArray() {
         //O(n)
         int count = countNodes();
@@ -96,22 +96,21 @@ public class FibonacciTree {
             return new int[0];
         int[] balanceFactors = new int[count];
         int index = 0;
-        // O(n log n)
+        // O(n^2)
         collectBalanceFactors(root, balanceFactors, index);
         return balanceFactors;
     }
 
     // collect balance factors in preorder
-    //O(n) * log n = O(n log n)
+    //O(n^2)
     private int collectBalanceFactors(FibonacciNode curr, int[] balanceFactors, int index) {
         if (curr != null) {
             //O(n)
             balanceFactors[index++] = balanceFactor(curr);
             //For each level call the work is O(n), and 
-            // we need to call it for the height of tree(log n) times
-            // That is O(n) * log n = O(n log n)
+            // we need to call it for every nodes (n) times
+            // That is O(n) * n = O(n^2)
             index = collectBalanceFactors(curr.left, balanceFactors, index);
-            //Same reasone O(n) * log n = O(n log n)
             index = collectBalanceFactors(curr.right, balanceFactors, index);
         }
         return index;
@@ -123,24 +122,23 @@ public class FibonacciTree {
     }
 
     // print the balance factor of each node of the Fibonacci tree
-    //O(n logn)
+    //O(n^2)
     public void printBalanceFactors() {
         System.out.println("Balance factors of Fibonacci Tree is:");
         printBalanceFactors(root, "root");
     }
 
     // print the balance factor of each node in the tree with toot curr
-    //O(n log n) in the worst case
+    //O(n^2) in the worst case
     public void printBalanceFactors(FibonacciNode curr, String position) {
         if (curr != null) {
             //O(n)
             int balanceFactor = balanceFactor(curr);
             System.out.println("node at " + position + ": balance factor is " + balanceFactor);
             //For each level call the work is O(n), and 
-            // we need to call it for the height of tree(log n) times
-            // That is O(n) * log n = O(n log n)
+            // we need to call it for every nodes (n) times
+            // That is O(n) * n = O(n^2)
             printBalanceFactors(curr.left, position + " .left");
-            //same reason O(n) * log n = O(n log n)
             printBalanceFactors(curr.right, position + " .right");
         }
     }

@@ -59,13 +59,23 @@ public class HeapBinaryTreeTest {
     }
 
     @Test
-    public void fromArrayEmptyTest() {
+    public void fromArrayEmptyNegativeTest() {
         int[] array = {};
         HeapBinaryTree tree = HeapBinaryTree.fromArray(array);
         assertNull(tree.getRoot());
         assertTrue(tree.isEmpty());
         assertEquals(0, tree.countNodes());
         assertEquals(0, tree.toArray().length);
+    }
+
+    @Test
+    public void fromArrayNullNegativeTest() {
+        HeapBinaryTree tree = HeapBinaryTree.fromArray(null);
+        assertNull(tree.getRoot());
+        assertTrue(tree.isEmpty());
+        assertEquals(0, tree.countNodes());
+        assertEquals(0, tree.toArray().length);
+        assertTrue(tree.isMaxHeap());
     }
 
     @Test
