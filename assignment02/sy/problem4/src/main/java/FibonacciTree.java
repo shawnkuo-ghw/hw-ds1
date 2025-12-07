@@ -103,17 +103,18 @@ public class FibonacciTree {
 
     // collect balance factors in preorder
     //O(n) * log n = O(n log n)
-    private void collectBalanceFactors(FibonacciNode curr, int[] balanceFactors, int index) {
+    private int collectBalanceFactors(FibonacciNode curr, int[] balanceFactors, int index) {
         if (curr != null) {
             //O(n)
             balanceFactors[index++] = balanceFactor(curr);
             //For each level call the work is O(n), and 
             // we need to call it for the height of tree(log n) times
             // That is O(n) * log n = O(n log n)
-            collectBalanceFactors(curr.left, balanceFactors, index);
+            index = collectBalanceFactors(curr.left, balanceFactors, index);
             //Same reasone O(n) * log n = O(n log n)
-            collectBalanceFactors(curr.right, balanceFactors, index);
+            index = collectBalanceFactors(curr.right, balanceFactors, index);
         }
+        return index;
     }
 
     //O(1)

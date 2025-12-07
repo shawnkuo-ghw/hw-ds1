@@ -72,11 +72,13 @@ public class FibonacciTreeTest {
 
     @Test
     public void getBalanceFactorsArrayPositiveTest() {
-        FibonacciTree tree = new FibonacciTree(5);
+        FibonacciTree tree = new FibonacciTree(3);
         int[] factors = tree.getBalanceFactorsArray();
         assertNotNull(factors);
-        assertEquals(12, factors.length);
+        assertEquals(4, factors.length);
         assertEquals(tree.balanceFactor(tree.getRoot()), factors[0]);
+        int[] expected = new int[] { -1, -1, 0, 0 };
+        assertArrayEquals(expected, factors);
     }
 
     @Test
