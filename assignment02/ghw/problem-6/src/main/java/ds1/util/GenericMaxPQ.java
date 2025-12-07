@@ -19,10 +19,10 @@ public class GenericMaxPQ<T extends Comparable<T>> implements GenericPQ<T>
 
     @SuppressWarnings("unchecked")
     public GenericMaxPQ(Class<T> type, int capacity) {
+        this.size = 0;
         this.type = type;
         this.capacity = capacity;
         this.heap = (T[]) java.lang.reflect.Array.newInstance(type, capacity);
-        this.size = 0;
     }
     
     // Copy constructor
@@ -41,7 +41,6 @@ public class GenericMaxPQ<T extends Comparable<T>> implements GenericPQ<T>
         this.heap = (T[]) java.lang.reflect.Array.newInstance(type, capacity);
         System.arraycopy(other.heap, 0, this.heap, 0, this.size);
     }
-
 
     /* ======================================================================= *
      *                               Setters                                   *

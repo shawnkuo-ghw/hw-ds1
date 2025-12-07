@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 /**
  * The interface of generic priority queue
  */
-public interface GenericPQ<T extends Comparable<T>>
+public interface GenericPQ<T extends Comparable<? super T>>
 {
     /**
      * Enqueue an element {@code elem} into priority queue.
