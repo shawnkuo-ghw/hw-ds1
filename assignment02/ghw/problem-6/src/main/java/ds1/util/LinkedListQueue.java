@@ -1,5 +1,4 @@
 package ds1.util;
-
 import ds1.TransactionWithFee;
 
 class Node {
@@ -9,10 +8,13 @@ class Node {
         this.data = data;
     }
 }
-public class LinkedListQueue implements Queue{
+
+public class LinkedListQueue implements Queue
+{
     Node head;
     Node tail;
     int size;
+
     public LinkedListQueue() {
         head = null;
         tail = null;
@@ -92,5 +94,4 @@ public class LinkedListQueue implements Queue{
         curr.next = curr.next.next;
         size--;
     }
-
 }

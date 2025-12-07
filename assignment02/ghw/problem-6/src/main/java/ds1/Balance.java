@@ -8,7 +8,7 @@ public interface Balance {
      * Returns the balance of the given address
      * @param address the address to check
      * @return balance of the address, 0 if address doesn't exist
-     * O(log A) where A is the number of addresses
+     * O(log|A|) where |A| is the number of addresses
      */
     int getBalance(String address);
 
@@ -16,7 +16,8 @@ public interface Balance {
      * Updates the balance of the given address
      * @param address the address to update
      * @param newBalance the new balance to set
-     * O(log A) where A is the number of addresses
+     * O(log|A|) where |A| is the number of addresses
+     * @throws IllegalStateException if totalSupply does not equal to the sum of all accounts
      */
     void updateBalance(String address, int newBalance);
 
@@ -30,7 +31,7 @@ public interface Balance {
     /**
      * Returns all addresses in the system
      * @return array of all addresses
-     * O(A) where A is the number of addresses
+     * O(|A|) where |A| is the number of addresses
      */
     String[] getAllAddresses();      
 }

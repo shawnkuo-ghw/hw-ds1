@@ -4,7 +4,8 @@ package ds1;
  * This class represents a pair of address and its corresponding balance.
  */
 
-public class AddressBalancePair implements Comparable<AddressBalancePair> {
+public class AddressBalancePair implements Comparable<AddressBalancePair>
+{
     public final String address;
     public final int balance;
 
@@ -36,5 +37,4 @@ public class AddressBalancePair implements Comparable<AddressBalancePair> {
     public int compareTo(AddressBalancePair o) {
         return this.address.compareTo(o.address);
     }
-
 }

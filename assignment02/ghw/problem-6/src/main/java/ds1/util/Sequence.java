@@ -13,4 +13,3 @@ public interface Sequence<T> {
     void updateAt(int i, T elem);
     T[] toArray();  
 }
-

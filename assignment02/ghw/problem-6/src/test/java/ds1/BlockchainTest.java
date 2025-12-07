@@ -38,7 +38,7 @@ class BlockchainTest {
         assertTrue(blockchain.repOK(), "Blockchain should be in a valid state");
     }
 
-        @Test
+    @Test
     void testUnfinishedBlockDoesnotAffectBalance() {
         ABlockchain blockchain = new ABlockchain(2,1000); // 2 transactions per block
         // Load some balances
@@ -238,5 +238,4 @@ class BlockchainTest {
         assertEquals(3, blockchain.getTransactionPoolSize(), "Transaction pool size should be 3");
         assertTrue(blockchain.repOK(), "Blockchain should be in a valid state");    
     }
-
 }

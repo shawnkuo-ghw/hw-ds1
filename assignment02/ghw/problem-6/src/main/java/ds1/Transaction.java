@@ -7,11 +7,12 @@ package ds1;
  * It includes common attributes and methods for transactions.
  * It implements Comparable to allow for transaction prioritization.
  */
-public abstract class Transaction  implements Comparable<Transaction> {
+public abstract class Transaction implements Comparable<Transaction>
+{
     protected String fromAddress;
     protected String toAddress;
-    protected int amount;
     protected boolean reverted;
+    protected int amount;
 
     // Getters
     public String getFromAddress() { return fromAddress; }
@@ -19,12 +20,17 @@ public abstract class Transaction  implements Comparable<Transaction> {
     public int getAmount() { return amount; }
     public boolean isReverted() { return reverted; }
     
+    // Setters
     public void revert() { this.reverted = true; }
 
     // toString for debugging
     @Override
     public String toString() {
-        return "Transaction[from=" + fromAddress + ", to=" + toAddress + ", amount=" + amount + ", reverted=" + reverted + "]";
+        return 
+            "Transaction[from=" +
+            fromAddress + ", to=" +
+            toAddress + ", amount=" +
+            amount + ", reverted=" +
+            reverted + "]";
     }
-
 }
