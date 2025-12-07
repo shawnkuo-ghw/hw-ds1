@@ -6,17 +6,18 @@ package ds1;
  * The fee is used to prioritize transactions in the blockchain.
  */
 
-public class TransactionWithFee extends Transaction {
-
+public class TransactionWithFee extends Transaction
+{
+    private final int fee;
     public TransactionWithFee(String from, String to, int amount, int fee) {
-        // TODO Auto-generated constructor stub
-        throw new UnsupportedOperationException("Not implemented yet");
+        super(from, to, amount);
+        this.fee = fee;
     }
 
     @Override
     public int compareTo(Transaction o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'compareTo'");
+        if (!(o instanceof TransactionWithFee)) { return super.compareTo(o); }
+        TransactionWithFee other = (TransactionWithFee) o;
+        return Integer.compare(this.fee, other.fee);
     }
-
 }

@@ -14,6 +14,12 @@ public abstract class Transaction implements Comparable<Transaction>
     protected boolean reverted;
     protected int amount;
 
+    public Transaction(String from, String to, int amount) {
+        this.fromAddress = from;
+        this.toAddress = to;
+        this.amount = amount;
+    }
+
     // Getters
     public String getFromAddress() { return fromAddress; }
     public String getToAddress() { return toAddress; }
@@ -22,6 +28,14 @@ public abstract class Transaction implements Comparable<Transaction>
     
     // Setters
     public void revert() { this.reverted = true; }
+
+    @Override
+    public int compareTo(Transaction o) {
+        if ( !(o instanceof Transaction) )
+            throw new IllegalArgumentException("Transactino.compareTo(): o is not of type transaction");
+        Transaction other = (Transaction) o;
+        return Integer.compare(this.amount, other.amount);
+    }
 
     // toString for debugging
     @Override
