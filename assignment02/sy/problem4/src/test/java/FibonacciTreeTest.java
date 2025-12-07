@@ -111,6 +111,39 @@ public class FibonacciTreeTest {
     }
 
     @Test
+    public void FibonacciTreeSize1PositiveTest() {
+        FibonacciTree tree = new FibonacciTree(1);
+        FibonacciNode root = tree.getRoot();
+        assertNotNull(root);
+        assertNull(root.left);
+        assertNull(root.right);
+        assertEquals(1, tree.height());
+        assertEquals(0, tree.balanceFactor(root));
+        assertEquals(1, tree.countNodes());
+        int[] expected = new int[] { 0 };
+        assertArrayEquals(expected, tree.getBalanceFactorsArray());
+        assertFalse(tree.isEmpty());
+    }
+
+    @Test
+    public void FibonacciTreeSize2PositiveTest() {
+        FibonacciTree tree = new FibonacciTree(2);
+        FibonacciNode root = tree.getRoot();
+        assertNotNull(root);
+        assertNotNull(root.left);
+        assertNull(root.right);
+        assertNull(root.left.left);
+        assertNull(root.left.right);
+        assertEquals(2, tree.height());
+        assertEquals(-1, tree.balanceFactor(root));
+        assertEquals(0, tree.balanceFactor(root.left));
+        assertEquals(2, tree.countNodes());
+        int[] expected = new int[] { -1, 0 };
+        assertArrayEquals(expected, tree.getBalanceFactorsArray());
+        assertFalse(tree.isEmpty());
+    }
+
+    @Test
     public void FibonacciTreeSize4PositiveTest() {
         FibonacciTree tree = new FibonacciTree(4);
         FibonacciNode root = tree.getRoot();
