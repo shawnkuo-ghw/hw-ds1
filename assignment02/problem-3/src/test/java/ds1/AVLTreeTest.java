@@ -185,4 +185,30 @@ public class AVLTreeTest {
         root.height = 99;
         assertFalse(tree.repOK());
     }
+
+    @Test //Bst Order Violation
+    public void repOkNegativeTest2() {
+        AVLTree tree = new AVLTree();
+        tree.insert(10);
+        tree.insert(5);
+        tree.insert(15);
+
+        AVLNode root = tree.getRoot();
+        //left child greater than parent
+        root.left.value = 20;
+
+        assertFalse(tree.repOK());
+    }
+
+    @Test
+    public void repOkNegativeTest3() {
+        AVLTree tree = new AVLTree();
+        tree.insert(1);
+        tree.insert(2);
+        assertTrue(tree.repOK());
+        // modify the stored count
+        tree.count = 99;
+
+        assertFalse(tree.repOK());
+    }
 }

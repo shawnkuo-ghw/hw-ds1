@@ -35,7 +35,7 @@ public class HeapBinaryTree {
     }
 
     // convert the heap binary tree into an array by heap index
-    // O(n) since each node is visited one time 
+    // O(n) since each node is visited
     public int[] toArray() {
         int size = countNodes();
         if (size == 0)
@@ -75,7 +75,7 @@ public class HeapBinaryTree {
         return countNodes(root);
     }
 
-    // helper to count nodes recursively
+    // count nodes recursively
     //O(n) in the worst case
     private int countNodes(HeapNode curr) {
         if (curr == null)
@@ -95,17 +95,34 @@ public class HeapBinaryTree {
         return isMaxHeap(root);
     }
 
-    // help to check heap property
+    // help to check heap property and completeness
     //O(n) since we need to visit all nodes
     private boolean isMaxHeap(HeapNode curr) {
         if (curr == null)
             return true;
-        if (curr.left != null && curr.left.data > curr.data)
-            return false;
-        if (curr.right != null && curr.right.data > curr.data)
-            return false;
-        return isMaxHeap(curr.left) && isMaxHeap(curr.right);
+        int size = countNodes(curr);
+        Queue queue = new LinkedListQueue();
+        queue.enqueue(new IndexNode(curr, 0));
+        while (!queue.isEmpty()) {
+            IndexNode current = queue.dequeue();
+            // if we reach an index outside [0, size - 1], the tree is not complete
+            if (current.index >= size)
+                return false;
+            HeapNode node = current.node;
+            int leftIndex = 2 * current.index + 1;
+            int rightIndex = 2 * current.index + 2;
+            if(node.left != null) {
+                if (node.left.data > node.data)
+                    return false;
+                queue.enqueue(new IndexNode(node.left, leftIndex));
+            }
+            if(node.right != null) {
+                if (node.right.data > node.data)
+                    return false;
+                queue.enqueue(new IndexNode(node.right, rightIndex));
+            }
+        }
+        return true;
     }
-
 }
 

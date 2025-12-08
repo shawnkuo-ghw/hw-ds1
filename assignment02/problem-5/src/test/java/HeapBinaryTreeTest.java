@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 public class HeapBinaryTreeTest {
 
     @Test
-    public void toArrayComplexPositiveTest() {
+    public void toArrayPositiveTest() {
         int[] array = {55, 40, 50, 20, 35, 10, 5, 18, 12, 30, 33};
         HeapBinaryTree tree = HeapBinaryTree.fromArray(array);
         int[] result = tree.toArray();
@@ -92,11 +92,47 @@ public class HeapBinaryTreeTest {
         assertEquals(array.length, tree.countNodes());
     }
 
-    @Test
+    @Test //not max
     public void isMaxHeapNegativeTest() {
         int[] array = {10, 30, 40};
         HeapBinaryTree tree = HeapBinaryTree.fromArray(array);
         assertFalse(tree.isMaxHeap());
         assertArrayEquals(array, tree.toArray());
+    }
+
+    @Test //not complete
+    public void isMaxHeapNegativeTest2() {
+        HeapNode root = new HeapNode(10);
+        root.right = new HeapNode(5);
+        HeapBinaryTree tree = new HeapBinaryTree(root);
+        assertFalse(tree.isMaxHeap());
+    }
+
+    @Test
+    public void isMaxHeapPositiveTest2() {
+        HeapNode root = new HeapNode(42);
+        HeapBinaryTree tree = new HeapBinaryTree(root);
+        assertTrue(tree.isMaxHeap());
+    }
+
+    @Test
+    public void isMaxHeapEmptyTreeTest() {
+        HeapBinaryTree tree = new HeapBinaryTree();
+        assertTrue(tree.isMaxHeap());
+    }
+
+    @Test
+    public void isMaxHeapPositiveTest3() {
+        //        50
+        //      /    \
+        //     40     30
+        //    /
+        //   20
+        HeapNode root = new HeapNode(50);
+        root.left = new HeapNode(40);
+        root.right = new HeapNode(30);
+        root.left.left = new HeapNode(20);
+        HeapBinaryTree tree = new HeapBinaryTree(root);
+        assertTrue(tree.isMaxHeap());
     }
 }

@@ -44,7 +44,7 @@ Then the height of the AVL tree is $\log n$
             } 
             //Subcase 3: 
             else {
-                //O(log n) since findSuccessor is O(log n)
+                //O(log n) since findSuccessor is O(log n). This method will be called at most onece per delete!!!
                 AVLNode succ = findSuccessor(curr);
                 //O(1)
                 curr.val = succ.val;
@@ -55,9 +55,10 @@ Then the height of the AVL tree is $\log n$
                  * Thus complexity is O(1) * log (n) = O(log n).
                  */
                 curr.right = delete(curr.right, succ.val);
+                //Thus in case 4, the complexity is also O(log n) not log(log^2 n)
             }
         }
-        // O(1) since rebalance is O(1)
+        // O(1) since rebalance is O(1) and rebalance is called onece per node
         return rebalance(curr);
     }
 

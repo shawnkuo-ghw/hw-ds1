@@ -10,18 +10,22 @@ public class AVLTree {
         count = 0;
     }
 
+    //O(1)
     public boolean isEmpty() {
         return root == null;
     }
 
+    //O(1)
     public int size() {
         return count;
     }
 
+    //O(1)
     public AVLNode getRoot() {
         return root;
     }
 
+    //O(1)
     public int height() {
         return height(root);
     }
@@ -179,6 +183,10 @@ public class AVLTree {
 
     //O(n) because verity is O(n)
     public boolean repOK() {
+        // root must be null iff count == 0
+        if ((root == null && count != 0) || (root != null && count == 0)) {
+            return false;
+        }
         CheckResult res = verify(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
         if (!res.valid) {
             return false;
@@ -216,6 +224,7 @@ public class AVLTree {
         return new CheckResult(true, expectedHeight, total);
     }
 
+    //O(1)
     private int height(AVLNode node) {
         if (node == null) {
             return 0;
@@ -223,14 +232,17 @@ public class AVLTree {
         return node.height;
     }
 
+    //O(1)
     private int balanceFactor(AVLNode node) {
         return height(node.right) - height(node.left);
     }
 
+    //O(1)
     private void updateHeight(AVLNode node) {
         node.height = 1 + Math.max(height(node.left), height(node.right));
     }
 
+    //O(1) for a single node (rotations and height updates)
     private AVLNode rebalance(AVLNode node) {
         updateHeight(node);
         int bf = balanceFactor(node);
@@ -249,6 +261,7 @@ public class AVLTree {
         return node;
     }
 
+    //O(1)
     private AVLNode leftRotate(AVLNode p) {
         AVLNode q = p.right;
         p.right = q.left;
@@ -258,6 +271,7 @@ public class AVLTree {
         return q;
     }
 
+    //O(1)
     private AVLNode rightRotate(AVLNode p) {
         AVLNode q = p.left;
         p.left = q.right;

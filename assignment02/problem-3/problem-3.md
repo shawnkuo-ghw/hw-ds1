@@ -221,13 +221,13 @@ Part 2
 >     // ... link subTree to parent ...
 > ```
 
-We go back up the tree from the new node to the root (using stack). For every node we pass, we recalculate its height. Then we call rebalance, thus we check if the "left" and "right" sides loose balance, then we rotates the nodes to fix it if needed
+We go back up the tree from the new node to the root (using stack). For every node we pass, we recalculate its height. Then we call rebalance, thus we check if the "left" and "right" sides loose balance, then we rotates the nodes to fix it if needed.
 
 The `updateHeight(node)` function recalculates the height based on children ($1 + \max(h_L, h_R)$). Since we do this from the bottom up, every node's height is corrected.
 
 The `rebalance(node)` function checks the balance factor ($h_R - h_L$).
 If the factor is $\in \{-1, 0, 1\}$, no changes. If the factor is $\pm 2$, rotations are performed.
-Rotations can reduce the height difference to preserve the BST Order
+These rotations only move whole subtrees, so the BST order is preserved while we reduce the height difference.
 
 Thus the RI perserved
 
@@ -255,6 +255,8 @@ First, we find the node to delete.
 Replacing a node with its successor maintains the sorted order. Because the successor is larger than everything in the left subtree and smaller than everything else in the right subtree.
 
 Connecting a parent to a child (skipping the deleted node) preserves the relative order of the remaining nodes.
+
+And the rotations in `rebalance` only rearrange whole subtrees, so they also keep this BST order while fixing the heights
 
 We are only removing links or shortening paths, never creating links to ancestors, thus it is acyclic
 
