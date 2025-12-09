@@ -95,7 +95,7 @@ public class HeapBinaryTree {
         return isMaxHeap(root);
     }
 
-    // help to check heap property and completeness
+    // check heap property and completeness
     //O(n) since we need to visit all nodes
     private boolean isMaxHeap(HeapNode curr) {
         if (curr == null)
