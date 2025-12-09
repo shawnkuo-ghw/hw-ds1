@@ -3,7 +3,7 @@
 
 Hint: you need to show the complexity of all functions that are invoked by DELETE.
 
-We know the complexity = (complexity per level) $\times$ (height of tree)
+We know the complexity = (complexity per level) $\times$ (height of tree) for a recursive method that go left or right in one level
 
 Let's first consider the worst case and assume the total number of nodes is $n$
 
@@ -16,18 +16,18 @@ Then the height of the AVL tree is $\log n$
         if (curr == null) {
             return null; //O(1)
         } 
-        /* Case 2: at this level we do O(1) work,
-         * then we go down one level by calling delete on a child.
-         * In the worst case, we can go down (the height of the tree) levels,
-         * so the total work along this path is O(1) * log (n) = O(log n).
+        /* Case 2: at this level, the work is O(1) ,
+         * then we go down one level by calling delete on curr.left
+         * In worst case, we can go down (the height of the tree) levels,
+         * so the total work in this path is O(1) * log (n) = O(log n).
          */
         else if (val < curr.val) {
             curr.left = delete(curr.left, val); 
         } 
-        /* Case 3: at this level we also do O(1) work,
-         * then we go down one level by calling delete on a child.
-         * In the worst case, we again go down (the height of the tree) levels,
-         * so the total work along this path is O(1) * log (n) = O(log n).
+        /* Case 3: at this level, the work is O(1),
+         * then we go down one level by calling delete on curr.right
+         * In worst case, we again go down (the height of the tree) levels,
+         * so the total work in this path is O(1) * log (n) = O(log n).
          */
         else if (val > curr.val) {
             curr.right = delete(curr.right, val); 
@@ -44,18 +44,18 @@ Then the height of the AVL tree is $\log n$
             } 
             //Subcase 3: 
             else {
-                //O(log n) since findSuccessor is O(log n). This method will be called at most onece per delete!!!
+                //O(log n) since findSuccessor is O(log n). This method will be called at most one time per delete!!!
                 AVLNode succ = findSuccessor(curr);
                 //O(1)
                 curr.val = succ.val;
-                /* For this recursive method we do O(1) work per level,
-                 * then go down, and the height of the tree starting
+                /* For this recursive method, the work is O(1) per level,
+                 * then go down and the height of the tree starting
                  * at curr.right is less or equal to log (n).
-                 * Thus in the worst case we need visits (the height of the tree) levels,
+                 * Thus in the worst case we need go through (the height of the tree) levels,
                  * Thus complexity is O(1) * log (n) = O(log n).
                  */
                 curr.right = delete(curr.right, succ.val);
-                //Thus in case 4, the complexity is also O(log n) not log(log^2 n)
+                //Thus in case 4, the complexity is also O(log n) not log(log^2 n) since `findSuccessor` is called at most one time
             }
         }
         // O(1) since rebalance is O(1) and rebalance is called onece per node
@@ -178,7 +178,7 @@ Then the height of the AVL tree is $\log n$
         return rightRotate(curr);
     }
 
-    // O(1) since leftRotate and rightRotate are both O(1)
+    // O(1) since leffRotate and rightRotate are both O(1)
     private AVLNode rightLeftRotate(AVLNode curr) {
         curr.right = rightRotate(curr.right);
         return leftRotate(curr);

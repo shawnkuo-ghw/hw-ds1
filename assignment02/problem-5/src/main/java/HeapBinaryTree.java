@@ -19,11 +19,11 @@ public class HeapBinaryTree {
             return new HeapBinaryTree(null);
         HeapNode[] nodes = new HeapNode[array.length];
         //O(n)
-        for (int i = 0; i < array.length; i++) {
+        for(int i = 0; i < array.length; i++) {
             nodes[i] = new HeapNode(array[i]);
         }
         //O(n)
-        for (int i = 0; i < array.length; i++) {
+        for(int i = 0; i < array.length; i++){
             int left = 2 * i + 1;
             int right = 2 * i + 2;
             if (left < array.length)
@@ -103,7 +103,7 @@ public class HeapBinaryTree {
         int size = countNodes(curr);
         Queue queue = new LinkedListQueue();
         queue.enqueue(new IndexNode(curr, 0));
-        while (!queue.isEmpty()) {
+        while(!queue.isEmpty()) {
             IndexNode current = queue.dequeue();
             // if we reach an index outside [0, size - 1], the tree is not complete
             if (current.index >= size)
@@ -112,7 +112,7 @@ public class HeapBinaryTree {
             int leftIndex = 2 * current.index + 1;
             int rightIndex = 2 * current.index + 2;
             if(node.left != null) {
-                if (node.left.data > node.data)
+                if(node.left.data > node.data)
                     return false;
                 queue.enqueue(new IndexNode(node.left, leftIndex));
             }
