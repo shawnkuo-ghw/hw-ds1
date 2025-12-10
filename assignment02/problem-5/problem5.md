@@ -52,4 +52,4 @@ For the next two items you can either represent the binary tree using the mathem
 
     Precondition:
     1. For all i, array[i] >= array[2*i+1] and array[i] >= array[2*i+2] (when those children exist)
-    2. Array represents a complete binary tree implicitly (indices 0..n-1, no gaps)
+    2. Array represents a complete binary tree

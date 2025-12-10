@@ -16,12 +16,12 @@
 
 ### (a) Provide the representation invariant for this data structure to effectively represent an AVL.
 
-#### **AVL Representation :**
+#### **AVL Representation:**
 
 -   `AVLNode: <int value, AVLNode left, AVLNode right, int height>`
 -   `AVL: <root: AVLNode>`
 
-#### AVL Representation Invariant :
+#### **AVL Representation Invariant:**
 
 $$\begin{aligned}
 RI(T) =\ & T \text{ is Acyclic w.r.t left and right} \\
@@ -42,47 +42,47 @@ $balance(n)$ is $height(n.right) - height(n.left)$.
 #### 1. insert
 
 ```pseudocode
-Function insertAVL(root: AVLNode, val: int) -> AVLNode
-    // Insert with Stack help to track path
-    Stack<AVLNode> path = new Stack()
-    AVLNode current = root
+AVLNode insert(root: AVLNode, val: int)
+    //record the visited node using stack
+    stack<AVLNode> stack = new stack()
+    AVLNode curr = root
     AVLNode parent = null
     
-    if current == null:
+    if curr == null
         return new AVLNode(val)
 
-    // Traverse down
-    while current != null:
-        parent = current
-        path.push(parent)
-        if val < current.value:
-            current = current.left
-        else if val > current.value:
-            current = current.right
-        else:
+    //go down
+    while curr != null
+        parent = curr
+        stack.push(parent)
+        if val < curr.value
+            curr = curr.left
+        else if val > curr.value
+            curr = curr.right
+        else
             return root
 
-    // New node and link to parent
+    // Create new node and link to parent
     AVLNode newNode = new AVLNode(val)
-    if val < parent.value:
+    if val < parent.value
         parent.left = newNode
-    else:
+    else
         parent.right = newNode
 
-    // Pop the stack to update heights and rebalance
-    while not path.isEmpty():
-        AVLNode node = path.pop()
+    // Pop the node to update height and rebbalance
+    while !stack.isEmpty()
+        AVLNode node = stack.pop()
         updateHeight(node)
         AVLNode subTree = rebalance(node)
         
         // If rotation happened, link the new subtree root to its parent
-        if not path.isEmpty():
-            AVLNode ancestor = path.readTop()
-            if ancestor.left == node:
+        if !stack.isEmpty()
+            AVLNode ancestor = stack.readTop()
+            if ancestor.left == node
                 ancestor.left = subTree
-            else:
+            else
                 ancestor.right = subTree
-        else:
+        else
             root = subTree
             
     return root
@@ -91,11 +91,11 @@ Function insertAVL(root: AVLNode, val: int) -> AVLNode
 #### 2. search
 
 ```pseudocode
-Function searchAVL(p: AVLNode, val: int) -> AVLNode
-    while p != null and val != p.value:
-        if val < p.value: 
+AVLNode search(p: AVLNode, val: int)
+    while p != null && val != p.value
+        if val < p.value
             p = p.left
-        else:
+        else
             p = p.right
     return p
 ```
@@ -103,84 +103,79 @@ Function searchAVL(p: AVLNode, val: int) -> AVLNode
 #### 3. delete
 
 ```pseudocode
-Function deleteAVL(root: AVLNode, val: int) -> AVLNode
-    Stack<AVLNode> path = new Stack()
-    AVLNode current = root
+AVLNode delete(root: AVLNode, val: int)
+    stack<AVLNode> stack = new stack()
+    AVLNode curr = root
     
-    // Find the node to delete and track path
-    while current != null and current.value != val:
-        path.push(current)
-        if val < current.value:
-            current = current.left
-        else:
-            current = current.right
+    // Find the node to delete and stored the visited node
+    while curr != null && curr.value != val
+        stack.push(curr)
+        if val < curr.value
+            curr = curr.left
+        else
+            curr = curr.right
             
     // Not found
-    if current == null:
-        return root
+    if curr == null
+        throw exception
 
-    // Deletion
-    // Case: Node has two children
-    if current.left != null and current.right != null:
-        // Find successor
-        AVLNode successor = current.right
-        path.push(current) 
+    // delete
+    // Case 1: node has two children
+    if curr.left != null && curr.right != null
+        //find successor
+        AVLNode successor = curr.right
+        stack.push(curr) 
         
-        // Go left until null to find successor
-        while successor.left != null:
-            path.push(successor)
+        // Go left until null to find successor and let curr be successor
+        while successor.left != null
+            stack.push(successor)
             successor = successor.left
-            
-        // Swap
-        current.value = successor.value
-        
-        // Delete
-        current = successor 
+        curr.value = successor.value
+        curr = successor 
 
-    // Case: Node has 0 or 1 child
+    // Case 2: Node has 0 or 1 child
     AVLNode child = null
-	if current.left != null:
-    	child = current.left
-	else:
-    	child = current.right
+	if curr.left != null
+    	child = curr.left
+	else
+    	child = curr.right
     
-    if path.isEmpty():
-        // Deleting the root
+    if stack.isEmpty()
         return child
-    else:
-        AVLNode parent = path.readTop()
-        if parent.left == current:
+    else
+        AVLNode parent = stack.readTop()
+        if parent.left == curr
             parent.left = child
         else:
             parent.right = child
 
-    // pop the path to rebalance
-    while not path.isEmpty():
-        AVLNode node = path.pop()
+    // pop the node to rebalance
+    while !stack.isEmpty()
+        AVLNode node = stack.pop()
         updateHeight(node)
         AVLNode subTree = rebalance(node)
         
-        if not path.isEmpty():
-            AVLNode ancestor = path.readTop()
-            if ancestor.left == node:
+        if !stack.isEmpty()
+            AVLNode ancestor = stack.readTop()
+            if ancestor.left == node
                 ancestor.left = subTree
-            else:
+            else
                 ancestor.right = subTree
-        else:
+        else
             root = subTree
-            
+        
     return root
 ```
 
 ### (c) Prove that the previous algorithms preserve the representation invariant (it is true before and after the execution of each of the 3 methods).
 
-Search
+#### Search
 
 > ```
-> while p != null and val != p.value:
->     if val < p.value:
+> while p != null && val != p.value
+>     if val < p.value
 >         p = p.left
->     else:
+>     else
 >         p = p.right
 > ```
 
@@ -190,94 +185,96 @@ Since the algorithm never modifies $T$, the state of the tree after execution is
 
 ---
 
-Insert
+#### Insert
 
-Part 1
+First, we record the visited node using stack. This part doesn't modify any node and doesn't break the structure.
+
+##### Part 1
 
 > ```
-> while current != null:
->     // ... (path tracking)
->     if val < current.value: current = current.left
->     else if val > current.value: current = current.right
-> // ...
-> if val < parent.value: parent.left = newNode
-> else: parent.right = newNode
+> while curr != null
+>     //...store the nodes
+>     if val < curr.value {curr = curr.left}
+>     else if val > curr.value {curr = curr.right}
+> ...
+> if val < parent.value {parent.left = newNode}
+> else {parent.right = newNode}
 > ```
 
-Go down the tree to find an empty position. If the value we want to add is smaller than the current node, we go left; if bigger, we go right. We link the newNode to this position.
+In this part, we go down the tree to find an empty position. If the value we want to add is smaller than the curr node, go left. If bigger, go right. Then We link the newNode to this position.
 
-Since "smaller goes left, bigger go right," we place `newNode` in the exact position required by the BST Invariant (i.e. $\forall l \in Left, l < n < r$).
+Since "smaller go left, bigger go right," we put `newNode` in the exact position required by the BSt Invariant (i.e. $\forall l \in Left, l < n < r$).
 
 We link a new leaf node to an existing tree. Since a leaf cannot link back to ancestors, the tree remains Acyclic.
 
 
-Part 2
+##### Part 2
 
 > ```
-> while not path.isEmpty():
->     AVLNode node = path.pop()
+> while !stack.isEmpty():
+>     AVLNode node = stack.pop()
 >     updateHeight(node)
 >     AVLNode subTree = rebalance(node)
->     // ... link subTree to parent ...
+>     // ...link subTree to parent ...
 > ```
 
-We go back up the tree from the new node to the root (using stack). For every node we pass, we recalculate its height. Then we call rebalance, thus we check if the "left" and "right" sides loose balance, then we rotates the nodes to fix it if needed
+We go back up the tree from the new node to the root using stack. For every node we going through, we recalculate its height. Then we call rebalance, thus we check if the left and right loose balance, then we rotate the nodes to fix it if needed
 
-The `updateHeight(node)` function recalculates the height based on children ($1 + \max(h_L, h_R)$). Since we do this from the bottom up, every node's height is corrected.
+The `updateHeight(node)` method recalculate the height based on children ($1 + \max(h_L, h_R)$). Since we do this from the bottom up, every node's height is updated
 
-The `rebalance(node)` function checks the balance factor ($h_R - h_L$).
-If the factor is $\in \{-1, 0, 1\}$, no changes. If the factor is $\pm 2$, rotations are performed.
-Rotations can reduce the height difference to preserve the BST Order
+The `rebalance(node)` method checks the balance factor ($h_R - h_L$).
+If the factor is $\in \{-1, 0, 1\}$, do notiing. If the factor is $\pm 2$, rotations are needed
+These rotations only move whole subtrees, so the BST order is preserved while we restore the balance
 
 Thus the RI perserved
 
 ---
 
-Delete
+#### Delete
 
-Part 1
+First, we find the node to delete and stored the visited node. This part doesn't modify any node and doesn't break the structure.
 
-> ```
-> // Case: Node has two children
-> if current.left != null and current.right != null:
->     // ... find successor ...
->     current.value = successor.value
->     current = successor // delete successor instead
-> 	// Case: Node has 0 or 1 child
-> 	// ... link parent to child ...
-> ```
-
-First, we find the node to delete.
-
-- If it has two children, we find the successor, copy its value here, and then delete the successor instead.
-- If it has 0 or 1 child, we just cut it and connect its parent to its only child.
-
-Replacing a node with its successor maintains the sorted order. Because the successor is larger than everything in the left subtree and smaller than everything else in the right subtree.
-
-Connecting a parent to a child (skipping the deleted node) preserves the relative order of the remaining nodes.
-
-We are only removing links or shortening paths, never creating links to ancestors, thus it is acyclic
-
-Part 2
+##### Part 1
 
 > ```
-> while not path.isEmpty():
->     AVLNode node = path.pop()
+> // Case 1: Node has two children
+> if curr.left != null && curr.right != null:
+>     // ... find successor
+>     curr.value = successor.value
+>     curr = successor // let curr be successor
+> 	// Case 2: Node has 0 or 1 child
+> 	// ...link parent to child ...
+> ```
+
+- If it has two children, we find the successor, let curr be successor.
+- If it has 0 or 1 child, we just remove it and connect its parent to its child.
+
+Replacing a node by a successor preserves the order. Because the successor is larger than every nodes in the left subtree and smaller than every node in the right subtree.
+
+Connect a parent to a child by skipping the deleted node which also preserves the order of the remaining nodes
+
+And the rotations in `rebalance` rearrange whole subtrees, so they also keep this BST order
+
+Since we only remove link or pop stack instead of creating links to ancestors, thus it is acyclic
+
+##### Part 2
+
+> ```
+> while !stack.isEmpty():
+>     AVLNode node = stack.pop()
 >     updateHeight(node)
 >     AVLNode subTree = rebalance(node)
->     // ... link subTree to parent ...
+>     // ...link subTree to parent
 > ```
 
-Similar to insert, removing a node might let one side of the tree short. We go back the tree using the stack and fix the heights and use rebalance to rotate the tree if node become unbalanced.
+Similar to insert, removing a node might make one side be short. Thus we need to go back up the tree using stack and fix the heights and use rebalance to rotate the tree if node becomes unbalanced.
 
-Deletion changes the height of the subtrees. But `path.pop()` ensures we visit every ancestor of the deleted node. `updateHeight` ensures $n.height$ matches the new tree.
+Deleting changes the height of the subtrees. But `stack.pop()` ensures we visit every ancestor of the deleted node. `updateHeight` ensures $n.height$ matches the new tree.
 
-Deletion can make a node's balance factor to become $\pm 2$. But the `rebalance` function can fix this by rotations.
+Deleting can make a node's balance factor to become $\pm 2$. But the `rebalance` function can fix this by rotations
 
-Deletion might require rotations at many levels. The `while` loop ensures we check every ancestor up to the root.
+The `while` loop ensures we check every ancestor's hegiht up to the root by rebalance
 
-Thus after the loop, the tree satisfies both the sorting property and the height balance property.
+Thus after the loop finished, the tree is sorted and the hiight is balanced
 
-Thus the invariant is preserved.
-
-### (d) Implement the algorithms in Java, including the method boolean `repOK()` that checks the representation invariant, and provide meaningful tests, including test that checks repOK()
+Thus the invariant is preserved

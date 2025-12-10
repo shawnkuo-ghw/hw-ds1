@@ -9,7 +9,7 @@ public class AVLTreeTest {
     @Test
     public void searchNegativeTest0() {
         AVLTree tree = new AVLTree();
-        assertFalse(tree.search(99));
+        assertNull(tree.search(99));
         assertTrue(tree.repOK());
     }
 
@@ -19,18 +19,25 @@ public class AVLTreeTest {
         tree.insert(8);
         tree.insert(4);
         tree.insert(12);
-        assertTrue(tree.search(12));
-        assertTrue(tree.search(4));
+        AVLNode twelve = tree.search(12);
+        AVLNode four = tree.search(4);
+        assertNotNull(twelve);
+        assertEquals(12, twelve.value);
+        assertNotNull(four);
+        assertEquals(4, four.value);
         assertTrue(tree.repOK());
     }
 
     @Test
     public void insertPositiveTest0() {
         AVLTree tree = new AVLTree();
-        tree.insert(42);
+        AVLNode rootAfterInsert = tree.insert(42);
+        assertNotNull(rootAfterInsert);
+        assertSame(tree.getRoot(), rootAfterInsert);
+        assertEquals(42, rootAfterInsert.value);
         assertEquals(1, tree.size());
         assertEquals(1, tree.height());
-        assertTrue(tree.search(42));
+        assertNotNull(tree.search(42));
         assertArrayEquals(new int[]{42}, tree.toArray());
         assertTrue(tree.repOK());
     }
@@ -56,8 +63,10 @@ public class AVLTreeTest {
 
         assertEquals(7, tree.size());
         assertEquals(3, tree.height());
-        assertTrue(tree.search(3));
-        assertFalse(tree.search(9));
+        AVLNode three = tree.search(3);
+        assertNotNull(three);
+        assertEquals(3, three.value);
+        assertNull(tree.search(9));
         assertArrayEquals(new int[]{1, 2, 3, 4, 5, 6, 7}, tree.toArray());
         assertTrue(tree.repOK());
     }
@@ -77,13 +86,15 @@ public class AVLTreeTest {
         tree.insert(1);
         tree.insert(3);
 
-        tree.delete(1); // remove leaf
-        assertFalse(tree.search(1));
+        AVLNode rootAfterLeafRemoval = tree.delete(1); // remove leaf
+        assertSame(tree.getRoot(), rootAfterLeafRemoval);
+        assertNull(tree.search(1));
         assertEquals(2, tree.size());
         assertTrue(tree.repOK());
 
-        tree.delete(2); // remove old root
-        assertFalse(tree.search(2));
+        AVLNode rootAfterRootRemoval = tree.delete(2); // remove old root
+        assertSame(tree.getRoot(), rootAfterRootRemoval);
+        assertNull(tree.search(2));
         assertEquals(1, tree.size());
         assertArrayEquals(new int[]{3}, tree.toArray());
         assertTrue(tree.repOK());
@@ -99,8 +110,10 @@ public class AVLTreeTest {
         tree.insert(7);
         tree.insert(12);
         tree.insert(18);
-        tree.delete(10);
-        assertFalse(tree.search(10));
+        AVLNode newRoot = tree.delete(10);
+        assertSame(tree.getRoot(), newRoot);
+        assertEquals(12, newRoot.value);
+        assertNull(tree.search(10));
         assertArrayEquals(new int[]{2, 5, 7, 12, 15, 18}, tree.toArray());
         assertEquals(6, tree.size());
         assertTrue(tree.repOK());
@@ -180,9 +193,23 @@ public class AVLTreeTest {
         tree.insert(10);
         tree.insert(20);
         tree.insert(30);
-        // break height invariant
+        // break height
         AVLNode root = tree.getRoot();
         root.height = 99;
+        assertFalse(tree.repOK());
+    }
+
+    @Test //Bst Order test
+    public void repOkNegativeTest2() {
+        AVLTree tree = new AVLTree();
+        tree.insert(10);
+        tree.insert(5);
+        tree.insert(15);
+
+        AVLNode root = tree.getRoot();
+        //left child greater than parent
+        root.left.value = 20;
+
         assertFalse(tree.repOK());
     }
 }

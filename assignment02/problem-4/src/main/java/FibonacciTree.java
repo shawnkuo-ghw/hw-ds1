@@ -3,18 +3,20 @@ public class FibonacciTree {
     FibonacciNode root;
 
     //create an empty Fibonacci tree
+    //O(1)
     public FibonacciTree() {
         root = null;
     }
 
     // create the ith Fibonacci tree
+    //O(n)
     public FibonacciTree(int i) {
         if (i < 0) {
             throw new IllegalArgumentException("Index should be non negative");
         }
         root = buildFibonacciTree(i);
     }
-
+    //n is the number of nodes in the tree
     // build the ith Fibonacci tree recursively
     //O(n)
     private FibonacciNode buildFibonacciTree(int i) {
@@ -123,7 +125,7 @@ public class FibonacciTree {
 
     // print the balance factor of each node of the Fibonacci tree
     //O(n^2)
-    public void printBalanceFactors() {
+    private void printBalanceFactors() {
         System.out.println("Balance factors of Fibonacci Tree is:");
         printBalanceFactors(root, "root");
     }

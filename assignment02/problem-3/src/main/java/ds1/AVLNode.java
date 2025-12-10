@@ -1,6 +1,6 @@
 package ds1;
 
-public class AVLNode {
+public class AVLNode{
     int value;
     AVLNode left;
     AVLNode right;
@@ -8,32 +8,32 @@ public class AVLNode {
 
     // create a new AVL node
     //O(1)
-    AVLNode(int value) {
+    AVLNode(int value){
         this.value = value;
         this.height = 1;
     }
 
-    // get the value of this node
+    // get the value of node
     //O(1)
-    int getValue() {
+    int getValue(){
         return value;
     }
 
-    // get the left child
+    //get the left child
     //O(1)
-    AVLNode getLeft() {
+    AVLNode getLeft(){
         return left;
     }
 
-    // get the right child
+    //get the right child
     //O(1)
-    AVLNode getRight() {
+    AVLNode getRight(){
         return right;
     }
 
-    // get the height of this node
+    //get the height of node
     //O(1)
-    int getHeight() {
+    int getHeight(){
         return height;
     }
 }

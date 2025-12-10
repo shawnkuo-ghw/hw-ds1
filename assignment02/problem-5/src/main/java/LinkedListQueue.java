@@ -29,7 +29,7 @@ public class LinkedListQueue implements Queue {
     //O(1)
     public IndexNode dequeue() {
         if (head == null) {
-            throw new RuntimeException("Queue is empty");
+            throw new IllegalStateException("Queue canont be empty");
         }
         IndexNode elem = head.data;
         head = head.next;
@@ -41,14 +41,14 @@ public class LinkedListQueue implements Queue {
     //O(1)
     public IndexNode front() {
         if (head == null) {
-            throw new RuntimeException("Queue is empty");
+            throw new IllegalStateException("Queue cannot be empty");
         }
         return head.data;
     }
     //O(1)
     public IndexNode rear() {
         if (tail == null) {
-            throw new RuntimeException("Queue is empty");
+            throw new IllegalStateException("Queue cannot be empty");
         }
         return tail.data;
     }
