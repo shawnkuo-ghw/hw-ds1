@@ -1,9 +1,6 @@
 package ds1;
 
-import ds1.Transaction;
-import ds1.TransactionWithFee;
 import ds1.util.PriorityQueue;
-import ds1.TransactionWithOrder;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +12,8 @@ public class PriorityQueueTest
     void init() { pq = new PriorityQueue(); }
 
     @Test
-    void transactionWithFeeTest() {
+    void transactionWithFeeTest()
+    {
         TransactionWithFee t1 = new TransactionWithFee("0", "A", 1, 3); // priority = 3
         TransactionWithFee t2 = new TransactionWithFee("0", "A", 1, 4); // priority = 4
         TransactionWithFee t3 = new TransactionWithFee("0", "A", 1, 1); // priority = 1
@@ -31,7 +29,8 @@ public class PriorityQueueTest
     }
 
     @Test
-    void transactionWithOrderTest() {
+    void transactionWithOrderTest()
+    {
         TransactionWithOrder t1 = new TransactionWithOrder("0", "A", 1, 0, 1); // priority = 0 + 1/1 =   1 = 1.00
         TransactionWithOrder t2 = new TransactionWithOrder("0", "A", 1, 1, 2); // priority = 1 + 1/2 = 3/2 = 1.50
         TransactionWithOrder t3 = new TransactionWithOrder("0", "A", 1, 2, 3); // priority = 2 + 1/3 = 7/3 = 2.33

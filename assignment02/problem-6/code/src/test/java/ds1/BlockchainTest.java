@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 
 class BlockchainTest {
     @Test
-    void testProcessTransactionAndAddBlock() {
+    void testProcessTransactionAndAddBlock()
+    {
         ABlockchain blockchain = new ABlockchain(2,1000); // 2 transactions per block
         // Load some balances this would generate the genesis block and first block (2 blocks)
         blockchain.requestTransaction("0", "A", 51,0);
@@ -39,7 +40,8 @@ class BlockchainTest {
     }
 
     @Test
-    void testUnfinishedBlockDoesnotAffectBalance() {
+    void testUnfinishedBlockDoesnotAffectBalance()
+    {
         ABlockchain blockchain = new ABlockchain(2,1000); // 2 transactions per block
         // Load some balances
         blockchain.requestTransaction("0", "A", 50,0);
@@ -63,7 +65,8 @@ class BlockchainTest {
     }
 
    @Test
-    void testGetBalanceNotReverted() {
+    void testGetBalanceNotReverted()
+    {
         ABlockchain blockchain = new ABlockchain(2,1000);
          // Load some balances
         blockchain.requestTransaction("0", "A", 70,0);
@@ -96,7 +99,8 @@ class BlockchainTest {
     }
 
     @Test
-    void testGetBalanceReverted() {
+    void testGetBalanceReverted()
+    {
         ABlockchain blockchain = new ABlockchain(2,1000);
          // Load some balances
         blockchain.requestTransaction("A", "B", 50,1);
@@ -116,7 +120,8 @@ class BlockchainTest {
     // Additional tests can be added here to cover more scenarios, use repOK, and
     // edge cases.
     @Test
-    void testTransactionProcessing() {
+    void testTransactionProcessing()
+    {
         ABlockchain blockchain = new ABlockchain(2, 1000);
         blockchain.requestTransaction("A", "B", 50,1);
         blockchain.requestTransaction("C", "D", 30,2);
@@ -124,7 +129,8 @@ class BlockchainTest {
     }
 
     @Test
-    void testInvalidTransaction() {
+    void testInvalidTransaction()
+    {
         ABlockchain blockchain = new ABlockchain(2, 1000);
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             blockchain.requestTransaction("A", "B", -10, 1);
@@ -144,7 +150,8 @@ class BlockchainTest {
     // the counts of successful and reverted transactions, as well as returned fees,
     // are tracked accurately. Finally, it uses the repOK method to ensure the internal
     // consistency of the blockchain after these operations.
-    void testABlockchainMethods() {
+    void testABlockchainMethods()
+    {
         ABlockchain blockchain = new ABlockchain(2,1000); // 2 transactions per block
         // Load some balances this would generate the genesis block and first block (2 blocks)
         // Transactions has same fees but different orders 
@@ -181,7 +188,8 @@ class BlockchainTest {
 
     // add test for reverted transactions count and returned fees
     @Test
-    void testRevertedTransactionsAndReturnedFees() {
+    void testRevertedTransactionsAndReturnedFees()
+    {
         ABlockchain blockchain = new ABlockchain(2,1000); // 2 transactions per block
         // Load some balances this would generate the genesis block and first block (2 blocks)
         blockchain.requestTransaction("0", "A", 50,0);
@@ -201,7 +209,8 @@ class BlockchainTest {
 
     // test for getBlockByNumber
     @Test
-    void testGetBlockByNumber() {
+    void testGetBlockByNumber()
+    {
         ABlockchain blockchain = new ABlockchain(2,1000); // 2 transactions per block
         // Load some balances this would generate the genesis block and first block (2 blocks)
         blockchain.requestTransaction("0", "A", 50,0);
@@ -229,7 +238,8 @@ class BlockchainTest {
 
     // test missing methods in ABlockchain
     @Test
-    void testGetTransactionPoolSize() {
+    void testGetTransactionPoolSize()
+    {
         ABlockchain blockchain = new ABlockchain(2,1000); // 2 transactions per block
         blockchain.requestTransaction("0", "A", 50,1);
         blockchain.requestTransaction("0", "C", 50,2);
@@ -242,7 +252,8 @@ class BlockchainTest {
     /* ============================ edge cases ============================== */
 
     @Test
-    void testRequestTransactionInvalidAddressesNegativeTest() {
+    void testRequestTransactionInvalidAddressesNegativeTest()
+    {
         ABlockchain blockchain = new ABlockchain(2, 1000);
         // fromAddress is null
         assertThrows(IllegalArgumentException.class, () ->
@@ -253,14 +264,16 @@ class BlockchainTest {
     }
 
     @Test
-    void testRequestTransactionNegativeFeeNegativeTest() {
+    void testRequestTransactionNegativeFeeNegativeTest()
+    {
         ABlockchain blockchain = new ABlockchain(2, 1000);
         assertThrows(IllegalArgumentException.class, () ->
             blockchain.requestTransaction("A", "B", 10, -1));
     }
 
     @Test
-    void testMineBlockEmptyTransactionPoolNegativeTest() {
+    void testMineBlockEmptyTransactionPoolNegativeTest()
+    {
         ABlockchain blockchain = new ABlockchain(2, 1000);
         int sizeBefore = blockchain.size();
         boolean mined = blockchain.mineBlock();
@@ -270,7 +283,8 @@ class BlockchainTest {
     }
 
     @Test
-    void testGetBlockByNumberInvalidIndicesNegativeTest() {
+    void testGetBlockByNumberInvalidIndicesNegativeTest()
+    {
         ABlockchain blockchain = new ABlockchain(2, 1000);
         assertThrows(IndexOutOfBoundsException.class, () -> blockchain.getBlockByNumber(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> blockchain.getBlockByNumber(9999));

@@ -116,9 +116,9 @@ public class GenericPQTest
         assertEquals(1, pq2Arr2[4]);
         // pq should not be changed
         Integer[] pqArr = pq.toArray();
-        assertEquals(3, pq2Arr.length);
-        assertEquals(4, pq2Arr[0]);
-        assertEquals(3, pq2Arr[1]);
-        assertEquals(2, pq2Arr[2]);
+        assertEquals(3, pqArr.length);
+        assertEquals(4, pqArr[0]);
+        assertEquals(3, pqArr[1]);
+        assertEquals(2, pqArr[2]);
     }
 }
