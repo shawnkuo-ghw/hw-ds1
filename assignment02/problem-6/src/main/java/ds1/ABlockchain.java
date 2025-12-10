@@ -71,7 +71,19 @@ public class ABlockchain implements Blockchain
      * TP is the number of transactions in the pool and
      *  A is the number of address with balance.
      * <p> Explaination: </p>
-     * <li> - Firstly, A is larger than TB, since to get A many addre</li>
+     * <li> - When currBlock is empty, there will be TB many transactions enqueued 
+     *        into currBlock </li>
+     * <li> - For each transaction enqueued, we have to dequeue it first from
+     *        transaction pool, where the compelxity is O(log TP); then we enqueue
+     *        the transaction into the current block, where the time complexity
+     *        is O(log TB) </li>
+     * <li> - After that, if the current block is full, 
+     *        {@code processCurrentBlockAndStartNewBlock} is called, whose time 
+     *        complexity is O(TB * log A) </li>
+     * <li> - Overall, the time complexity is  TB * O(log TP + log TB) + O(TB * log A) 
+     *        = O(TB * (log TP + log TB + log A)) </li>
+     * <li> - If A is larger than TB, than the time complexity is O(TB * (log TP + log A)) </li>
+     * @see ds1.util.PriorityQueue#dequeue()
      * @see ds1.ABlockchain#processCurrentBlockAndStartNewBlock()
      */
     @Override
@@ -87,7 +99,7 @@ public class ABlockchain implements Blockchain
                 transWithOrder.getAmount(),
                 transWithOrder.getFee()
             );
-            currBlock.addTransaction(transWithOutOrder); // O(log TB) = O(log A), since TB <= A
+            currBlock.addTransaction(transWithOutOrder); // O(log TB)
         }
         // 2. If the block becomes full
         if ( currBlock.isFull() ) processCurrentBlockAndStartNewBlock(); // O(TB * log A)
@@ -148,11 +160,9 @@ public class ABlockchain implements Blockchain
             transactionsPerBlock, 
             currBlock.getBlockNumber() + 1
         );
-        // System.out.println(balances.toString());
-        if ( !repOK() )
-            throw new IllegalStateException(
-                "ABlockchain.processCurrentBlockAndStartNewBlock(): RI is not satisfied."
-            );
+        if ( !repOK() ) throw new IllegalStateException(
+            "ABlockchain.processCurrentBlockAndStartNewBlock(): RI is not satisfied."
+        );
     }
 
     /* =========================== Getters ================================== */
