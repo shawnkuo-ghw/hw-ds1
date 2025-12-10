@@ -266,8 +266,8 @@ public class AVLTreeImp<K extends Comparable <K>, V> implements AVLTree<K, V>
         boolean checkeFlag = true;
         Sequence<AVLNode<K, V>> nodes = nodesSequence();
         int i = 0;
-        int j = 0;
         while ( checkeFlag && i < nodesNum ) {
+            int j = 0;
             while ( checkeFlag && j < nodesNum ) {
                 AVLNode<K, V> node1 = nodes.at(i);
                 AVLNode<K, V> node2 = nodes.at(j);

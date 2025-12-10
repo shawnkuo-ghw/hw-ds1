@@ -71,13 +71,6 @@ public interface Sequence<T>
     void removeRear();
 
     /**
-     * Insert a new element {@code elem} in sorted order
-     * <p> Time Complexity: O(N) </p>
-     * @param elem new element to insert
-     */
-    void insertSorted(T elem);
-    
-    /**
      * The index of element {@code elem}
      * <p> Time Complexity: O(N) </p>
      * @param elem the element to search index

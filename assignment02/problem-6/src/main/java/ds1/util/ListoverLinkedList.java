@@ -189,33 +189,6 @@ public class ListoverLinkedList<T> implements Sequence<T>
             );
     }
 
-    // insert elem in sorted order
-    // O(N)
-    @Override
-    public void insertSorted(T elem) {
-        Node<T> newNode = new Node<T>(elem);
-        if (head == null) {
-            head = newNode;
-        } else {
-            Node<T> prev = findPrev(elem);
-            if (prev == null) {
-                newNode.next = head;
-                head.prev = newNode;
-                head = newNode;
-            } else {
-                newNode.prev = prev;
-                newNode.next = prev.next;
-                prev.next.prev = newNode;
-                prev.next = newNode;
-            }
-        }
-        length++;
-        if ( !repOk() )
-            throw new IllegalStateException(
-                "RI of ListoverLinkedList is not satisfied."
-            );
-    }
-
     // O(N)
     @Override
     public void removeAt(int i) {
@@ -293,17 +266,6 @@ public class ListoverLinkedList<T> implements Sequence<T>
             curr = curr.next;
         }
         return curr;
-    }
-
-    // O(N)
-    private Node<T> findPrev(T elem) {
-        Node<T> curr = head;
-        Node<T> prev = null;
-        while (curr != null && (Integer) curr.data < (Integer) elem) {
-            prev = curr;
-            curr = curr.next;
-        }
-        return prev;
     }
 
     /* ====================== Representation Invariant ====================== */

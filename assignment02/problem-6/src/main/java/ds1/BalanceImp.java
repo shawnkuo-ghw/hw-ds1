@@ -41,25 +41,30 @@ public class BalanceImp implements Balance
      * @see ds1.util.ListoverLinkedList#insertRear(Object)
      */
     @Override
-    public void updateBalance(String address, int newBalance) {
+    public void updateBalance(String address, int newBalance) { 
         // System.out.println("Address: " + address + ", New balance: " + newBalance);
         AddressBalancePair targetPair = addBalPairs.searchTree(address);                  // O(log |A|)
+        int oldBalance = (targetPair == null) ? 0 : targetPair.balance;
         if ( address.equals("0") && allAddress.length() == 0 ) {
             // initiat `totalSupply` with the amount of BB-coins of 
             // the address "0" in the genesis block
-            AddressBalancePair initPair = new AddressBalancePair(address, newBalance);
-            addBalPairs.insertTree(address, initPair);                                    // O(log |A|)
+            addBalPairs.insertTree(address, new AddressBalancePair(address, newBalance)); // O(log |A|)
             allAddress.insertRear(address);                                               // O(1)
+            totalSupply = newBalance;                                                     // update totalSupply
         } else if ( targetPair == null ) {
             // address does not exist in Balance
             addBalPairs.insertTree(address, new AddressBalancePair(address, newBalance)); // O(log |A|)
             allAddress.insertRear(address);                                               // O(1)
+            totalSupply += newBalance;                                                    // update totalSupply
         } else {
             // address already exists in Balance
             addBalPairs.updateTree(address, new AddressBalancePair(address, newBalance)); // O(log |A|)
+            totalSupply += (newBalance - oldBalance);                                     // update totalSupply
         }
-        // update the totalSupply
-        updateTotalSupply();
+        if ( !repOK() )
+            throw new IllegalStateException(
+                "BalanceImp.updateBalance(): totalSupply does not equal to the sum of all accounts."
+            );
     }
 
     /* ========================== Getters =================================== */
@@ -92,11 +97,9 @@ public class BalanceImp implements Balance
     }
 
     // representation invariant checker for Balance
-    public boolean repOK() { return totalSupply() == initialBalance; }   
+    public boolean repOK() { return totalSupply == getSumOfBalances() && totalSupply == initialBalance; }
 
     /* ========================= Utilities ================================== */
-
-    private void updateTotalSupply() { totalSupply = getSumOfBalances(); }
 
     private int getSumOfBalances() {
         AddressBalancePair[] pairs = addBalPairs.toArray();
