@@ -3,12 +3,10 @@ package ds1;
 public class AVLTree {
 
     AVLNode root;
-    int count;
     private static final int MIN_STACK_CAPACITY = 5;
 
     public AVLTree() {
         root = null;
-        count = 0;
     }
 
     //O(1)
@@ -18,7 +16,14 @@ public class AVLTree {
 
     //O(1)
     public int size() {
-        return count;
+        return size(root);
+    }
+
+    //O(n)
+    private int size(AVLNode node) {
+        if(node == null)
+            return 0;
+        return 1 + size(node.left) + size(node.right);
     }
 
     //O(1)
@@ -33,9 +38,8 @@ public class AVLTree {
 
     //O(1)
     private int height(AVLNode node) {
-        if (node == null) {
+        if(node == null)
             return 0;
-        }
         return node.height;
     }
 
@@ -128,10 +132,9 @@ public class AVLTree {
     //O(log n)
     public AVLNode insert(int value){
         //O(1)
-        ArrayOverStack<AVLNode> stack = new ArrayOverStack<AVLNode>(Math.max(MIN_STACK_CAPACITY, count + 1));
+        ArrayOverStack<AVLNode> stack = new ArrayOverStack<AVLNode>(Math.max(MIN_STACK_CAPACITY, height()));
         if(root == null){
             root = new AVLNode(value);
-            count = 1;
             return root;
         }
         //O(1)
@@ -156,7 +159,6 @@ public class AVLTree {
             parent.left = newNode;
         else
             parent.right = newNode;
-        count++;
 
         // go back up using stack, since in the stack is the nodes we visited and we go through the tree 
         // of log n level, thus O(log n)
@@ -179,7 +181,7 @@ public class AVLTree {
 
     //O(log n)
     public AVLNode delete(int val) {
-        ArrayOverStack<AVLNode> stack = new ArrayOverStack<>(Math.max(MIN_STACK_CAPACITY, count));
+        ArrayOverStack<AVLNode> stack = new ArrayOverStack<>(Math.max(MIN_STACK_CAPACITY, height()));
         AVLNode curr = root;
 
         // Find the node to delete and stored the visited node O(log n)
@@ -235,10 +237,6 @@ public class AVLTree {
                 parent.right = child;
             }
         }
-        if (count > 0) {
-            count--;
-        }
-
         // pop the node to rebalance O(log n)
         while(!stack.isEmpty()) {
             AVLNode node = stack.pop();
@@ -263,11 +261,12 @@ public class AVLTree {
 
     //O(n) because it visits every node once
     public int[] toArray() {
-        int[] arr = new int[count];
+        int n = size();
+        int[] arr = new int[n];
         if (root == null) {
             return arr;
         }
-        ArrayOverStack<AVLNode> stack = new ArrayOverStack<AVLNode>(Math.max(MIN_STACK_CAPACITY, count));
+        ArrayOverStack<AVLNode> stack = new ArrayOverStack<AVLNode>(Math.max(MIN_STACK_CAPACITY, height()));
         AVLNode curr = root;
         int index = 0;
         while(curr != null || !stack.isEmpty()) {
@@ -285,8 +284,6 @@ public class AVLTree {
 
     //O(n^2)
     public boolean repOK() {
-        if ((root == null && count != 0) || (root != null && count == 0))
-            return false;
         if (root == null)
             return true;
         //O(n^2)
@@ -306,8 +303,7 @@ public class AVLTree {
 
     // invariant 1: tree is acyclic w.r.t left/right, O(n^2)
     private boolean checkAcyclicInvariant() {
-        int capacity = Math.max(MIN_STACK_CAPACITY, count);
-        ArrayOverStack<AVLNode> stack = new ArrayOverStack<>(capacity);
+        ArrayOverStack<AVLNode> stack = new ArrayOverStack<>(MIN_STACK_CAPACITY);
         return !hasCycle(root, stack);
     }
 
