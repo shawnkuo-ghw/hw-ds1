@@ -50,6 +50,12 @@ public class ABlockchain implements Blockchain
      */
     @Override
     public void requestTransaction(String fromAddress, String toAddress, int amount, int fee) {
+        if ( fromAddress == null || toAddress == null )
+            throw new IllegalArgumentException("Addresses must not be null");
+        if ( fromAddress.isEmpty() || toAddress.isEmpty() )
+            throw new IllegalArgumentException("Addresses must not be empty");
+        if ( fee < 0 )
+            throw new IllegalArgumentException("Fee must be non-negative");
         if ( amount <= 0 )
             throw new IllegalArgumentException("Amount must be positive");
         TransactionWithOrder t = new TransactionWithOrder(
@@ -73,8 +79,14 @@ public class ABlockchain implements Blockchain
         // 1. Selects transactions from the transaction pool based on priority to fill the current block
         while ( !currBlock.isFull() && !transactionsPool.isEmpty() ) // TB * O(log TP + log TB) = O(TB * (log TP + log TB))
         {
-            TransactionWithFee nextTransacion = transactionsPool.dequeue(); // O(log TP)
-            currBlock.addTransaction(nextTransacion); // O(log TB)
+            TransactionWithFee transWithOrder = transactionsPool.dequeue(); // O(log TP)
+            TransactionWithFee transWithOutOrder = new TransactionWithFee(
+                transWithOrder.getFromAddress(),
+                transWithOrder.getToAddress(),
+                transWithOrder.getAmount(),
+                transWithOrder.getFee()
+            );
+            currBlock.addTransaction(transWithOutOrder); // O(log TB)
         }
         // 2. If the block becomes full
         if ( currBlock.isFull() ) processCurrentBlockAndStartNewBlock(); // O(TB * log A)
@@ -114,7 +126,7 @@ public class ABlockchain implements Blockchain
                 successfulTransactionsCount++;
             // transaction fails
             } else {
-                if ( fromAddBalance != 0 && fromAddBalance >= fee / 2 ) {
+                if ( fromAddBalance >= fee ) {
                     balances.updateBalance(fromAddress, fromAddBalance - fee / 2);   // O(log A)
                     balances.updateBalance("0", zeroAddBalacne + (fee - fee / 2));  // O(log A)
                     returnedFees += fee / 2;
@@ -148,6 +160,8 @@ public class ABlockchain implements Blockchain
      */
     @Override
     public Block getBlock(int index) {
+        if ( index < 0 || index >= size() )
+            throw new IndexOutOfBoundsException("index out of range");
         if ( index == size() - 1 ) return currBlock;
         else return blocks.searchTree(index);
     }
@@ -157,6 +171,8 @@ public class ABlockchain implements Blockchain
      */
     @Override
     public Block getBlockByNumber(int number) {
+        if ( number < 0 || number >= size())
+            throw new IndexOutOfBoundsException("number out of range");
         if ( number == size() - 1 ) return currBlock;
         else return blocks.searchTree(number);
     }

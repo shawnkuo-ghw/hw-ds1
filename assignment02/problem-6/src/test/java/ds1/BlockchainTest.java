@@ -238,4 +238,41 @@ class BlockchainTest {
         assertEquals(3, blockchain.getTransactionPoolSize(), "Transaction pool size should be 3");
         assertTrue(blockchain.repOK(), "Blockchain should be in a valid state");    
     }
+
+   //edge cases
+
+    @Test
+    void testRequestTransactionInvalidAddressesNegativeTest() {
+        ABlockchain blockchain = new ABlockchain(2, 1000);
+        // fromAddress is null
+        assertThrows(IllegalArgumentException.class, () ->
+            blockchain.requestTransaction(null, "B", 10, 1));
+        // toAddress is empty
+        assertThrows(IllegalArgumentException.class, () ->
+            blockchain.requestTransaction("A", "", 10, 1));
+    }
+
+    @Test
+    void testRequestTransactionNegativeFeeNegativeTest() {
+        ABlockchain blockchain = new ABlockchain(2, 1000);
+        assertThrows(IllegalArgumentException.class, () ->
+            blockchain.requestTransaction("A", "B", 10, -1));
+    }
+
+    @Test
+    void testMineBlockEmptyTransactionPoolNegativeTest() {
+        ABlockchain blockchain = new ABlockchain(2, 1000);
+        int sizeBefore = blockchain.size();
+        boolean mined = blockchain.mineBlock();
+        assertFalse(mined);
+        assertEquals(sizeBefore, blockchain.size());
+        assertTrue(blockchain.repOK());
+    }
+
+    @Test
+    void testGetBlockByNumberInvalidIndicesNegativeTest() {
+        ABlockchain blockchain = new ABlockchain(2, 1000);
+        assertThrows(IndexOutOfBoundsException.class, () -> blockchain.getBlockByNumber(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> blockchain.getBlockByNumber(9999));
+    }
 }
