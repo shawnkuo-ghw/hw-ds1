@@ -13,10 +13,12 @@ public class BalanceImp implements Balance
 
     private final AVLTree<String, AddressBalancePair> addBalPairs;
     private final Sequence<String> allAddress;
+    private final int initialBalance;
     private int totalSupply;
 
-    public BalanceImp() {
-        totalSupply = 0;
+    public BalanceImp(int initialBalance) {
+        this.initialBalance = initialBalance;
+        this.totalSupply = 0;
         allAddress = new ListoverLinkedList<String>(String.class);
         addBalPairs = new AVLTreeImp<String, AddressBalancePair>(
             AVLNode.class, 
@@ -29,34 +31,35 @@ public class BalanceImp implements Balance
     /**
      * Time Complexity: O(log |A|)
      * Explaination:
-     *   - time complexity of {@code searchTree} and {@code insertTree} is O(log |A|)
+     *   - time complexities of {@code searchTree}, {@code insertTree} and 
+     *     {@code updateTree} are all O(log |A|)
      *   - time complexity of {@code insertRear} is O(1)
      *   - the overall time complexity is O(log |A|)
      * @see ds1.util.AVLTree#searchTree(Comparable)
      * @see ds1.util.AVLTree#insertTree(Comparable, Object)
+     * @see ds1.util.AVLTree#updateTree(Comparable, Object)
      * @see ds1.util.ListoverLinkedList#insertRear(Object)
      */
     @Override
     public void updateBalance(String address, int newBalance) {
+        // System.out.println("Address: " + address + ", New balance: " + newBalance);
         AddressBalancePair targetPair = addBalPairs.searchTree(address);                  // O(log |A|)
         if ( address.equals("0") && allAddress.length() == 0 ) {
             // initiat `totalSupply` with the amount of BB-coins of 
             // the address "0" in the genesis block
-            addBalPairs.insertTree(address, targetPair);                                  // O(log |A|)
-            totalSupply = newBalance;
+            AddressBalancePair initPair = new AddressBalancePair(address, newBalance);
+            addBalPairs.insertTree(address, initPair);                                    // O(log |A|)
+            allAddress.insertRear(address);                                               // O(1)
         } else if ( targetPair == null ) {
             // address does not exist in Balance
             addBalPairs.insertTree(address, new AddressBalancePair(address, newBalance)); // O(log |A|)
             allAddress.insertRear(address);                                               // O(1)
         } else {
             // address already exists in Balance
-            addBalPairs.updateTree(address, new AddressBalancePair(address, newBalance));
+            addBalPairs.updateTree(address, new AddressBalancePair(address, newBalance)); // O(log |A|)
         }
-        if ( !repOK() ) {
-            throw new IllegalStateException(
-                "BalanceImp.updateBalance(): totalSupply does not equal to the sum of all accounts."
-            );
-        }
+        // update the totalSupply
+        updateTotalSupply();
     }
 
     /* ========================== Getters =================================== */
@@ -71,10 +74,9 @@ public class BalanceImp implements Balance
      */
     @Override
     public int getBalance(String address) {
-        int balanceOfAddress;
+        int balanceOfAddress = 0;
         AddressBalancePair targetPair = addBalPairs.searchTree(address); // O(log |A|)
         if ( targetPair != null ) balanceOfAddress = targetPair.balance;
-        else balanceOfAddress = 0;
         return balanceOfAddress;
     }
 
@@ -90,10 +92,31 @@ public class BalanceImp implements Balance
     }
 
     // representation invariant checker for Balance
-    private boolean repOK() {
-        int totalBalance = 0;
-        AddressBalancePair[] pairsArray = addBalPairs.toArray();
-        for ( AddressBalancePair pair: pairsArray ) { totalBalance += pair.balance; }
-        return totalBalance == totalSupply;
-    }   
+    public boolean repOK() { return totalSupply() == initialBalance; }   
+
+    /* ========================= Utilities ================================== */
+
+    private void updateTotalSupply() { totalSupply = getSumOfBalances(); }
+
+    private int getSumOfBalances() {
+        AddressBalancePair[] pairs = addBalPairs.toArray();
+        int sumOfBalances = 0;
+        for ( AddressBalancePair p: pairs ) sumOfBalances += p.balance;
+        return sumOfBalances;
+    }
+
+    public String toString() {
+        String strRep = "Balances in chain:\n";
+        int length = addBalPairs.size();
+        if (length == 0) {
+            strRep += "Empty\n";
+        } else {
+            String[] allAddrs = getAllAddresses();
+            for (int i = 0; i < length; i++) {
+                String currAddr = allAddrs[i];
+                strRep += currAddr + ": " + getBalance(currAddr) + "\n";
+            }
+        }
+        return strRep;
+    }
 }

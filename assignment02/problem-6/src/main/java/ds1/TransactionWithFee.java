@@ -8,7 +8,7 @@ package ds1;
  */
 public class TransactionWithFee extends Transaction
 {
-    // Fields
+    // Field
     private final int fee;
 
     // Constructor

@@ -33,7 +33,7 @@ public class AVLTreeImp<K extends Comparable <K>, V> implements AVLTree<K, V>
         }
         this.root = insertNode(this.root, null, key, value);
         nodesNum++;
-        print();
+        // print();
         if ( !repOK() ) {
             throw new IllegalStateException(
                 "AVLTree.insertTree(): representation invariant of AVL tree is not satisfied."
@@ -71,7 +71,6 @@ public class AVLTreeImp<K extends Comparable <K>, V> implements AVLTree<K, V>
     private Sequence<AVLNode<K, V>> nodesSequence() {
         Sequence<AVLNode<K, V>> seq = new ListoverLinkedList<AVLNode<K, V>>(NType);
         inorder(this.root, seq);
-        System.out.println("here");
         return seq;
     }
 
