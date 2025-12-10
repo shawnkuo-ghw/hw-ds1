@@ -13,11 +13,9 @@ public class BalanceImp implements Balance
 
     private final AVLTree<String, AddressBalancePair> addBalPairs;
     private final Sequence<String> allAddress;
-    private final int initialBalance;
     private int totalSupply;
 
-    public BalanceImp(int initialBalance) {
-        this.initialBalance = initialBalance;
+    public BalanceImp() {
         this.totalSupply = 0;
         allAddress = new ListoverLinkedList<String>(String.class);
         addBalPairs = new AVLTreeImp<String, AddressBalancePair>(
@@ -30,11 +28,11 @@ public class BalanceImp implements Balance
 
     /**
      * Time Complexity: O(log |A|)
-     * Explaination:
-     *   - time complexities of {@code searchTree}, {@code insertTree} and 
-     *     {@code updateTree} are all O(log |A|)
-     *   - time complexity of {@code insertRear} is O(1)
-     *   - the overall time complexity is O(log |A|)
+     * <p> Explaination: </p>
+     * <li> - time complexities of {@code searchTree}, {@code insertTree} and 
+     *        {@code updateTree} are all O(log |A|) </li>
+     * <li> - time complexity of {@code insertRear} is O(1) </li>
+     * <li> - the overall time complexity is O(log |A|) </li>
      * @see ds1.util.AVLTree#searchTree(Comparable)
      * @see ds1.util.AVLTree#insertTree(Comparable, Object)
      * @see ds1.util.AVLTree#updateTree(Comparable, Object)
@@ -42,7 +40,9 @@ public class BalanceImp implements Balance
      */
     @Override
     public void updateBalance(String address, int newBalance) { 
-        // System.out.println("Address: " + address + ", New balance: " + newBalance);
+        if ( address == null || newBalance < 0 ) throw new IllegalArgumentException(
+            "BalanceImp.updateBalance(): param address is null or param newBalance < 0."
+        );
         AddressBalancePair targetPair = addBalPairs.searchTree(address);                  // O(log |A|)
         int oldBalance = (targetPair == null) ? 0 : targetPair.balance;
         if ( address.equals("0") && allAddress.length() == 0 ) {
@@ -71,14 +71,17 @@ public class BalanceImp implements Balance
 
     /**
      * Time Complexity: O(log |A|)
-     * <p>Explaination:</p>
+     * <p> Explaination: </p>
      * <li> - the height of AVL tree is less than or equal to log|A|</li>
      * <li> - the number of times to compare the elements with the target is O(log |A|)</li>
      * <li> - so the time complexity of {@code searchTree} is O(log |A|)</li>
-     * @see ds1.util.AVLTreeImple#searchTree(Comparable)
+     * @see ds1.util.AVLTreeImp#searchTree(Comparable)
      */
     @Override
     public int getBalance(String address) {
+        if ( address == null ) throw new IllegalArgumentException(
+            "BalanceImp.getBalance(): param address is null."
+        );
         int balanceOfAddress = 0;
         AddressBalancePair targetPair = addBalPairs.searchTree(address); // O(log |A|)
         if ( targetPair != null ) balanceOfAddress = targetPair.balance;
@@ -97,7 +100,7 @@ public class BalanceImp implements Balance
     }
 
     // representation invariant checker for Balance
-    public boolean repOK() { return totalSupply == getSumOfBalances(); }
+    private boolean repOK() { return totalSupply == getSumOfBalances(); }
 
     /* ========================= Utilities ================================== */
 

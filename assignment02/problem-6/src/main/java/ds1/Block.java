@@ -14,9 +14,9 @@ public class Block implements Comparable<Block>
     
     private PriorityQueue transactionsPQ;   // priority queue of transactions in a block
     private final int transactionsPerBlock; // number of transaction in per block
-    private final int blockHash;            // the hash of block
     private final int previousHash;         // the hash of previous block
     private final int blockNumber;          // the number of block
+    private final int blockHash;            // the hash of block
 
     public Block(int previousHash, int transactionsPerBlock, int blockNumber) {
         this.blockHash = previousHash + 1;
@@ -30,55 +30,58 @@ public class Block implements Comparable<Block>
 
     /** 
      * Adds a transaction to the block's priority queue.
-     * @param t The transaction to be added.
-     * @throws IllegalStateException if the priority queue is full
      * <p> Time Complexity: O(log T) where T is the number of transactions in the block </p>
      * <li> - this method is implemented by calling {@code transactionsPQ.enquue} </li>
      * <li> - the time complexity of enqueue is O(log T) </li>
      * <li> - therefore the time complexity is O(log T) </li>
      * @see ds1.util.GenericMaxPQ#enqueue(Comparable)
+     * @param t The transaction to be added.
+     * @throws IllegalStateException if the priority queue is full
      */
     public void addTransaction(TransactionWithFee t) {
-        if ( isFull() )
-            throw new IllegalStateException("Block.addTransaction(): block is full.");
-        else 
-            transactionsPQ.enqueue(t); // O(log T)
+        if ( t == null ) throw new IllegalArgumentException(
+            "Block.addTransaction(): param t is null."
+        );
+        if ( isFull() ) throw new IllegalStateException(
+            "Block.addTransaction(): block is full."
+        );
+        else  transactionsPQ.enqueue(t); // O(log T)
     }
 
     /* ============================== Getters =============================== */
     
     /** 
      * Retrieves the transaction with the highest priority (highest fee) without removing it.
-     * @return The transaction with the highest priority.
-     * @throws NoSuchElementException if the priority queue is empty
      * <p> Time complexity: O(1) </p>
      * <li> - this method is implemented by calling {@code transactionsPQ.next} </li>
      * <li> - the time complexity of {@code transactionsPQ.next} is O(1) </li>
+     * @return The transaction with the highest priority.
+     * @throws NoSuchElementException if the priority queue is empty
      * @see ds1.util.GenericMaxPQ#next()
      */
     public TransactionWithFee getFirstTransaction() {
-        if ( isEmpty() )
-            throw new NoSuchElementException("Block.getFirstTransaction(): block is empty.");
-        else
-            return transactionsPQ.next();
+        if ( isEmpty() ) throw new NoSuchElementException(
+            "Block.getFirstTransaction(): block is empty."
+        );
+        else return transactionsPQ.next();
     }
     
     /**
      * Returns an array of transactions in the block sorted by priority (highest fee first).
-     * @return An array of transactions.
      * <p> Time complexity: O(T log T), where T is the number of transactions in the block. </p>
      * <li> - this method is implemented by calling {@code transactionsPQ.toArray} </li>
      * <li> - the time complexity of {@code traWithFee.toArray} is O(N log N), where N is the number of elements </li>
+     * @return An array of transactions.
      * @see ds1.util.GenericMaxPQ#toArray()
      */
     public TransactionWithFee[] getTransactions() { return transactionsPQ.toArray(); }
     
-    public int getBlockHash() { return this.blockHash; }
-    public int getPreviousHash() { return this.previousHash; }
-    public int getBlockNumber() { return this.blockNumber; }
     public int getTransactionCount() { return transactionsPQ.size(); }
-    public boolean isEmpty() { return transactionsPQ.size() == 0; }
-    public boolean isFull() { return transactionsPQ.size() == transactionsPerBlock; }
+    public int getPreviousHash()     { return this.previousHash; }
+    public int getBlockNumber()      { return this.blockNumber; }
+    public int getBlockHash()        { return this.blockHash; }
+    public boolean isEmpty()         { return transactionsPQ.size() == 0; }
+    public boolean isFull()          { return transactionsPQ.size() == transactionsPerBlock; }
     
     // toString for debugging
     @Override

@@ -2,6 +2,8 @@ package ds1;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.NoSuchElementException;
+
 class BlockTest
 { 
     // Create tests for Block class here. Respect the signatures of its methods:
@@ -9,7 +11,8 @@ class BlockTest
 
     @Test
     void testAddTransactionAndIsFull() {
-        Block block = new Block(0, 2, 1); // previousHash=0, transactionsPerBlock=2, blockNumber=1
+        // previousHash = 0, transactionsPerBlock = 2, blockNumber = 1
+        Block block = new Block(0, 2, 1);
         TransactionWithFee t1 = new TransactionWithFee("A", "B", 50, 0);
         TransactionWithFee t2 = new TransactionWithFee("C", "D", 30, 0);
         block.addTransaction(t1);
@@ -56,5 +59,19 @@ class BlockTest
         TransactionWithFee[] transactions = block.getTransactions();
         assertEquals(1, transactions.length, "There should be 1 transaction in the block");
         assertTrue(revertedT1.isReverted(), "Transaction t1 should be marked as reverted");
+    }
+
+    /* ======================== Edge Cases ================================== */
+
+    @Test
+    void testIllegalOperations() {
+        Block block = new Block(0, 2, 0);
+        assertThrows(NoSuchElementException.class, () -> block.getFirstTransaction());
+        block.addTransaction(new TransactionWithFee("0", "A", 1, 1));
+        block.addTransaction(new TransactionWithFee("0", "B", 2, 2));
+        assertThrows(IllegalStateException.class,
+            () -> block.addTransaction(new TransactionWithFee("0", "C", 3, 3))
+        );
+        assertThrows(IllegalArgumentException.class, () -> block.addTransaction(null));
     }
 }

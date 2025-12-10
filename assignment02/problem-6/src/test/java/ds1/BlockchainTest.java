@@ -239,7 +239,7 @@ class BlockchainTest {
         assertTrue(blockchain.repOK(), "Blockchain should be in a valid state");    
     }
 
-   //edge cases
+    /* ============================ edge cases ============================== */
 
     @Test
     void testRequestTransactionInvalidAddressesNegativeTest() {

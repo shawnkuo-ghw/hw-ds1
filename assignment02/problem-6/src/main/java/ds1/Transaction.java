@@ -25,9 +25,9 @@ public abstract class Transaction implements Comparable<Transaction>
     /* =========================== Getters ================================== */
 
     public String getFromAddress() { return fromAddress; }
-    public String getToAddress() { return toAddress; }
-    public boolean isReverted() { return reverted; }
-    public int getAmount() { return amount; }
+    public String getToAddress()   { return toAddress; }
+    public boolean isReverted()    { return reverted; }
+    public int getAmount()         { return amount; }
     
     /* =========================== Setters ================================== */
 

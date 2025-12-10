@@ -8,9 +8,8 @@ public class PriorityQueue
     private final GenericPQ<TransactionWithFee> pqt; // priority queue of transactions
     public PriorityQueue() { pqt = new GenericMaxPQ<TransactionWithFee>(TransactionWithFee.class); }
     public PriorityQueue(PriorityQueue o) { 
-        if ( o != null ) {
-            pqt = new GenericMaxPQ<TransactionWithFee>((GenericMaxPQ<TransactionWithFee>) o.pqt);
-        } else throw new IllegalArgumentException("PriorityQueue(other): other is null.");
+        if ( o == null )throw new IllegalArgumentException("PriorityQueue(other): param o is null.");
+        else pqt = new GenericMaxPQ<TransactionWithFee>((GenericMaxPQ<TransactionWithFee>) o.pqt);
     }
 
     /* ======================== Modifiers =================================== */

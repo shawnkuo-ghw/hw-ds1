@@ -25,11 +25,9 @@ public class TransactionWithOrder extends TransactionWithFee
     // Comparable interface
     @Override
     public int compareTo(Transaction o) {
-        if ( !(o instanceof TransactionWithOrder) ) {
-            throw new IllegalArgumentException(
-                "TransactionWithOrder.compareTo: the type of o is not TransactionWithOrder"
-            );
-        }
+        if ( !(o instanceof TransactionWithOrder) ) throw new IllegalArgumentException(
+            "TransactionWithOrder.compareTo: the type of o is not TransactionWithOrder"
+        );
         TransactionWithOrder other = (TransactionWithOrder) o;
         double thisPriority = PRIORITY(this);
         double otherPriority = PRIORITY(other);

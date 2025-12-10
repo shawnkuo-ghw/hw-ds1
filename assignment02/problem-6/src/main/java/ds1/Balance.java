@@ -34,10 +34,4 @@ public interface Balance {
      * @return array of all addresses
      */
     String[] getAllAddresses();
-
-    /**
-     * Return whether totalSupply equals to the sum of all accounts
-     * @return {@code true} if yes; {@code false} otherwise
-     */
-    boolean repOK();
 }

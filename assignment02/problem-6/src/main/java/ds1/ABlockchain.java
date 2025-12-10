@@ -18,7 +18,7 @@ public class ABlockchain implements Blockchain
 
     public ABlockchain(int transactionsPerBlock, int initialBalance) {
         transactionsPool = new PriorityQueue();
-        balances = new BalanceImp(initialBalance);
+        balances = new BalanceImp();
         blocks = new AVLTreeImp<Integer, Block>(AVLNode.class, Block.class);
         this.transactionsPerBlock = transactionsPerBlock;
         this.initialBalance = initialBalance;
@@ -66,12 +66,13 @@ public class ABlockchain implements Blockchain
     }
 
     /**
-     * Time complexity: O(TB * (log TP + log A)), where TB is the number of transactions per block, 
-     * TB is the number of transactions per block and TP is the number of transactions in the pool.
-     * Explaination:
-     * <li> - the worst case of time complexity is reached when the current block is full and then 
-     *        {@code processCurrentBlockAndStartNewBlock} is called </li>
-     * <li> - the time complexity of {@code processCurrentBlockAndStartNewBlock} is explained as below </li>
+     * Time complexity: O(TB * (log TP + log A)), where
+     * TB is the number of transactions per block,
+     * TP is the number of transactions in the pool and
+     *  A is the number of address with balance.
+     * <p> Explaination: </p>
+     * <li> - Firstly, A is larger than TB, since to get A many addre</li>
+     * @see ds1.ABlockchain#processCurrentBlockAndStartNewBlock()
      */
     @Override
     public boolean mineBlock() {
@@ -86,7 +87,7 @@ public class ABlockchain implements Blockchain
                 transWithOrder.getAmount(),
                 transWithOrder.getFee()
             );
-            currBlock.addTransaction(transWithOutOrder); // O(log TB)
+            currBlock.addTransaction(transWithOutOrder); // O(log TB) = O(log A), since TB <= A
         }
         // 2. If the block becomes full
         if ( currBlock.isFull() ) processCurrentBlockAndStartNewBlock(); // O(TB * log A)
@@ -97,10 +98,14 @@ public class ABlockchain implements Blockchain
 
     /**
      * Time complexity: O(TB * log A)
-     * Explaination:
-     * <li> - </li>
-     * <li> - </li>
-     * <li> - </li>
+     * <p> Explaination: </p>
+     * <li> - There are TB many transactions waiting to be executed </li>
+     * <li> - For each transaction being executed, the worst time complexity is reached 
+     *        when transaction succeeds, where {@code balances.updateBalance} is called 
+     *        three times </li>
+     * <li> - The time complexity of {@code balances.updateBalance} is O(log A) </li>
+     * <li> - Therefore the overall time complexity is TB * 3 * O(log A) = O(TB * log A) </li>
+     * @see ds1.BalanceImp#updateBalance(String, int)
      */
     @Override
     public void processCurrentBlockAndStartNewBlock() {
@@ -120,15 +125,15 @@ public class ABlockchain implements Blockchain
             // transaction succeeds
             else if ( fromAddBalance >= amount + fee ) {
                 balances.updateBalance(fromAddress, fromAddBalance - (amount + fee)); // O(log A)
-                balances.updateBalance(toAddress, toAddBalance + amount);     // O(log A)
+                balances.updateBalance(toAddress, toAddBalance + amount); // O(log A)
                 zeroAddBalacne = balances.getBalance("0");
-                balances.updateBalance("0", zeroAddBalacne + fee);   // O(log A)
+                balances.updateBalance("0", zeroAddBalacne + fee); // O(log A)
                 successfulTransactionsCount++;
             // transaction fails
             } else {
                 if ( fromAddBalance >= fee ) {
-                    balances.updateBalance(fromAddress, fromAddBalance - fee / 2);   // O(log A)
-                    balances.updateBalance("0", zeroAddBalacne + (fee - fee / 2));  // O(log A)
+                    balances.updateBalance(fromAddress, fromAddBalance - fee / 2); // O(log A)
+                    balances.updateBalance("0", zeroAddBalacne + (fee - fee / 2)); // O(log A)
                     returnedFees += fee / 2;
                 }
                 t.revert();
@@ -143,7 +148,7 @@ public class ABlockchain implements Blockchain
             transactionsPerBlock, 
             currBlock.getBlockNumber() + 1
         );
-        System.out.println(balances.toString());
+        // System.out.println(balances.toString());
         if ( !repOK() )
             throw new IllegalStateException(
                 "ABlockchain.processCurrentBlockAndStartNewBlock(): RI is not satisfied."
@@ -154,15 +159,15 @@ public class ABlockchain implements Blockchain
 
     /**
      * Time complexity: O(log B), where B is the number of blocks
-     * Explaination:
+     * <p> Explaination: </p>
      * <li> - This method is implemented by calling {@code searchTree}, whose time complexity is O(log B)</li>
      * @see ds1.util.AVLTree#searchTree(Comparable)
      */
     @Override
     public Block getBlock(int index) {
-        if ( index < 0 || index >= size() )
+        if ( index < 0 || index >= size() ) 
             throw new IndexOutOfBoundsException("index out of range");
-        if ( index == size() - 1 ) return currBlock;
+        if ( index == size() - 1 ) return currBlock; // the last one is the current block
         else return blocks.searchTree(index);
     }
 
@@ -171,12 +176,11 @@ public class ABlockchain implements Blockchain
      */
     @Override
     public Block getBlockByNumber(int number) {
-        if ( number < 0 || number >= size())
+        if ( number < 0 || number >= size() )
             throw new IndexOutOfBoundsException("number out of range");
-        if ( number == size() - 1 ) return currBlock;
+        if ( number == size() - 1 ) return currBlock; // the last one is the current block
         else return blocks.searchTree(number);
     }
-
 
     @Override
     public int size() { return blocks.size() + 1; } // 1 for the current block
@@ -194,7 +198,7 @@ public class ABlockchain implements Blockchain
 
     /**
      * Time complexity: O(log A)
-     * Explaination:
+     * <p> Explaination: </p>
      * <li> - this method is simply implemented by calling {@code balances.getBalance} </li>
      * <li> - the time complexity of {@code balances.getBalance} is O(log A) </li>
      * @see ds1.Balance#getBalance(String)
@@ -214,7 +218,65 @@ public class ABlockchain implements Blockchain
     @Override
     public int getReturnedFees() { return returnedFees; }
 
+    /* =================== Representation Invariant ========================= */
+
 	public boolean repOK() {
-        return balances.repOK() && true;
-    }    
+        // if ( !correctHashLinking() )
+        //     System.out.println("hash link");
+        // if ( !allBlocksHaveSameTransactionCapacity() )
+        //     System.out.println("same transaction capcity");
+        // if ( !blockNumbersStrictlyIncrease() )
+        //     System.out.println("block number");
+        return 
+            correctHashLinking() &&
+            allBlocksHaveSameTransactionCapacity() &&
+            blockNumbersStrictlyIncrease();
+    }
+
+    private boolean correctHashLinking() {
+        boolean isCorrect = true;
+        Block[] blocksArrary = blocks.toArray();
+        int length = blocksArrary.length;
+        int i = 1; // start from the second block
+        while ( isCorrect && i < length ) {
+            int prevHash = blocksArrary[i-1].getBlockHash();
+            int currHash = blocksArrary[i].getBlockHash();
+            if ( prevHash != currHash - 1 )
+                isCorrect = false;
+            else
+                i++;
+        }
+        return isCorrect;
+    }
+
+    private boolean allBlocksHaveSameTransactionCapacity() {
+        boolean isCorrect = true;
+        Block[] blocksArray = blocks.toArray();
+        int length = blocksArray.length;
+        int i = 1; // skip genesis block
+        while ( isCorrect && i < length ) {
+            Transaction[] currBlockTransactions = blocksArray[i].getTransactions();
+            if ( currBlockTransactions.length != transactionsPerBlock )
+                isCorrect = false;
+            else
+                i++;
+        }
+        return isCorrect;
+    }
+    
+    private boolean blockNumbersStrictlyIncrease() {
+        boolean isCorrect = true;
+        Block[] blocksArray = blocks.toArray();
+        int length = blocksArray.length;
+        int i = 1; // skip genesis block
+        while ( isCorrect && i < length ) {
+            int prevBlockNumber = blocksArray[i-1].getBlockNumber();
+            int currBlockNumber = blocksArray[i].getBlockNumber();
+            if ( prevBlockNumber >= currBlockNumber )
+                isCorrect = false;
+            else
+                i++;
+        }
+        return isCorrect;
+    }
 }

@@ -1,5 +1,4 @@
 package ds1.util;
-import ds1.Transaction;
 import java.lang.reflect.*;
 import java.util.NoSuchElementException;
 
@@ -17,7 +16,6 @@ public class GenericMaxPQ<T extends Comparable<? super T> > implements GenericPQ
      *                             Constructor                                 *
      * ======================================================================= */
 
-    @SuppressWarnings("unchecked")
     public GenericMaxPQ(Class<T> newType) {
         size = 0;
         type = newType;
@@ -25,13 +23,11 @@ public class GenericMaxPQ<T extends Comparable<? super T> > implements GenericPQ
     }
     
     // Copy constructor
-    @SuppressWarnings("unchecked")
     public GenericMaxPQ(GenericMaxPQ<T> o) {
-        if ( o == null ) {
-            throw new IllegalArgumentException(
-                "GenericMaxPQ(other): argument other is null."
-            );
-        }
+        if ( o == null ) throw new IllegalArgumentException(
+            "GenericMaxPQ(other): argument other is null."
+        );
+        
         GenericMaxPQ<T> other = (GenericMaxPQ<T>) o;
         this.type = other.type;
         this.size = other.size;
@@ -48,21 +44,17 @@ public class GenericMaxPQ<T extends Comparable<? super T> > implements GenericPQ
         heap.insertRear(elem); // heap[size] = elem;
         size++;
         swim(size-1);
-        if ( !repOK() ) {
-            throw new IllegalStateException(
-                "GenericMaxPQ.enqueue(): RI is not satisfied."
-            );
-        }
+        if ( !repOK() ) throw new IllegalStateException(
+            "GenericMaxPQ.enqueue(): RI is not satisfied."
+        );   
     }
 
     // Time complexity: O(log N)
     @Override
     public T dequeue() {
-        if ( this.isEmpty() ) {
-            throw new NoSuchElementException(
-                "GenericMaxPQ.dequeue(): pq is empty."
-            );
-        } else {
+        if ( this.isEmpty() ) throw new NoSuchElementException(
+            "GenericMaxPQ.dequeue(): pq is empty."
+        ); else {
             T maxElem = heap.at(0); // T maxElem = heap[0];
             if ( size > 1 ) swap(0, size-1);
             heap.removeRear();; // heap[size-1] = null;
@@ -83,12 +75,10 @@ public class GenericMaxPQ<T extends Comparable<? super T> > implements GenericPQ
 
     @Override
     public T next() {
-        if ( this.isEmpty() )
-            throw new NoSuchElementException(
-                "GenericMaxPQ.next(): pq is empty."
-            );
-        else
-            return heap.at(0); // return heap[0];
+        if ( this.isEmpty() ) throw new NoSuchElementException(
+            "GenericMaxPQ.next(): pq is empty."
+        );
+        else return heap.at(0); // return heap[0];
     }
 
     @Override
@@ -137,9 +127,7 @@ public class GenericMaxPQ<T extends Comparable<? super T> > implements GenericPQ
     // check whether element of index i is less than element of index j
     private boolean less(int i, int j) {
         if ( i == j ) 
-            throw new IllegalArgumentException(
-                "GenericMaxPQ.less(): i should not be equal to j."
-            );
+            throw new IllegalArgumentException("GenericMaxPQ.less(): i should not be equal to j.");
         else
             // return heap[i].compareTo(heap[j]) < 0;
             return heap.at(i).compareTo(heap.at(j)) < 0;
@@ -182,11 +170,8 @@ public class GenericMaxPQ<T extends Comparable<? super T> > implements GenericPQ
 
     // swap elements of index i and j
     private void swap(int i, int j) {
-        if ( !(0 <= i && i < j && j < size) ) {
-            throw new IllegalStateException(
-                "GenericMaxPQ.swap(): it should be that 0 <= i < j < size."
-            );
-        }        
+        if ( !(0 <= i && i < j && j < size) )
+            throw new IllegalStateException("GenericMaxPQ.swap(): it should be that 0 <= i < j < size.");
         T temp = heap.at(i);          // T temp = heap[i];
         heap.updateAt(i, heap.at(j)); // heap[i] = heap[j];
         heap.updateAt(j, temp);       // heap[j] = temp;   
