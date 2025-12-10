@@ -283,45 +283,47 @@ public class AVLTree {
         return arr;
     }
 
-    //O(n) since it verifies every node
+    //O(n^2)
     public boolean repOK() {
-        if ((root == null && count != 0) || (root != null && count == 0)) {
+        if ((root == null && count != 0) || (root != null && count == 0))
             return false;
-        }
-        if (root == null) {
+        if (root == null)
             return true;
-        }
-        if (!checkAcyclicInvariant()) {
+        //O(n^2)
+        if (!checkAcyclicInvariant())
             return false;
-        }
-        if (!checkBSTInvariant()) {
+        //O(n)
+        if (!checkBSTInvariant())
             return false;
-        }
-        if (!checkBalanceInvariant()) {
+        //O(n)
+        if (!checkBalanceInvariant())
             return false;
-        }
-        if (!checkHeightInvariant()) {
+        //O(n)
+        if (!checkHeightInvariant())
             return false;
-        }
         return true;
     }
 
-    // invariant 1: tree is acyclic w.r.t left/right, O(n)
+    // invariant 1: tree is acyclic w.r.t left/right, O(n^2)
     private boolean checkAcyclicInvariant() {
         int capacity = Math.max(MIN_STACK_CAPACITY, count);
         ArrayOverStack<AVLNode> stack = new ArrayOverStack<>(capacity);
         return !hasCycle(root, stack);
     }
 
-    //O(n) since it visits each node to detect cycles
+    //O(n^2)
     private boolean hasCycle(AVLNode node, ArrayOverStack<AVLNode> stack) {
         if (node == null) {
             return false;
         }
+        //O(n)
         if (stack.contains(node)) {
             return true;
         }
         stack.push(node);
+        //Each level, we do O(n) work `contains`
+        //And we need to call hasCycle n times(every node)
+        //Thus O(n^2)
         boolean leftCycle = hasCycle(node.left, stack);
         if(leftCycle) {
             stack.pop();
@@ -337,7 +339,7 @@ public class AVLTree {
         return validBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
     }
 
-    //O(n) because it visit each node at most once
+    //O(n) because it visit each node at most once and each level work is O(1)
     private boolean validBST(AVLNode node, long min, long max) {
         if (node == null) {
             return true;
@@ -354,22 +356,19 @@ public class AVLTree {
     }
 
     //O(n) since we recurse every node to comute height
+    //And each level work is O(1)
     private int validBalance(AVLNode node) {
-        if (node == null) {
+        if (node == null)
             return 0;
-        }
         int leftHeight = validBalance(node.left);
-        if (leftHeight == -1) {
+        if (leftHeight == -1)
             return -1;
-        }
         int rightHeight = validBalance(node.right);
-        if (rightHeight == -1) {
+        if (rightHeight == -1)
             return -1;
-        }
         int balance = rightHeight - leftHeight;
-        if (balance < -1 || balance > 1) {
+        if (balance < -1 || balance > 1)
             return -1;
-        }
         return 1 + Math.max(leftHeight, rightHeight);
     }
 
@@ -380,21 +379,17 @@ public class AVLTree {
 
     //O(n) since we verify each node's heght
     private int validHeights(AVLNode node) {
-        if (node == null) {
+        if (node == null) 
             return 0;
-        }
         int leftHeight = validHeights(node.left);
-        if (leftHeight == -1) {
+        if (leftHeight == -1)
             return -1;
-        }
         int rightHeight = validHeights(node.right);
-        if (rightHeight == -1) {
+        if (rightHeight == -1)
             return -1;
-        }
         int actual = 1 + Math.max(leftHeight, rightHeight);
-        if (node.height != actual) {
+        if (node.height != actual)
             return -1;
-        }
         return actual;
     }
 }
