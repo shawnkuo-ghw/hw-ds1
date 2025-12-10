@@ -1,12 +1,26 @@
 package ds1;
+import ds1.util.*;
 
-import ds1.util.Sequence;
+public class ABlockchain implements Blockchain
+{
+    /* ===================== Fields and Constructor ========================= */
 
-public class ABlockchain implements Blockchain {
-    
+    private final PriorityQueue transactionsPool; // transaction pool
+    private final AVLTree<Integer, Block> blocks; // blocks in chain, key = order of insertion
+    private final int transactionsPerBlock; // transaction per block
+    private final int initialBalance;       // initial balance
+    private final Balance balances;         // record of balances of each address
+    private int transactionsCounter;        // counter of transaction
+    private Block currBlock;                // current block yet to add in the chain
+    private Block prevBlock;                // last added block in the chain
+
     public ABlockchain(int transactionsPerBlock, int initialBalance) {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+        
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'requestTransaction'");
+    }    
+
+    /* ============================ Modifiers =============================== */
 
     @Override
     public void requestTransaction(String fromAddress, String toAddress, int amount, int fee) {
@@ -26,6 +40,8 @@ public class ABlockchain implements Blockchain {
         throw new UnsupportedOperationException("Unimplemented method 'processCurrentBlockAndStartNewBlock'");
     }
 
+    /* =========================== Getters ================================== */
+
     @Override
     public Block getBlock(int index) {
         // TODO Auto-generated method stub
@@ -33,16 +49,10 @@ public class ABlockchain implements Blockchain {
     }
 
     @Override
-    public int size() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'size'");
-    }
+    public int size() { return blocks.size(); }
 
     @Override
-    public Block getLastBlock() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getLastBlock'");
-    }
+    public Block getLastBlock() { return prevBlock; }
 
     @Override
     public Sequence<Block> getBlocks() {
@@ -50,11 +60,15 @@ public class ABlockchain implements Blockchain {
         throw new UnsupportedOperationException("Unimplemented method 'getBlocks'");
     }
 
+    /**
+     * Time complexity: O(log A)
+     * Explaination:
+     * <li> - this method is simply implemented by calling {@code balances.getBalance()}</li>
+     * <li> - the time complexity of {@code balances.getBalance()} is O(log A)
+     * @see ds1.BalanceImp#getBalance(String)
+     */
     @Override
-    public int getBalance(String address) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBalance'");
-    }
+    public int getBalance(String address) { return balances.getBalance(address); }
 
     @Override
     public int getTransactionPoolSize() {

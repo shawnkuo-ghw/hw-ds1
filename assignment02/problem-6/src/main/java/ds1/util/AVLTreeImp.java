@@ -1,7 +1,7 @@
 package ds1.util;
 import java.util.NoSuchElementException;
 
-public class AVLTreeImple<K extends Comparable <K>, V> implements AVLTree<K, V>
+public class AVLTreeImp<K extends Comparable <K>, V> implements AVLTree<K, V>
 {
     /* ====================== Fields and Constructor ======================== */
     
@@ -9,12 +9,17 @@ public class AVLTreeImple<K extends Comparable <K>, V> implements AVLTree<K, V>
     private final Class<V> VType;       // type of value
     private AVLNode<K, V> root;         // the root of AVL tree
     private int nodesNum;               // number of nodes
-    public AVLTreeImple(Class<? extends AVLNode> newNType, Class<V> newVType) {
+    public AVLTreeImp(Class<? extends AVLNode> newNType, Class<V> newVType) {
         this.NType = (Class<AVLNode<K, V>>) newNType;
         this.VType = newVType;
         this.root = null;
         nodesNum = 0;
     }
+
+    /* ============================ Getters ================================= */
+
+    @Override
+    public int size() { return nodesNum; }
 
     /* ============================ Modifiers =============================== */
 

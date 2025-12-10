@@ -1,15 +1,15 @@
 package ds1.util;
 import ds1.Transaction;
+import java.lang.reflect.*;
 import java.util.NoSuchElementException;
 
-public class GenericMaxPQ<T extends Comparable<T>> implements GenericPQ<T>
+public class GenericMaxPQ<T extends Comparable<? super T> > implements GenericPQ<T>
 {
     /* ======================================================================= *
      *                                Fields                                   *
      * ======================================================================= */
 
-    private final T[] heap; // 0-based index array
-    private final int capacity;
+    private final Sequence<T> heap;
     private final Class<T> type;
     private int size;
 
@@ -18,64 +18,54 @@ public class GenericMaxPQ<T extends Comparable<T>> implements GenericPQ<T>
      * ======================================================================= */
 
     @SuppressWarnings("unchecked")
-    public GenericMaxPQ(Class<T> type, int capacity) {
-        this.size = 0;
-        this.type = type;
-        this.capacity = capacity;
-        this.heap = (T[]) java.lang.reflect.Array.newInstance(type, capacity);
+    public GenericMaxPQ(Class<T> newType) {
+        size = 0;
+        type = newType;
+        heap = new ListoverLinkedList<>(type);
     }
     
     // Copy constructor
     @SuppressWarnings("unchecked")
-    public GenericMaxPQ(GenericMaxPQ<T> other)
-    {
-        if ( other == null ) {
+    public GenericMaxPQ(GenericMaxPQ<T> o) {
+        if ( o == null ) {
             throw new IllegalArgumentException(
                 "GenericMaxPQ(other): argument other is null."
             );
         }
+        GenericMaxPQ<T> other = (GenericMaxPQ<T>) o;
         this.type = other.type;
-        this.capacity = other.capacity;
         this.size = other.size;
-        // construct a new array of type T and of size capacity
-        this.heap = (T[]) java.lang.reflect.Array.newInstance(type, capacity);
-        System.arraycopy(other.heap, 0, this.heap, 0, this.size);
+        heap = new ListoverLinkedList<T>((ListoverLinkedList<T>) other.heap);
     }
 
     /* ======================================================================= *
-     *                               Setters                                   *
+     *                             Modifiers                                   *
      * ======================================================================= */
 
+    // Time complexity: O(log N)
     @Override
-    public void enqueue(T elem)
-    {
-        if ( this.isFull() ) {
+    public void enqueue(T elem) {
+        heap.insertRear(elem); // heap[size] = elem;
+        size++;
+        swim(size-1);
+        if ( !repOK() ) {
             throw new IllegalStateException(
-                "GenericMaxPQ.enqueue(): pq is full."
+                "GenericMaxPQ.enqueue(): RI is not satisfied."
             );
-        } else {
-            heap[size] = elem;
-            size++;
-            swim(size - 1);
-            if ( !repOK() ) {
-                throw new IllegalStateException(
-                    "GenericMaxPQ.enqueue(): RI is not satisfied."
-                );
-            }
         }
     }
 
+    // Time complexity: O(log N)
     @Override
-    public T dequeue()
-    {
+    public T dequeue() {
         if ( this.isEmpty() ) {
             throw new NoSuchElementException(
                 "GenericMaxPQ.dequeue(): pq is empty."
             );
         } else {
-            T maxElem = heap[0];
+            T maxElem = heap.at(0); // T maxElem = heap[0];
             if ( size > 1 ) swap(0, size-1);
-            heap[size-1] = null;
+            heap.removeRear();; // heap[size-1] = null;
             size--;
             sink(0);
             if ( !repOK() ) {
@@ -92,15 +82,13 @@ public class GenericMaxPQ<T extends Comparable<T>> implements GenericPQ<T>
      * ======================================================================= */
 
     @Override
-    public T next()
-    {
-        if ( this.isEmpty() ) { 
+    public T next() {
+        if ( this.isEmpty() )
             throw new NoSuchElementException(
                 "GenericMaxPQ.next(): pq is empty."
             );
-        } else {
-            return heap[0];
-        }
+        else
+            return heap.at(0); // return heap[0];
     }
 
     @Override
@@ -109,24 +97,18 @@ public class GenericMaxPQ<T extends Comparable<T>> implements GenericPQ<T>
     @Override
     public boolean isEmpty() { return this.size() == 0; }
 
-    @Override
-    public boolean isFull() { return this.size() == this.capacity; }
-
     // Converts the priority queue to an array sorted by priority (highest priority first)
     // Take into account that dequeue modifies the heap, so may need to copy it first
     @Override
     @SuppressWarnings("unchecked")
-    public T[] toArray()
-    {
-        GenericMaxPQ<T> auxPQ = new GenericMaxPQ<T>(this.type, this.capacity);
-        auxPQ.size = this.size;
-        for (int i = 0; i < this.size; i++) auxPQ.heap[i] = this.heap[i];
+    public T[] toArray() {
+        GenericMaxPQ<T> auxPQ = new GenericMaxPQ<T>(this);
         // construct a new array of type T and of size capacity
-        T[] resArray = (T[]) java.lang.reflect.Array.newInstance(type, this.size);
-        // pop all elements from auxPQ into resArray
+        T[] array = (T[]) Array.newInstance(type, this.size);
+        // pop all elements from auxPQ into array
         int i = 0;
-        while (!auxPQ.isEmpty()) resArray[i++] = auxPQ.dequeue();
-        return resArray;
+        while ( !auxPQ.isEmpty() ) array[i++] = auxPQ.dequeue(); // dequeue: O(log N)
+        return array;
     }
 
     /* ======================================================================= *
@@ -134,17 +116,13 @@ public class GenericMaxPQ<T extends Comparable<T>> implements GenericPQ<T>
      * ======================================================================= */
     
     // Representation Invariant Checker of max priority queue
-    private boolean repOK()
-    {
+    private boolean repOK() {
         boolean is_RI_satisfified = true;
         int i = this.size - 1;
-        while ( i > 0 ) {
+        while ( is_RI_satisfified && i > 0 ) {
             int parent = PARENT(i);
-            if ( !less(i, parent) ) {
-                is_RI_satisfified = false;
-            } else {
-                i--;
-            }
+            if ( less(parent, i) ) is_RI_satisfified = false;
+            else i--;
         }
         return is_RI_satisfified;
     }
@@ -157,19 +135,17 @@ public class GenericMaxPQ<T extends Comparable<T>> implements GenericPQ<T>
     private static int RIGHT(int i) { return 2 * i + 2; }
 
     // check whether element of index i is less than element of index j
-    private boolean less(int i, int j)
-    {
-        if ( i == j ) {
+    private boolean less(int i, int j) {
+        if ( i == j ) 
             throw new IllegalArgumentException(
                 "GenericMaxPQ.less(): i should not be equal to j."
             );
-        } else {
-            return heap[i].compareTo(heap[j]) < 0;
-        }
+        else
+            // return heap[i].compareTo(heap[j]) < 0;
+            return heap.at(i).compareTo(heap.at(j)) < 0;
     }
 
-    private void swim(int k)
-    {
+    private void swim(int k) {
         int parent = PARENT(k);
         while ( k > 0 && less(parent, k) )
         {
@@ -179,8 +155,7 @@ public class GenericMaxPQ<T extends Comparable<T>> implements GenericPQ<T>
         }
     }
 
-    private void sink(int k)
-    {
+    private void sink(int k) {
         int left_child = LEFT(k);
         int right_child = RIGHT(k);
         int child = left_child;
@@ -193,8 +168,7 @@ public class GenericMaxPQ<T extends Comparable<T>> implements GenericPQ<T>
                 child = right_child;
             }
             // swap the node and its child, if needed
-            if ( less(k, child) )
-            {
+            if ( less(k, child) ) {
                 swap(k, child);
                 k = child;
                 left_child = LEFT(k);
@@ -207,15 +181,14 @@ public class GenericMaxPQ<T extends Comparable<T>> implements GenericPQ<T>
     }
 
     // swap elements of index i and j
-    private void swap(int i, int j)
-    {
-        if ( !(0 <= i && i < j && j < this.size) ) {
+    private void swap(int i, int j) {
+        if ( !(0 <= i && i < j && j < size) ) {
             throw new IllegalStateException(
-                "GenericMaxPQ.swap(): it should be the case that 0 <= i < j < size."
+                "GenericMaxPQ.swap(): it should be that 0 <= i < j < size."
             );
-        }
-        T temp = heap[i];
-        heap[i] = heap[j];
-        heap[j] = temp;
+        }        
+        T temp = heap.at(i);          // T temp = heap[i];
+        heap.updateAt(i, heap.at(j)); // heap[i] = heap[j];
+        heap.updateAt(j, temp);       // heap[j] = temp;   
     }
 }

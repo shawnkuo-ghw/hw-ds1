@@ -1,7 +1,7 @@
 package ds1;
 import ds1.util.AVLTree;
 import ds1.util.AVLNode;
-import ds1.util.AVLTreeImple;
+import ds1.util.AVLTreeImp;
 import org.junit.jupiter.api.*;
 import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +13,7 @@ public class AVLTreeTest
     @BeforeEach
     void init()
     {
-        t = new AVLTreeImple<Integer, Integer>(AVLNode.class, Integer.class);
+        t = new AVLTreeImp<Integer, Integer>(AVLNode.class, Integer.class);
     }
     
     @Test
