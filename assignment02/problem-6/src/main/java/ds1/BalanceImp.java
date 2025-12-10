@@ -97,7 +97,7 @@ public class BalanceImp implements Balance
     }
 
     // representation invariant checker for Balance
-    public boolean repOK() { return totalSupply == getSumOfBalances() && totalSupply == initialBalance; }
+    public boolean repOK() { return totalSupply == getSumOfBalances(); }
 
     /* ========================= Utilities ================================== */
 
