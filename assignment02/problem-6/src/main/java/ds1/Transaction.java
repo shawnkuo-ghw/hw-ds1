@@ -9,6 +9,8 @@ package ds1;
  */
 public abstract class Transaction implements Comparable<Transaction>
 {
+    /* ====================== Fileds and Contructor ========================= */
+
     protected String fromAddress;
     protected String toAddress;
     protected boolean reverted;
@@ -20,31 +22,24 @@ public abstract class Transaction implements Comparable<Transaction>
         this.amount = amount;
     }
 
-    // Getters
-    public String getFromAddress() { return fromAddress; }
-    public String getToAddress() { return toAddress; }
-    public int getAmount() { return amount; }
-    public boolean isReverted() { return reverted; }
-    
-    // Setters
-    public void revert() { this.reverted = true; }
+    /* =========================== Getters ================================== */
 
-    @Override
-    public int compareTo(Transaction o) {
-        if ( !(o instanceof Transaction) )
-            throw new IllegalArgumentException("Transactino.compareTo(): o is not of type transaction");
-        Transaction other = (Transaction) o;
-        return Integer.compare(this.amount, other.amount);
-    }
+    public String getFromAddress() { return fromAddress; }
+    public String getToAddress()   { return toAddress; }
+    public boolean isReverted()    { return reverted; }
+    public int getAmount()         { return amount; }
+    
+    /* =========================== Setters ================================== */
+
+    public void revert() { this.reverted = true; }
 
     // toString for debugging
     @Override
     public String toString() {
         return 
-            "Transaction[from=" +
-            fromAddress + ", to=" +
-            toAddress + ", amount=" +
-            amount + ", reverted=" +
-            reverted + "]";
+            "Transaction[from=" + fromAddress + 
+            ", to=" + toAddress + 
+            ", amount=" + amount + 
+            ", reverted=" + reverted + "]";
     }
 }

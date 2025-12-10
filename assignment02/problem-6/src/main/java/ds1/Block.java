@@ -8,88 +8,93 @@ import java.util.NoSuchElementException;
  * It contains a priority queue of transactions, a block hash, a previous block hash, and a block number.
  * Transactions are stored in a priority queue based on their fees.
  */
-
 public class Block implements Comparable<Block>
 {
     /* ==================== Fields and Constructor ========================== */
     
-    private PriorityQueue pq;
-    private final int blockHash;
-    private final int previousHash;
-    private final int blockNumber;
-    private final int transactionsPerBlock;
+    private PriorityQueue transactionsPQ;   // priority queue of transactions in a block
+    private final int transactionsPerBlock; // number of transaction in per block
+    private final int previousHash;         // the hash of previous block
+    private final int blockNumber;          // the number of block
+    private final int blockHash;            // the hash of block
 
     public Block(int previousHash, int transactionsPerBlock, int blockNumber) {
         this.blockHash = previousHash + 1;
         this.previousHash = previousHash;
         this.blockNumber = blockNumber;
         this.transactionsPerBlock = transactionsPerBlock;
-        pq = new PriorityQueue(transactionsPerBlock);
+        transactionsPQ = new PriorityQueue();
     }
 
-    /* =========================== Modifier ================================= */
+    /* =========================== Modifiers ================================ */
 
     /** 
      * Adds a transaction to the block's priority queue.
+     * <p> Time Complexity: O(log T) where T is the number of transactions in the block </p>
+     * <li> - this method is implemented by calling {@code transactionsPQ.enquue} </li>
+     * <li> - the time complexity of enqueue is O(log T) </li>
+     * <li> - therefore the time complexity is O(log T) </li>
+     * @see ds1.util.GenericMaxPQ#enqueue(Comparable)
      * @param t The transaction to be added.
      * @throws IllegalStateException if the priority queue is full
-     * Time Complexity: O(log T) where T is the number of transactions in the block.
-     *   - this method is implemented by calling `pq.enquue()`
-     *   - the time complexity of enqueue is O(log T)
-     *   - therefore the time complexity is O(log T)
      */
     public void addTransaction(TransactionWithFee t) {
-        if ( pq.isFull() ) {
-            throw new IllegalStateException("Block.addTransaction(): block is full.");
-        }
-        pq.enqueue(t); // time complexity: O()
+        if ( t == null ) throw new IllegalArgumentException(
+            "Block.addTransaction(): param t is null."
+        );
+        if ( isFull() ) throw new IllegalStateException(
+            "Block.addTransaction(): block is full."
+        );
+        else  transactionsPQ.enqueue(t); // O(log T)
     }
 
-    /* ============================== Getter ================================ */
+    /* ============================== Getters =============================== */
     
     /** 
      * Retrieves the transaction with the highest priority (highest fee) without removing it.
+     * <p> Time complexity: O(1) </p>
+     * <li> - this method is implemented by calling {@code transactionsPQ.next} </li>
+     * <li> - the time complexity of {@code transactionsPQ.next} is O(1) </li>
      * @return The transaction with the highest priority.
      * @throws NoSuchElementException if the priority queue is empty
-     * Time complexity: O(1)
-     *   - the time complexity of pq.next() is O(1)
+     * @see ds1.util.GenericMaxPQ#next()
      */
     public TransactionWithFee getFirstTransaction() {
-        if ( pq.isEmpty() ) {
-            throw new NoSuchElementException("Block.getFirstTransaction(): block is empty.");
-        }
-        return pq.next();
+        if ( isEmpty() ) throw new NoSuchElementException(
+            "Block.getFirstTransaction(): block is empty."
+        );
+        else return transactionsPQ.next();
     }
     
     /**
      * Returns an array of transactions in the block sorted by priority (highest fee first).
+     * <p> Time complexity: O(T log T), where T is the number of transactions in the block. </p>
+     * <li> - this method is implemented by calling {@code transactionsPQ.toArray} </li>
+     * <li> - the time complexity of {@code traWithFee.toArray} is O(N log N), where N is the number of elements </li>
      * @return An array of transactions.
-     * O(T log T) where T is the number of transactions in the block.
+     * @see ds1.util.GenericMaxPQ#toArray()
      */
-    public TransactionWithFee[] getTransactions() {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    public boolean isFull() { return pq.isFull(); }
+    public TransactionWithFee[] getTransactions() { return transactionsPQ.toArray(); }
     
-    // Getters
-    public int getBlockHash() { return this.blockHash; }
-    public int getPreviousHash() { return this.previousHash; }
-    public int getBlockNumber() { return this.blockNumber; }
-    public int getTransactionCount() { return pq.size(); }
+    public int getTransactionCount() { return transactionsPQ.size(); }
+    public int getPreviousHash()     { return this.previousHash; }
+    public int getBlockNumber()      { return this.blockNumber; }
+    public int getBlockHash()        { return this.blockHash; }
+    public boolean isEmpty()         { return transactionsPQ.size() == 0; }
+    public boolean isFull()          { return transactionsPQ.size() == transactionsPerBlock; }
     
     // toString for debugging
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return "";
     }
 
+    // Compaprable interface
     @Override
     public int compareTo(Block o) {
-        if ( !(o instanceof Block) ) {
+        if ( !(o instanceof Block) )
             throw new IllegalArgumentException("Block.compareTo(): o is not of type Block");
-        }
         Block other = (Block) o;
-        return Integer.compare(blockNumber, o.blockNumber);
+        return Integer.compare(this.blockNumber, other.blockNumber);
     }
 }

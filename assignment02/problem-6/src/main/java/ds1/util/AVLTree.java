@@ -9,7 +9,7 @@ public interface AVLTree<K extends Comparable<K>, V>
 {
     /**
      * Insert the key-value pair into avl tree
-     * <p>Time complexity: O(logN)</p>
+     * <p>Time complexity: O(log N)</p>
      * @param newKey the key
      * @param newValue the value
      * @throws IllegalArgumentException if {@code key} is already in the AVL tree
@@ -18,7 +18,7 @@ public interface AVLTree<K extends Comparable<K>, V>
     
     /**
      * Search the value corresponding to the key {@code key}
-     * <p>Time complexity: O(logN)</p>
+     * <p>Time complexity: O(log N)</p>
      * @param key the key to search
      * @return the value corresponding to {@key}; {@code null} if search fails
      */
@@ -26,12 +26,18 @@ public interface AVLTree<K extends Comparable<K>, V>
     
     /**
      * Update the value correspoding to {@code key}
-     * <p>Time complexity: O(logN)</p>
+     * <p>Time complexity: O(log N)</p>
      * @param key the key of value to update
      * @param newValue new value of {@code key}
      * @throws NoSuchElementException if {@code key} does not exist in AVL tree
      */
     void updateTree(K key, V newValue);
+
+    /**
+     * Return the number of nodes in AVL tree
+     * @return the number of nodes
+     */
+    int size();
 
     /**
      * Return the array of data values stored in AVL tree inorderly

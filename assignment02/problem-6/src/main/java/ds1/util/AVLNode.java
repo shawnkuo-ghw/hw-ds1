@@ -2,6 +2,8 @@ package ds1.util;
 
 /**
  * Class of generic node for AVL tree.
+ * @param K the type of key that implements comaparable interface
+ * @param V the type of value
  */
 public class AVLNode<K extends Comparable<K>, V>
 {

@@ -1,5 +1,7 @@
 package ds1;
 import ds1.util.*;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,13 +9,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GenericPQTest
 {
     GenericPQ<Integer> pq;
-    int capacity;
+
+    @BeforeEach
+    void init() { pq = new GenericMaxPQ<Integer>(Integer.class); }
 
     @Test
     void testEnqueueDequeueNext()
-    {
-        capacity = 8;
-        pq = new GenericMaxPQ<Integer>(Integer.class, capacity);
+    {        
         pq.enqueue(2);
         pq.enqueue(7);
         pq.enqueue(6);
@@ -43,66 +45,80 @@ public class GenericPQTest
     @Test
     void testGetters()
     {
-        capacity = 5;
-        pq = new GenericMaxPQ<Integer>(Integer.class, capacity);
         // pq is empty
         assertEquals(0, pq.size());
         assertTrue(pq.isEmpty());
-        assertFalse(pq.isFull());
+
         pq.enqueue(3); // pq = [3]
+        
         assertEquals(1, pq.size());
         assertFalse(pq.isEmpty());
-        assertFalse(pq.isFull());
+
         pq.enqueue(1); // pq = [3, 1]
         pq.enqueue(4); // pq = [4, 1, 3]
+        
         assertEquals(3, pq.size());
         assertFalse(pq.isEmpty());
-        assertFalse(pq.isFull());
+        
         pq.enqueue(2); // pq = [4, 2, 3, 1]
         pq.enqueue(5); // pq = [5, 4, 3, 1, 2]
+        
         // pq is full
         assertEquals(5, pq.size());
         assertFalse(pq.isEmpty());
-        assertTrue(pq.isFull());
     }
 
     @Test
     void testDequeueEmpty()
     {
-        capacity = 5;
-        pq = new GenericMaxPQ<Integer>(Integer.class, capacity);
         assertThrows(NoSuchElementException.class, () -> pq.next());
         assertThrows(NoSuchElementException.class, () -> pq.dequeue());
     }
 
     @Test
-    void testEnqueueFull()
+    void testToArray()
     {
-        capacity = 5;
-        pq = new GenericMaxPQ<Integer>(Integer.class, capacity);
         pq.enqueue(3);
         pq.enqueue(1);
         pq.enqueue(4);
         pq.enqueue(2);
         pq.enqueue(5);
-        assertThrows(IllegalStateException.class, () -> pq.enqueue(6));
+        Integer[] arr = pq.toArray();
+        assertEquals(5, arr[0]);
+        assertEquals(4, arr[1]);
+        assertEquals(3, arr[2]);
+        assertEquals(2, arr[3]);
+        assertEquals(1, arr[4]);
     }
 
     @Test
-    void testToArray()
+    void testCopyConstructor()
     {
-        capacity = 5;
-        pq = new GenericMaxPQ<Integer>(Integer.class, capacity);
         pq.enqueue(3);
-        pq.enqueue(1);
         pq.enqueue(4);
         pq.enqueue(2);
-        pq.enqueue(5);
+        // construct a new priority queue `pq`, which is the same as pq
+        GenericPQ<Integer> pq2 = new GenericMaxPQ<Integer>((GenericMaxPQ<Integer>) pq);
+        Integer[] pq2Arr = pq2.toArray();
+        assertEquals(3, pq2Arr.length);
+        assertEquals(4, pq2Arr[0]);
+        assertEquals(3, pq2Arr[1]);
+        assertEquals(2, pq2Arr[2]);
+        // modify pq2
+        pq2.enqueue(5);
+        pq2.enqueue(1);
+        Integer[] pq2Arr2 = pq2.toArray();
+        assertEquals(5, pq2Arr2.length);
+        assertEquals(5, pq2Arr2[0]);
+        assertEquals(4, pq2Arr2[1]);
+        assertEquals(3, pq2Arr2[2]);
+        assertEquals(2, pq2Arr2[3]);
+        assertEquals(1, pq2Arr2[4]);
+        // pq should not be changed
         Integer[] pqArr = pq.toArray();
-        assertEquals(5, pqArr[0]);
-        assertEquals(4, pqArr[1]);
-        assertEquals(3, pqArr[2]);
-        assertEquals(2, pqArr[3]);
-        assertEquals(1, pqArr[4]);
+        assertEquals(3, pq2Arr.length);
+        assertEquals(4, pq2Arr[0]);
+        assertEquals(3, pq2Arr[1]);
+        assertEquals(2, pq2Arr[2]);
     }
 }

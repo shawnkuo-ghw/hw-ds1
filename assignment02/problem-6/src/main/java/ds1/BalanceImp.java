@@ -9,62 +9,83 @@ import ds1.util.*;
  */
 public class BalanceImp implements Balance
 {
+    /* ====================== Fields and Constructor ======================== */
+
     private final AVLTree<String, AddressBalancePair> addBalPairs;
     private final Sequence<String> allAddress;
     private int totalSupply;
 
     public BalanceImp() {
-        addBalPairs = new AVLTreeImple<String, AddressBalancePair>(
+        this.totalSupply = 0;
+        allAddress = new ListoverLinkedList<String>(String.class);
+        addBalPairs = new AVLTreeImp<String, AddressBalancePair>(
             AVLNode.class, 
             AddressBalancePair.class
         );
-        allAddress = new ListoverLinkedList<String>(String.class);
-        totalSupply = 0;
     }
 
-    /**
-     * Time Complexity: O(log|A|)
-     * Explaination:
-     *   - the height of AVL tree is less than or equal to log|A|
-     *   - so the complexity of `searchTree` is O(log|A|)
-     */
-    @Override
-    public int getBalance(String address) {
-        int balanceOfAddress;
-        AddressBalancePair targetPair = addBalPairs.searchTree(address); // O(log |A|)
-        if ( targetPair != null ) balanceOfAddress = targetPair.balance;
-        else balanceOfAddress = 0;
-        return balanceOfAddress;
-    }
+    /* ========================== Modifier ================================== */
 
     /**
-     * Time Complexity: O(log|A|)
-     * Explaination:
-     *   - time complexity of `searchTree()` and `insertTree()` is O(log|A|)
-     *   - time complexity of `insertRear()` is O(1)
-     *   - the overall time complexity is O(log|A|)
+     * Time Complexity: O(log |A|)
+     * <p> Explaination: </p>
+     * <li> - time complexities of {@code searchTree}, {@code insertTree} and 
+     *        {@code updateTree} are all O(log |A|) </li>
+     * <li> - time complexity of {@code insertRear} is O(1) </li>
+     * <li> - the overall time complexity is O(log |A|) </li>
+     * @see ds1.util.AVLTree#searchTree(Comparable)
+     * @see ds1.util.AVLTree#insertTree(Comparable, Object)
+     * @see ds1.util.AVLTree#updateTree(Comparable, Object)
+     * @see ds1.util.ListoverLinkedList#insertRear(Object)
      */
     @Override
-    public void updateBalance(String address, int newBalance) {
-        AddressBalancePair targetPair = addBalPairs.searchTree(address);                  // O(log|A|)
+    public void updateBalance(String address, int newBalance) { 
+        if ( address == null || newBalance < 0 ) throw new IllegalArgumentException(
+            "BalanceImp.updateBalance(): param address is null or param newBalance < 0."
+        );
+        AddressBalancePair targetPair = addBalPairs.searchTree(address);                  // O(log |A|)
+        int oldBalance = (targetPair == null) ? 0 : targetPair.balance;
         if ( address.equals("0") && allAddress.length() == 0 ) {
             // initiat `totalSupply` with the amount of BB-coins of 
             // the address "0" in the genesis block
-            addBalPairs.insertTree(address, targetPair);                                  // O(log|A|)
-            totalSupply = newBalance;
+            addBalPairs.insertTree(address, new AddressBalancePair(address, newBalance)); // O(log |A|)
+            allAddress.insertRear(address);                                               // O(1)
+            totalSupply = newBalance;                                                     // update totalSupply
         } else if ( targetPair == null ) {
             // address does not exist in Balance
-            addBalPairs.insertTree(address, new AddressBalancePair(address, newBalance)); // O(log|A|)
+            addBalPairs.insertTree(address, new AddressBalancePair(address, newBalance)); // O(log |A|)
             allAddress.insertRear(address);                                               // O(1)
+            totalSupply += newBalance;                                                    // update totalSupply
         } else {
             // address already exists in Balance
-            addBalPairs.updateTree(address, new AddressBalancePair(address, newBalance));
+            addBalPairs.updateTree(address, new AddressBalancePair(address, newBalance)); // O(log |A|)
+            totalSupply += (newBalance - oldBalance);                                     // update totalSupply
         }
-        if ( !repOK() ) {
+        if ( !repOK() )
             throw new IllegalStateException(
                 "BalanceImp.updateBalance(): totalSupply does not equal to the sum of all accounts."
             );
-        }
+    }
+
+    /* ========================== Getters =================================== */
+
+    /**
+     * Time Complexity: O(log |A|)
+     * <p> Explaination: </p>
+     * <li> - the height of AVL tree is less than or equal to log|A|</li>
+     * <li> - the number of times to compare the elements with the target is O(log |A|)</li>
+     * <li> - so the time complexity of {@code searchTree} is O(log |A|)</li>
+     * @see ds1.util.AVLTreeImp#searchTree(Comparable)
+     */
+    @Override
+    public int getBalance(String address) {
+        if ( address == null ) throw new IllegalArgumentException(
+            "BalanceImp.getBalance(): param address is null."
+        );
+        int balanceOfAddress = 0;
+        AddressBalancePair targetPair = addBalPairs.searchTree(address); // O(log |A|)
+        if ( targetPair != null ) balanceOfAddress = targetPair.balance;
+        return balanceOfAddress;
     }
 
     @Override
@@ -78,12 +99,30 @@ public class BalanceImp implements Balance
         return allAddresses;
     }
 
-    // representation invariant check for Balance
-    // 
-    private boolean repOK() {
-        int totalBalance = 0;
-        AddressBalancePair[] pairsArray = addBalPairs.toArray();
-        for ( AddressBalancePair pair: pairsArray ) { totalBalance += pair.balance; }
-        return totalBalance == totalSupply;
-    }   
+    // representation invariant checker for Balance
+    private boolean repOK() { return totalSupply == getSumOfBalances(); }
+
+    /* ========================= Utilities ================================== */
+
+    private int getSumOfBalances() {
+        AddressBalancePair[] pairs = addBalPairs.toArray();
+        int sumOfBalances = 0;
+        for ( AddressBalancePair p: pairs ) sumOfBalances += p.balance;
+        return sumOfBalances;
+    }
+
+    public String toString() {
+        String strRep = "Balances in chain:\n";
+        int length = addBalPairs.size();
+        if (length == 0) {
+            strRep += "Empty\n";
+        } else {
+            String[] allAddrs = getAllAddresses();
+            for (int i = 0; i < length; i++) {
+                String currAddr = allAddrs[i];
+                strRep += currAddr + ": " + getBalance(currAddr) + "\n";
+            }
+        }
+        return strRep;
+    }
 }

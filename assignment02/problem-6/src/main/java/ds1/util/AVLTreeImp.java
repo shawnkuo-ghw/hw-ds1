@@ -1,7 +1,7 @@
 package ds1.util;
 import java.util.NoSuchElementException;
 
-public class AVLTreeImple<K extends Comparable <K>, V> implements AVLTree<K, V>
+public class AVLTreeImp<K extends Comparable <K>, V> implements AVLTree<K, V>
 {
     /* ====================== Fields and Constructor ======================== */
     
@@ -9,12 +9,17 @@ public class AVLTreeImple<K extends Comparable <K>, V> implements AVLTree<K, V>
     private final Class<V> VType;       // type of value
     private AVLNode<K, V> root;         // the root of AVL tree
     private int nodesNum;               // number of nodes
-    public AVLTreeImple(Class<? extends AVLNode> newNType, Class<V> newVType) {
+    public AVLTreeImp(Class<? extends AVLNode> newNType, Class<V> newVType) {
         this.NType = (Class<AVLNode<K, V>>) newNType;
         this.VType = newVType;
         this.root = null;
         nodesNum = 0;
     }
+
+    /* ============================ Getters ================================= */
+
+    @Override
+    public int size() { return nodesNum; }
 
     /* ============================ Modifiers =============================== */
 
@@ -28,7 +33,7 @@ public class AVLTreeImple<K extends Comparable <K>, V> implements AVLTree<K, V>
         }
         this.root = insertNode(this.root, null, key, value);
         nodesNum++;
-        print();
+        // print();
         if ( !repOK() ) {
             throw new IllegalStateException(
                 "AVLTree.insertTree(): representation invariant of AVL tree is not satisfied."
@@ -66,7 +71,6 @@ public class AVLTreeImple<K extends Comparable <K>, V> implements AVLTree<K, V>
     private Sequence<AVLNode<K, V>> nodesSequence() {
         Sequence<AVLNode<K, V>> seq = new ListoverLinkedList<AVLNode<K, V>>(NType);
         inorder(this.root, seq);
-        System.out.println("here");
         return seq;
     }
 
@@ -262,8 +266,8 @@ public class AVLTreeImple<K extends Comparable <K>, V> implements AVLTree<K, V>
         boolean checkeFlag = true;
         Sequence<AVLNode<K, V>> nodes = nodesSequence();
         int i = 0;
-        int j = 0;
         while ( checkeFlag && i < nodesNum ) {
+            int j = 0;
             while ( checkeFlag && j < nodesNum ) {
                 AVLNode<K, V> node1 = nodes.at(i);
                 AVLNode<K, V> node2 = nodes.at(j);

@@ -1,44 +1,67 @@
 package ds1.util;
+import java.lang.reflect.*;
+import java.util.NoSuchElementException;
 
 public class ListoverLinkedList<T> implements Sequence<T>
-{
-    
-    /* ========================== Node Class ===============================  */
-
-    class Node<T2> {
-        T2 data;
-        Node<T2> next;
+{    
+    class Node<V> {
+        V data;
+        Node<V> next, prev;
+        Node(V newData) {
+            next = null;
+            prev = null;
+            data = newData;
+        }
     }
-
+    
     /* ============================= Fields ================================= */
 
-    Node<T> head, tail;
-    private int length;
     private final Class<T> type;
+    private int length;
+    Node<T> head, tail;
 
     /* =========================== Constructor ============================== */
 
     public ListoverLinkedList(Class<T> newType) {
+        type = newType;
         head = null;
         tail = null;
         length = 0;
-        type = newType;
     }
 
-    /* =========================== Queriers ================================= */
-
-    // O(N)
-    public T at(int i) {
-        Node<T> curr = head;
-        for (int j = 0; j < i; j++) {
-            curr = curr.next;
-        }
-        return curr.data;
+    // copy constructor
+    public ListoverLinkedList(ListoverLinkedList<T> o) {
+        if ( o == null ) throw new IllegalArgumentException(
+            "ListoverLinkedList(o): param other is null"
+        );
+        ListoverLinkedList<T> other = (ListoverLinkedList<T>) o;
+        type = other.type;
+        head = null;
+        tail = null;
+        if ( o.length > 0 ) 
+            for ( int i = 0; i < o.length; i++ ) insertRear(other.at(i));
     }
-    
+
+    /* ============================ Getters ================================= */
+
     // O(1)
     public int length() { return length; }
 
+    // O(N)
+    public T at(int i) {
+        if ( head == null && tail == null )
+            throw new NoSuchElementException(
+                "ListoverLinkedList.at(): list is empty."
+            );
+        if ( !(0 <= i && i < length) )
+            throw new IndexOutOfBoundsException(
+                "ListoverLinkedList.at(): index out of bound."
+            );
+        Node<T> curr = head;
+        for (int j = 0; j < i; j++) curr = curr.next;
+        return curr.data;
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -66,8 +89,9 @@ public class ListoverLinkedList<T> implements Sequence<T>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public T[] toArray() {
-        T[] arr = (T[]) java.lang.reflect.Array.newInstance(type, length);
+        T[] arr = (T[]) Array.newInstance(type, length);
         Node<T> curr = head;
         int index = 0;
         while ( curr != null ) {
@@ -83,90 +107,154 @@ public class ListoverLinkedList<T> implements Sequence<T>
     // O(N)
     @Override
     public void updateAt(int i, T elem) {
+        if ( head == null && tail == null )
+            throw new NoSuchElementException(
+                "ListoverLinkedList.updateAt(): list is empty."
+            );
+        if ( !(0 <= i && i < length) )
+            throw new IndexOutOfBoundsException(
+                "ListoverLinkedList.updateAt(): index out of bound."
+            );
         Node<T> curr = head;
-        for (int j = 0; j < i; j++) {
-            curr = curr.next;
-        }
+        for (int j = 0; j < i; j++) curr = curr.next;
         curr.data = elem;
     }
 
     // O(N)
+    @Override
     public void insertAt(int i, T elem) {
-        if (i == 0) {
+        if ( !(0 <= i && i <= length) )
+            throw new IndexOutOfBoundsException(
+                "ListoverLinkedList.insertAt(): index out of bound." 
+            );
+        if ( head == null && tail == null ) {
+            Node<T> newNode = new Node<T>(elem);
+            head = newNode;
+            tail = newNode;
+            length++;
+        } else if (i == 0) {
             insertFront(elem);
-        } else if (i == length-1) {
+        } else if (i == length) {
             insertRear(elem);
-        }  else {
-            Node<T> newNode = new Node<T>();
-            newNode.data = elem;
+        } else {
+            Node<T> newNode = new Node<T>(elem);
             Node<T> prev = findPrev(i);
             newNode.next = prev.next;
+            newNode.prev = prev;
+            prev.next.prev = newNode;
             prev.next = newNode;
             length++;
         }
-    }
-
-    // O(N)
-    public void removeAt(int i) {
-        if (i == 0) {
-            removeFront();
-        } else {
-            Node<T> prev = findPrev(i);
-            prev.next = prev.next.next;
-            length--;
-        }
+        if ( !repOk() )
+            throw new IllegalStateException(
+                "RI of ListoverLinkedList is not satisfied."
+            );
     }
 
     // O(1)
+    @Override
     public void insertFront(T elem) {
-        Node<T> newNode = new Node<T>();
-        newNode.data = elem;
-        newNode.next = head;
-        head = newNode;
-        length++;
-    }
-
-    // O(1)
-    public void removeFront() {
-        if (head != null) {
-            head = head.next;
-            length--;
-        }
-    }
-
-    // O(1)
-    public void insertRear(T elem) {
-        Node<T> newNode = new Node<T>();
-        newNode.data = elem;
-        newNode.next = null;
+        Node<T> newNode = new Node<T>(elem);
         if ( head == null && tail == null ) {
             head = newNode;
             tail = newNode;
         } else {
+            head.prev = newNode;
+            newNode.next = head;
+            head = newNode;
+        }
+        length++;
+        if ( !repOk() )
+            throw new IllegalStateException(
+                "RI of ListoverLinkedList is not satisfied."
+            );
+    }
+
+    // O(1)
+    @Override
+    public void insertRear(T elem) {
+        Node<T> newNode = new Node<T>(elem);
+        if ( head == null && tail == null ) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            newNode.prev = tail;
             tail.next = newNode;
             tail = newNode;
         }
         length++;
+        if ( !repOk() )
+            throw new IllegalStateException(
+                "RI of ListoverLinkedList is not satisfied."
+            );
     }
 
-    // insert elem in sorted order
     // O(N)
-    public void insertSorted(T elem) {
-        Node<T> newNode = new Node<T>();
-        newNode.data = elem;
-        if (head == null) {
-            head = newNode;
+    @Override
+    public void removeAt(int i) {
+        if ( head == null && tail == null )
+            throw new NoSuchElementException(
+            "ListoverLinkedList.removeAt(): list is empty."
+            );
+        if ( !(0<= i && i < length) )
+            throw new IndexOutOfBoundsException(
+            "ListoverLinkedList.removeAt(): index out out bound."
+            );
+        if (i == 0) {
+            removeFront();
+        } else if (i == length-1) { 
+            removeRear();
         } else {
-            Node<T> prev = findPrev(elem);
-            if (prev == null) {
-                newNode.next = head;
-                head = newNode;
-            } else {
-                newNode.next = prev.next;
-                prev.next = newNode;
-            }
+            Node<T> prev = findPrev(i);
+            prev.next = prev.next.next;
+            prev.next.prev = prev;
+            length--;
         }
-        length++;
+        if ( !repOk() )
+            throw new IllegalStateException(
+                "RI of ListoverLinkedList is not satisfied."
+            );
+    }
+
+    // O(1)
+    @Override
+    public void removeFront() {
+        if (head == null && null == null) {
+            throw new NoSuchElementException(
+                "ListoverLinkedList.removeFront(): list if empty."
+            );
+        } else if ( head == tail ) {
+            head = null;
+            tail = null;
+        } else {
+            head = head.next;
+            head.prev = null;
+        }
+        length--;
+        if ( !repOk() )
+            throw new IllegalStateException(
+                "RI of ListoverLinkedList is not satisfied."
+            );
+    }
+
+    @Override
+    public void removeRear() {
+        if ( head == null && tail == null ) {
+            throw new NoSuchElementException(
+                "ListoverLinkedList.removeFront(): list if empty."
+            );
+        } else if ( head == tail ) {
+            head = null;
+            tail = null;
+        } else {
+            tail = tail.prev;
+            tail.next = null;
+        }
+        length--;
+        if ( !repOk() )
+            throw new IllegalStateException(
+                "RI of ListoverLinkedList is not satisfied."
+            );
     }
 
     /* ========================= Private Utilities ========================== */
@@ -180,14 +268,19 @@ public class ListoverLinkedList<T> implements Sequence<T>
         return curr;
     }
 
-    // O(N)
-    private Node<T> findPrev(T elem) {
-        Node<T> curr = head;
-        Node<T> prev = null;
-        while (curr != null && (Integer) curr.data < (Integer) elem) {
-            prev = curr;
-            curr = curr.next;
+    /* ====================== Representation Invariant ====================== */
+
+    private boolean repOk() {
+        Node<T> tempHead = head;
+        Node<T> tempTail = tail;
+        int headCount = 0;
+        int tailCount = 0;
+        while ( tempHead != null && tempTail != null ) {
+            headCount++;
+            tailCount++;
+            tempHead = tempHead.next;
+            tempTail = tempTail.prev;
         }
-        return prev;
+        return headCount == length && tailCount == length;
     }
 }
