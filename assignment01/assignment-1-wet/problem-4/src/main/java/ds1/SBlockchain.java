@@ -19,9 +19,9 @@ public class SBlockchain implements Blockchain
      * Fields *
      **********/
     private final Sequence<Block> blocks;   // chain of blocks
-    private final Balance balances;         // set of balances for each address
     private final int transactionsPerBlock; // number of transactions for each block
     private final int initialBalance;       // initial balence for genesis block
+    private final Balance balances;         // set of balances for each address
     private Block currBlock;
 
     /***************
