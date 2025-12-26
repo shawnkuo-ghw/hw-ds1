@@ -87,7 +87,7 @@ public class MonteCarlo {
     // 2. Treap, BST Height Comparison
     private static void test2(int[] sizes, int times, long seed) {
         Random random = new Random(seed);
-        System.out.println("2. Treap, BST Height Comparison(heightDifference = HD = Treap.Height - BST.Height)");
+        System.out.println("2. Treap, BST Height Comparison(heightDifference = HD = BST.Height - Treap.Height)");
         System.out.println("n || times || HD_Min || HD_Max || HD_Average || HD_Median");
         //collect the data
         for(int i = 0; i < sizes.length; i++) {

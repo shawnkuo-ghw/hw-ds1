@@ -29,9 +29,9 @@
             - When i = 7, j = 8. Since A[j] < A[r] (9 < 10), then we do i++, then i = 8 and swap A[j] with A[i]. A=[1,2,3,4,5,6,7,8,9,10]
             - Since j = 9 > r-1, we finished with a swap A[i+1] with A[r] (swapping A[9] with A[9]).
         3. Provide a general argument on when one partition approach is better than the other.
-            Hoare partition is better when the array has many duplicate values because when there are many duplicates, Hoare will swap and move index again and again, then we have a balanced partition(cut an array half and half). However, even if Lomuto perform fewer swap for many duplicate values. It will result in the bad partition(partition is not half half) since Lomuto partition will not swap and move the index when there are duplicate values. See the answer for 1.1
+            Hoare partition is better when the array has many duplicate values because when there are many duplicates, Hoare will swap and move index again and again, then we have a balanced partition(cut an array half and half). Thus the complexity is $O(\log n)$. However, even if Lomuto perform fewer swap for many duplicate values. It will result in the bad partition(partition is not half half) since Lomuto partition will not swap and move the index when there are duplicate values. In the worst case, each partition will split a size $k$ array into $1$ size array and $k-1$ size array. Then the complexity is $O(n^2)$.
             
-            Also, in general, Hoare partition is better than Lomuto partition since Hoare swap less than Lomuto in most case and create a balanced partiton
+            Thus, in general, Hoare partition is better than Lomuto partition since Hoare's complexity is better than Lomuto
             
             Lomuto partition is better when you want a simple and understandable partition algothim. 
     2. Provide the pseudo code of quicksort using the Hoare partition.
@@ -54,7 +54,7 @@
                 while i <= j and A[j] > pivot do
                     j = j - 1
                 end while
-                if i < j then
+                if i <= j then
                     swap A[i] with A[j]
                     i = i + 1
                     j = j - 1

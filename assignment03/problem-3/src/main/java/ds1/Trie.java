@@ -101,7 +101,7 @@ public class Trie {
         toPatriciaTrie(root);
     }
 
-    public static void toPatriciaTrie(TrieNode node) {
+    private static void toPatriciaTrie(TrieNode node) {
         //Base case: if node is null, return
         if (node == null) return;
         //recurse all child
@@ -112,15 +112,15 @@ public class Trie {
             if (child != null) {
                 if (child.countChildren() == 1 && !child.isEndOfWord) {
                     TrieNode grandChild = child.getOnlyChild();
-                    child.index += grandChild.index;
+                    child.index = grandChild.index;
                     child.children = grandChild.children;
                     child.isEndOfWord = grandChild.isEndOfWord;
+                    for (TrieNode nod : child.children)
+                        if (nod != null) nod.parent = child;
                 }
             }
         }
-    }
-
-    
+    }   
 }
 
 

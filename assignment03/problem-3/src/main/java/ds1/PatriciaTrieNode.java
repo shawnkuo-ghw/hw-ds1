@@ -32,10 +32,10 @@ class PatriciaTrieNode {
         return children[position];
     }
 
-   // return the only child when countChildren() == 1
+   // return the only child
     public PatriciaTrieNode getOnlyChild() {
         for (PatriciaTrieNode child : children) {
-            if (child != null && child.countChildren() == 1) {
+            if (child != null) {
                 return child;
             }
         }

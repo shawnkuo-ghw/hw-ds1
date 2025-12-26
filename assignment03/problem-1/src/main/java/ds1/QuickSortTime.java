@@ -48,7 +48,7 @@ public class QuickSortTime {
     }
 
     public static void main(String[] args) {
-        int times = 50;
+        int times = 40;
         int[] arr1 = {5,5,5,5,5};
         test("(a.1): ", arr1, times);
         int[] arr2 = {1,2,3,4,5,6,7,8,9,10};

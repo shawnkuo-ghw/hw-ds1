@@ -222,7 +222,7 @@ public class TrieTest {
         assertThrows(IllegalArgumentException.class,
             () -> {trie.insert("#ee"); });
     }
-
+    
     //toPatriciaTrie Test
     @Test
     public void toPatriciaTriePositiveTest() {
@@ -238,38 +238,45 @@ public class TrieTest {
 
         trie.toPatriciaTrie();
         TrieNode root = trie.getRoot();
-        //First we test the branch of s, subl should becompressed to s
+
+        // First we test the branch of s, subl should be compressed to s
         TrieNode sublNode = root.getChild('s');
         assertNotNull(sublNode);
         
-        // After subl, there should be 2 children: e and i
+        // After subl, there should be 2 children: e and i 
         assertEquals(2, sublNode.countChildren());
-        assertNotNull(sublNode.getChild('e'));
-        assertNotNull(sublNode.getChild('i'));
+        TrieNode childE = sublNode.getChild('e');
+        TrieNode childI = sublNode.getChild('i');
+        assertNotNull(childE);
+        assertNotNull(childI);
 
-        //check sublease ease should be compressed to e
-        TrieNode subleaseEnd = sublNode.getChild('e');
-        assertTrue(subleaseEnd.isEndOfWord);
-        assertEquals(0, subleaseEnd.countChildren());
+        //check parent
+        //e and i should be child of sublNode
+        assertEquals(sublNode, childE.parent);
+        assertEquals(sublNode, childI.parent);
 
-        //we test the branch of e, es should becompressed to e
+        //check sublease, ease should be compressed to e and e should be endOfWord
+        assertTrue(childE.isEndOfWord);
+        assertEquals(0, childE.countChildren());
+
+        //check branch of i
+        // childI should have e, a and i, then e is endOfWord
+        TrieNode sublimeEnd = childI.getChild('e');
+        assertNotNull(sublimeEnd);
+        assertTrue(sublimeEnd.isEndOfWord);
+
+        //test the branch of e, es should be compressed to e
         TrieNode esNode = root.getChild('e');
         assertNotNull(esNode);
-        // esNode should have s and t childs
+        // esNode should have s and t children
         assertEquals(2, esNode.countChildren());
         assertNotNull(esNode.getChild('s')); 
         assertNotNull(esNode.getChild('t'));
     }
 
     @Test
-    public void toPatriciaTrieNegativeTest1() {
-        // Null case
-        assertDoesNotThrow(() -> Trie.toPatriciaTrie(null));
-    }
-
-    @Test
-    public void toPatriciaTrieNegativeTest2() {
-        // no merge with 1 node
+    public void toPatriciaTrieNegativeTest() {
+        // empty case
         Trie trie = new Trie();
         trie.toPatriciaTrie();
         assertEquals(0, trie.getRoot().countChildren());
