@@ -30,7 +30,6 @@ public class TransactionWithFee extends Transaction {
     public int getAmount() { return amount; }
     public boolean isReverted() { return reverted; }
     public int getFee() { return fee; }
-    
     public void revert() { this.reverted = true; }
 
     // toString for debugging

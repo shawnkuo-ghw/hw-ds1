@@ -35,5 +35,4 @@ public class TransactionWithOrder extends TransactionWithFee {
             return super.compareTo(o);
         }
     }
-
 }

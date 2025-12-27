@@ -36,5 +36,4 @@ public class AddressBalancePair implements Comparable<AddressBalancePair> {
     public int compareTo(AddressBalancePair o) {
         return this.address.compareTo(o.address);
     }
-
 }

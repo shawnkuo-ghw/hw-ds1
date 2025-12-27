@@ -11,4 +11,3 @@ public class HashUtils {
         return Integer.toHexString(h);
     }
 }
-

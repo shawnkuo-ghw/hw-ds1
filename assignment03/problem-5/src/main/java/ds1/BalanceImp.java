@@ -9,44 +9,77 @@ import ds1.util.StateMPT;
 public class BalanceImp implements Balance {
     // implement use StateMPT
     private StateMPT stateMPT ;
-    int totalSupply;
+    private int totalSupply;
     
-        public BalanceImp() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+    public BalanceImp() {
+        totalSupply = 0;
+        stateMPT = new StateMPT();
     }
 
+    /**
+     * <p> Time complexity: O(L) </p>
+     * <li> - The implementation consists of calling {@code stateMPT.search},
+     *        {@code stateMPT.insert} and {@code stateMPT.update} in linear order. </li>
+     * <li> - Time complexities of these three methods are all O(L). </li>
+     * @see ds1.util.StateMPT#search(String)
+     * @see ds1.util.StateMPT#insert(String, int)
+     * @see ds1.util.StateMPT#update(String, int)
+     */
     @Override
     public void updateBalance(String address, int newBalance) {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+        if ( address == null || newBalance < 0) throw new IllegalArgumentException(
+            "BalanceImp.updateBalance(): param address is null or param newBalance < 0."
+        );
+        int oldBalance = stateMPT.search(address); // O(L)
+        if ( address.equals("0") && stateMPT.adddressesCount() == 0 ) {
+            // initiate `totalSupply` with the amount of BB-coins of 
+            // the address "0" in the genesis block
+            stateMPT.insert(address, newBalance); // O(1)
+            totalSupply = newBalance;
+        } else if ( oldBalance == -1 ) {
+            // address does not exist in stateMPT
+            stateMPT.insert(address, newBalance); // O(L)
+            totalSupply += newBalance;
+        } else {
+            // address exists in stateMPT
+            stateMPT.update(address, newBalance); // O(L)
+            totalSupply += (newBalance - oldBalance);
+        }
     }
-    @Override
-    public int getBalance(String address) {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+    
+    /* ============================= Getters ================================ */
 
     @Override
-    public String[] getAllAddresses() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
-     }
+    public int totalSupply() { return totalSupply; }
+
+    // Get root hash of the StateMPT
+    @Override
+    public String getStateHash() { return stateMPT.getRoothash(); }
+    
+    @Override
+    public int getBalance(String address) { return stateMPT.search(address); }
 
     @Override
-    public int totalSupply() {
-        // Implementation
-        return totalSupply;
-    }
+    public String[] getAllAddresses() { return stateMPT.getAllAdressesSequence().toArray(); }
+
+    /* ========================= Class Invariant ============================ */
 
     /**
      * repOK method to check class invariants 
      * remember to check also the StateMPT repOK
-    */
-    public boolean repOK() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+     */
+    public boolean repOK() { return totalSupply == getSumOfBalances() && stateMPT.repOK(); }
+
+    /* ========================== Private Utilities ========================= */
+
+    private int getSumOfBalances() {
+        int sumOfBalances = 0;
+        String[] allAddress = getAllAddresses();
+        for ( String address: allAddress) sumOfBalances += stateMPT.search(address);
+        return sumOfBalances;
     }
+
+    /* =========================== Debuggers ================================ */
 
     // toString for debugging
     @Override
@@ -62,11 +95,4 @@ public class BalanceImp implements Balance {
         sb.append("}]");
         return sb.toString();
     }
-    // Get root hash of the StateMPT
-    @Override
-    public String getStateHash() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
 }

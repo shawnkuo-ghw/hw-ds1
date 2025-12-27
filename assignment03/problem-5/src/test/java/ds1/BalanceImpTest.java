@@ -63,8 +63,4 @@ class BalanceImpTest {
         assertEquals("2e5b02b8", balanceImp.getStateHash(), "State root hash should match computed hash");
         assertTrue(balanceImp.repOK(), "repOK should return true for valid state");
     }
-
-
-
-
 }

@@ -18,16 +18,12 @@ public abstract class Transaction  implements Comparable<Transaction> {
     public String getToAddress() { return toAddress; }
     public int getAmount() { return amount; }
     public boolean isReverted() { return reverted; }
-    
     public void revert() { this.reverted = true; }
-
-    public String hash() {
-        return ds1.util.HashUtils.hash(this.toString());
-    }   
+    public String hash() { return ds1.util.HashUtils.hash(this.toString()); }   
+    
     // toString for debugging
     @Override
     public String toString() {
         return "Transaction[from=" + fromAddress + ", to=" + toAddress + ", amount=" + amount + ", reverted=" + reverted + "]";
     }
-
 }
