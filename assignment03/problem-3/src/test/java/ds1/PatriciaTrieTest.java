@@ -87,8 +87,6 @@ public class PatriciaTrieTest {
         assertTrue(trie.search("essential"));
         assertTrue(trie.search("essence"));
 
-        // Capture the essence node before removal to verify structural integrity
-        // "essential" extends "essence" via char 't'
         PatriciaTrieNode essenceNode = trie.findNode("essence");
         assertNotNull(essenceNode);
 
@@ -102,6 +100,21 @@ public class PatriciaTrieTest {
         assertTrue(trie.search("essence"));
         assertTrue(trie.search("estimate"));
         assertTrue(trie.search("sublime"));
+
+        //another test when they have same prefix
+        trie.remove("estimation");
+        assertTrue(trie.search("estimate"));
+
+        PatriciaTrieNode esNode = trie.root.getChild('e');
+        assertNotNull(esNode);
+        
+        // get t branch
+        PatriciaTrieNode estimateNode = esNode.getChild('t');
+        assertNotNull(estimateNode);
+
+        //it should be 8 after conpress since estimat disappear, we only has estimate
+        assertEquals(8, estimateNode.index);
+        assertEquals("estimate", estimateNode.fullWord);
     }
 
     @Test
