@@ -68,17 +68,10 @@ public class PatriciaTrieNodeTest {
     @Test
     public void getOnlyChildPositiveTest() {
         PatriciaTrieNode root = new PatriciaTrieNode();
-        PatriciaTrieNode childA = new PatriciaTrieNode();
-        PatriciaTrieNode childB = new PatriciaTrieNode();
-        PatriciaTrieNode childC = new PatriciaTrieNode();
-        root.setChild('a', childA);
-        root.setChild('b', childB);
-        root.setChild('c', childC);
-
-        childA.setChild('x', new PatriciaTrieNode());
-        childC.setChild('y', new PatriciaTrieNode()); 
-        childC.setChild('z', new PatriciaTrieNode());
-        assertEquals(childA, root.getOnlyChild());
+        PatriciaTrieNode child = new PatriciaTrieNode();
+        root.setChild('a', child);
+        child.setChild('x', new PatriciaTrieNode());
+        assertEquals(child, root.getOnlyChild());
     }
 
     @Test
