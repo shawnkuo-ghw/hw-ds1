@@ -11,7 +11,8 @@
             - When i = -1, j = 1. Since A[j] !< A[r], then we don’t swap.  
             - When i = -1, j=2. Since A[j] !<A[r], then we don’t swap.  
             - When i = -1, j= 3. Since A[j] !< A[r], then we don’t swap.  
-            - Since j = 4 > r-1, we finished with a swap A[i+1] with A[r].  
+            - Since j = 4 > r-1, we finished with a swap A[i+1] with A[r]. 
+        Thus Lomuto partition is faster since it performs less swap 
         2. Provide one example for which Hoare partition is faster than Lomuto partition.
         For array A = [1,2,3,4,5,6,7,8,9,10] with index from 0 to 9.
         - For Hoare partition: We only need 1 swap action.
@@ -28,6 +29,7 @@
             - When i = 6, j = 7. Since A[j] < A[r] (8 < 10), then we do i++, then i = 7 and swap A[j] with A[i]. A=[1,2,3,4,5,6,7,8,9,10]
             - When i = 7, j = 8. Since A[j] < A[r] (9 < 10), then we do i++, then i = 8 and swap A[j] with A[i]. A=[1,2,3,4,5,6,7,8,9,10]
             - Since j = 9 > r-1, we finished with a swap A[i+1] with A[r] (swapping A[9] with A[9]).
+        Thus Hoare partition is faster since it performs less swap
         3. Provide a general argument on when one partition approach is better than the other.
             Hoare partition is better when the array has many duplicate values because when there are many duplicates, Hoare will swap and move index again and again, then we have a balanced partition(cut an array half and half). Thus the complexity is $O(\log n)$. However, even if Lomuto perform fewer swap for many duplicate values. It will result in the bad partition(partition is not half half) since Lomuto partition will not swap and move the index when there are duplicate values. In the worst case, each partition will split a size $k$ array into $1$ size array and $k-1$ size array. Then the complexity is $O(n^2)$.
             
@@ -66,8 +68,12 @@
     3. Implement quicksort using the Hoare partition and Lomuto partition in Java (the use of do while, while true, break and continue statements is strictly forbidden).
         Finished
     4. Provide a program that effectively shows that the runtime of the examples provided in item (a) are really faster when running the implementation. Hint: you may need to execute the sorting many times to collect average times.
-        Although in (a.1) array, Lomuto partition is faster than Hoare Partition. But since Lomuto partition is not balanced, then the sorting will cost more time as the test result shows: to sort (a,1) array, quicksort using lomuto partition is slower than quicksort using hoare partition
+        Note!!! In 1(a),1(b) we give an array with small size. But in the test, we need to extend the size of array to avoid the noise. 
+
+        In 1(a), our array is `A=[5,5,5,5,5]`, in the test we use `A'=[5,5,5,...,5]` with size 1000. By induction, we can also know lomuto partition is also faster than Hoare parittion for `A'` by argument in 1(a) with same idea
+
+        In 1(b), our array is `A=[1,2,3,4,5,6,7,8,9,10]`, in the test we use `A'=[0,1,2,...,999]` with size 1000. By induction, we can also know lomuto partition is also faster than Hoare parittion for `A'` by argument in 1(b) with same idea
+        
+        Although in (a.1) array, Lomuto partition is faster than Hoare Partition. But since Lomuto partition is not balanced, then the sorting will cost more time as the test result shows: to sort (a,1) array, quicksort using lomuto partition is slower than quicksort using hoare partition although for the speed of partition itself, Lomuto is quicker.
 
         For (a.2) array, quciksort using Lomuto partition is slower than quicksort using Hoare partition since Hoare Parition swap less than Lomuto as we analyzed in a. Also the partition for array are both generally balanced. Thus the result also verify this.
-
-        Note if you run quickSortTime one time, probably it shows quicksort using Lomuto partition is faster. This is because the Java Complier or some other things have optimization. Please run it more times. 

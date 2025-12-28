@@ -2,7 +2,7 @@ package ds1;
 
 public class QuickSort {
 
-    private static int partitionLomuto(int[] A, int l, int r) {
+    public static int partitionLomuto(int[] A, int l, int r) {
         int i = l - 1;
         for (int j = l; j < r; j++) {
             if (A[j] < A[r]) {
@@ -26,7 +26,7 @@ public class QuickSort {
         }
     }
 
-    private static int partitionHoare(int[] A, int l, int r) {
+    public static int partitionHoare(int[] A, int l, int r) {
         int i = l;
         int j = r - 1;
         int pivot = A[r];
