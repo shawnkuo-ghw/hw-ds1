@@ -8,51 +8,89 @@ import ds1.util.StateMPT;
  */
 public class BalanceImp implements Balance {
     // implement use StateMPT
-    private StateMPT stateMPT ;
-    int totalSupply;
+    private final StateMPT stateMPT ;
+    private int totalSupply;
     
-        public BalanceImp() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+    public BalanceImp() {
+        totalSupply = 0;
+        stateMPT = new StateMPT();
     }
 
+    /**
+     * <p> Time complexity: O(L) </p>
+     * <li> - The implementation consists of calling {@code stateMPT.search},
+     *        {@code stateMPT.insert} and {@code stateMPT.update} in linear order. </li>
+     * <li> - Time complexities of these three methods are all O(L). </li>
+     * @see ds1.util.StateMPT#search(String)
+     * @see ds1.util.StateMPT#insert(String, int)
+     * @see ds1.util.StateMPT#update(String, int)
+     */
     @Override
     public void updateBalance(String address, int newBalance) {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+        if ( address == null ) throw new IllegalArgumentException(
+            "BalanceImp.updateBalance(): param address is null."
+        );
+        int oldBalance = stateMPT.search(address); // O(L)
+        if ( address.equals("0") && stateMPT.adddressesCount() == 0 ) {
+            // initiate `totalSupply` with the amount of BB-coins of 
+            // the address "0" in the genesis block`
+            stateMPT.insert(address, newBalance); // O(1)
+            totalSupply = newBalance;
+        } else if ( oldBalance == -1 ) {
+            // address does not exist in stateMPT
+            stateMPT.insert(address, newBalance); // O(L)
+        } else {
+            // address exists in stateMPT
+            stateMPT.update(address, newBalance); // O(L)
+        }
+        totalSupply = getSumOfBalances(); // update total supply
     }
+    
+    /* ============================= Getters ================================ */
+
+    @Override
+    public int totalSupply() { return totalSupply; }
+
+    // Get root hash of the StateMPT
+    @Override
+    public String getStateHash() { return stateMPT.getRoothash(); }
+    
     @Override
     public int getBalance(String address) {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+        int balance = stateMPT.search(address);
+        if ( balance == -1 ) return 0;
+        else return balance;
     }
 
     @Override
-    public String[] getAllAddresses() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
-     }
+    public String[] getAllAddresses() { return stateMPT.getAllAdressesSequence().toArray(); }
 
-    @Override
-    public int totalSupply() {
-        // Implementation
-        return totalSupply;
-    }
+    /* ========================= Class Invariant ============================ */
 
     /**
      * repOK method to check class invariants 
      * remember to check also the StateMPT repOK
-    */
+     */
     public boolean repOK() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+        return totalSupply >= 0 && totalSupply == getSumOfBalances() && stateMPT.repOK();
     }
+
+    /* ========================== Private Utilities ========================= */
+
+    private int getSumOfBalances() {
+        int sumOfBalances = 0;
+        String[] allAddress = getAllAddresses();
+        for ( String address: allAddress) sumOfBalances += stateMPT.search(address);
+        return sumOfBalances;
+    }
+
+    /* =========================== Debuggers ================================ */
 
     // toString for debugging
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("BalanceImp[totalSupply=").append(totalSupply).append(", addresses={");
+        sb.append("BalanceImp [totalSupply=").append(totalSupply).append(", addresses={");
         String[] addresses = getAllAddresses();
         for (int i = 0; i < addresses.length; i++) {
             String address = addresses[i];
@@ -62,11 +100,4 @@ public class BalanceImp implements Balance {
         sb.append("}]");
         return sb.toString();
     }
-    // Get root hash of the StateMPT
-    @Override
-    public String getStateHash() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
 }

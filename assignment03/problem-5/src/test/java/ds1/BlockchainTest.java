@@ -260,5 +260,4 @@ class BlockchainTest {
         assertNotEquals(stateMPTHash1, stateMPTHash2, "State MPT hash should change after balance updates");
         assertTrue(blockchain.repOK(), "Blockchain should be in a valid state");
     }
-
 }

@@ -36,4 +36,15 @@ public class TransactionWithOrder extends TransactionWithFee {
         }
     }
 
+    // // toString for debugging
+    // @Override
+    // public String toString() {
+    //     return
+    //         "Transaction[from=" + fromAddress + 
+    //         ", to=" + toAddress + 
+    //         ", amount=" + amount + 
+    //         ", fee=" + fee + 
+    //         ", order=" + order + 
+    //         ", reverted=" + reverted + "]";
+    // }
 }

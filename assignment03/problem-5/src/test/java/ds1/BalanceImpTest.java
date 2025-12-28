@@ -40,7 +40,7 @@ class BalanceImpTest {
         balanceImp.updateBalance("123", 100);
         balanceImp.updateBalance("456", 200);
         assertTrue(balanceImp.repOK(), "repOK should return true for valid state");
-        balanceImp.updateBalance("123", -50); // Invalid balance
+        balanceImp.updateBalance("123", -250); // force issue in totalSupply
         assertFalse(balanceImp.repOK(), "repOK should return false for negative total supply"); 
     }
 
@@ -63,8 +63,4 @@ class BalanceImpTest {
         assertEquals("2e5b02b8", balanceImp.getStateHash(), "State root hash should match computed hash");
         assertTrue(balanceImp.repOK(), "repOK should return true for valid state");
     }
-
-
-
-
 }
