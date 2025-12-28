@@ -76,7 +76,8 @@ public class StateMPT
     /**
      * Search the balance associated with the given address (if any)
      * <p> Time Complexity: O(L) </p>
-     * <li> - This method is implemented by calling {@code findPrefixNode}, whose time complexity is O(L) </li>
+     * <li> - This method is implemented by calling {@code findPrefixNode}, 
+     *        whose time complexity is O(L) </li>
      * @param address the address to query
      * @return the associated balance of {@code address}; or {@code -1} if not found
      * @see #findPrefixNode(String)
@@ -86,7 +87,7 @@ public class StateMPT
         if ( node == null ) return -1;
         else {
             if ( node.isAddress ) return node.balance.intValue();
-            else return -1;
+            else return -1; // node could be just a node on the path of some address
         }
     }
 
@@ -95,12 +96,16 @@ public class StateMPT
     /**
      * Insert a new address-balance pair
      * <p> Time Complexity: O(L) </p>
-     * <li> - The implementation consist of a L-loop and updating hashes, where L is the length of {@code newAddress} </li>
-     * <li> - It takes constant time to run each loop, so the L-loop has time complexity O(L). </li>
-     * <li> - The time complexity of {@code propagateHashUpdatingUpwards} is exactly O(L), since P is equal to L in this case </li>
+     * <li> - The implementation consist of a L-loop and updating hashes, 
+     *        where L is the length of {@code newAddress} </li>
+     * <li> - It takes constant time to run each loop, so the L-loop has time 
+     *        complexity O(L). </li>
+     * <li> - The time complexity of {@code propagateHashUpdatingUpwards} is 
+     *        exactly O(L), since P is equal to L in this case </li>
      * @param newAddress new address
      * @param newBalance new balance
-     * @throws IllegalArgumentException if {@code newBalance < 0} or {@newAddress} is null, empty or duplicate.
+     * @throws IllegalArgumentException if {@code newBalance < 0} or 
+     *         {@newAddress} is null, empty or duplicate.
      * @see #propagateHashUpdatingUpwards(MPTNode)
      */
     public void insert(String newAddress, int newBalance) {

@@ -260,4 +260,37 @@ class BlockchainTest {
         assertNotEquals(stateMPTHash1, stateMPTHash2, "State MPT hash should change after balance updates");
         assertTrue(blockchain.repOK(), "Blockchain should be in a valid state");
     }
+
+    /* ============================ edge cases ============================== */
+
+    @Test
+    void testRequestTransactionInvalidAddressesNegativeTest()
+    {
+        ABlockchain blockchain = new ABlockchain(2, 1000);
+        // fromAddress is null
+        assertThrows(IllegalArgumentException.class, () ->
+            blockchain.requestTransaction(null, "B", 10, 1));
+        // toAddress is empty
+        assertThrows(IllegalArgumentException.class, () ->
+            blockchain.requestTransaction("A", "", 10, 1));
+    }
+
+    @Test
+    void testRequestTransactionNegativeFeeNegativeTest()
+    {
+        ABlockchain blockchain = new ABlockchain(2, 1000);
+        assertThrows(IllegalArgumentException.class, () ->
+            blockchain.requestTransaction("A", "B", 10, -1));
+    }
+
+    @Test
+    void testMineBlockEmptyTransactionPoolNegativeTest()
+    {
+        ABlockchain blockchain = new ABlockchain(2, 1000);
+        int sizeBefore = blockchain.size();
+        boolean mined = blockchain.mineBlock();
+        assertFalse(mined);
+        assertEquals(sizeBefore, blockchain.size());
+        assertTrue(blockchain.repOK());
+    }
 }

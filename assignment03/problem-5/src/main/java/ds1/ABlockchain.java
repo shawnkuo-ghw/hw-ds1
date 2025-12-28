@@ -61,9 +61,10 @@ public class ABlockchain implements Blockchain {
     
 
     public void requestTransaction(String fromAddress, String toAddress, int amount, int fee) {
-        if (amount <= 0 || fee < 0) {
-            throw new IllegalArgumentException("Amount must be positive and fee non-negative");
-        }        
+        if (fromAddress == null || toAddress == null || fromAddress.length() == 0 || toAddress.length() == 0)
+            throw new IllegalArgumentException("fromAddress or toAddress is empty.");
+        if (amount <= 0 || fee < 0)
+            throw new IllegalArgumentException("Amount must be positive and fee non-negative");     
         orderCounter++;
         TransactionWithOrder transaction = new TransactionWithOrder(fromAddress, toAddress, amount, fee, orderCounter);
         transactionPool.insert(transaction);
