@@ -1,8 +1,6 @@
 package ds1;
-
-import ds1.util.AVLTree;
-import ds1.util.MaxHeapArray;
-import ds1.util.StateMPT;
+import ds1.util.ListoverLinkedList;
+import ds1.util.Sequence;
 
 /** 
  * UBlockchain.java
@@ -16,10 +14,15 @@ import ds1.util.StateMPT;
 
 public class UBlockchain extends ABlockchain
 {
+    /* ============================= Fields ================================= */
+
+    Sequence<String> stateRootHashList;
+
     /* =========================== Constructor ============================== */
 
     public UBlockchain(int transactionsPerBlock, int initialBalance) {
-        super(transactionsPerBlock, initialBalance); 
+        super(transactionsPerBlock, initialBalance);
+        stateRootHashList = new ListoverLinkedList<String>();
     }
 
     /* ============================ Getters ================================= */
@@ -42,12 +45,6 @@ public class UBlockchain extends ABlockchain
         blocksTree.insert(firstBlock);
         currentBlock = firstBlock;
         return genesis;
-    }
-
-    @Override
-    public void processCurrentBlockAndStartNewBlock() {
-        processBlockTransactions();
-        createNewBlock();
     }
 
     @Override
@@ -86,6 +83,8 @@ public class UBlockchain extends ABlockchain
         currentBlock.setStateRootHash(newStateRootHash);
         // Compute the hashing of current block
         currentBlock.computeAndSetBlockHash();
+        // Record the hashing of stateRoot
+        stateRootHashList.insertRear(newStateRootHash);
         System.out.println("current block hash:  " + currentBlock.getBlockHash());
     }
 
@@ -105,11 +104,47 @@ public class UBlockchain extends ABlockchain
     @Override
     public boolean mineBlock() { return super.mineBlock(); }
 
+    /* ========================== Class Invariant =========================== */
+
     @Override
-    /** You can use part of old repOK and adapt it to the new structure
-     *      
-    **/
+    /**
+     * You can use part of old repOK and adapt it to the new structure
+     * Time complexity: O(B), where B is the number of blocks in the chain
+     **/
 	public boolean repOK() {
-        return true;
+        return stateRootInvariant() && hashInvariant(chain) && lastBlockValidity();
+    }
+
+    // O(1)
+    private boolean stateRootInvariant() {
+        boolean isSatisfied = true;
+        int i = 1;
+        while ( isSatisfied && i < stateRootHashList.length() ) {
+            String stateRootHashInBlock = (String) chain.at(i).getStateRootHash();
+            String stateRootHashInList = stateRootHashList.at(i-1);
+            if ( stateRootHashInBlock.equals(stateRootHashInList) ) i++;
+            else isSatisfied = false;
+        }
+        return isSatisfied;
+    }
+
+    // O(B)
+    private boolean hashInvariant(Sequence<Block> chain) {
+        boolean isSatisfied = true;
+        int i = 1;
+        while ( isSatisfied && i < chain.length() ) {
+            Block prevBlock = chain.at(i-1);    
+            Block currBlock = chain.at(i);
+            if ( currBlock.getPreviousHash().equals(prevBlock.getBlockHash()) ) i++;
+            else isSatisfied = false;
+        }
+        return isSatisfied;
+    }
+
+    // O(1)
+    private boolean lastBlockValidity() {
+        int currBlockNumber = currentBlock.getBlockNumber();
+        if ( currBlockNumber == 1 ) return true; // chain has just been initialized
+        else return chain.at(currBlockNumber - 1).getStateRootHash() == balance.getStateHash();
     }
 }
