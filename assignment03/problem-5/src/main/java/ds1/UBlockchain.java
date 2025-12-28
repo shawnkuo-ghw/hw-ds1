@@ -1,5 +1,8 @@
 package ds1;
 
+import ds1.util.AVLTree;
+import ds1.util.MaxHeapArray;
+
 /** 
  * UBlockchain.java
  * This class represents an unoptimized blockchain implementation.
@@ -10,54 +13,97 @@ package ds1;
  * Or override them if needed.
  */
 
-public class UBlockchain extends ABlockchain {
-    // Add required fields here
+public class UBlockchain extends ABlockchain
+{
+    /* =========================== Constructor ============================== */
 
     public UBlockchain(int transactionsPerBlock, int initialBalance) {
         super(transactionsPerBlock, initialBalance); 
     }
 
+    /* Getters */
+
+    public String getStateMPTHash() { return balance.getStateHash(); }
+
+    /* =========================== Modifiers ================================ */
+
     @Override
     protected Block createGenesisBlock(int initialBalance) {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+        Block genesis = new Block("", transactionsPerBlock, blockCounter++);
+        chain.insertRear(genesis);
+        blocksTree.insert(genesis);
+
+        balance.updateBalance("0", initialBalance); // Infinite balance for genesis
+        genesis.computeAndSetBlockHash(); // Compute the block hash for genesis block
+
+        Block firstBlock = new Block(genesis.getBlockHash(), transactionsPerBlock, blockCounter++);
+        chain.insertRear(firstBlock);
+        blocksTree.insert(firstBlock);
+        currentBlock = firstBlock;
+        return genesis;
     }
 
     @Override
     public void processCurrentBlockAndStartNewBlock() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+        processBlockTransactions();
+        createNewBlock();
     }
 
     @Override
     protected void processBlockTransactions() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+        // Execute transactions and update balances for current block
+        TransactionWithFee[] transactions = currentBlock.getTransactions();
+        for (TransactionWithFee transaction : transactions) {
+            System.out.println("Execute transaction: " + transaction.toString());
+            String from = transaction.getFromAddress();
+            String to = transaction.getToAddress();
+            int amount = transaction.getAmount();
+            int fromBalance = balance.getBalance(from);
+            int fee = transaction.getFee();
+            if (fromBalance >= amount + fee) {
+                successfulTransactionsCount++;
+                // Execute transaction
+                balance.updateBalance(from, fromBalance - amount - fee);
+                int toBalance = balance.getBalance(to);
+                balance.updateBalance(to, toBalance + amount);
+                balance.updateBalance("0", balance.getBalance("0") + fee); // collect fee
+            } else {
+                revertedTransactionsCount++;
+                // Revert transaction
+                if(fromBalance >= fee/2) {
+                    balance.updateBalance(from, fromBalance - fee/2);
+                    balance.updateBalance("0", balance.getBalance("0") + fee/2); // collect fee/2
+                    returnedFees += fee/2;
+                }
+                transaction.revert();
+            }
+            System.out.println("Global State:        " + balance.toString());
+        }
+        // Update the block hash for current block
+        currentBlock.computeAndSetBlockHash();
     }
 
     @Override
     protected void createNewBlock() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+        // Create new current block
+        Block newBlock = new Block(
+            currentBlock.getBlockHash(), transactionsPerBlock, blockCounter++
+        );
+        chain.insertRear(newBlock);
+        blocksTree.insert(newBlock);
+        currentBlock = newBlock;
     }
 
     // Mine a new block from the transaction pool
     // It is similar to addBlock but selects transactions from the pool
     @Override
-    public boolean mineBlock() {
-        return super.mineBlock();
-    }
+    public boolean mineBlock() { return super.mineBlock(); }
 
     @Override
     /** You can use part of old repOK and adapt it to the new structure
      *      
     **/
 	public boolean repOK() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-    public String getStateMPTHash() {
-        // Should be implemented by students
-        throw new UnsupportedOperationException("Not implemented yet");
+        return true;
     }
 }

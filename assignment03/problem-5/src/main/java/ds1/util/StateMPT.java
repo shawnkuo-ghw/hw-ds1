@@ -1,6 +1,7 @@
 package ds1.util;
-import ds1.util.Sequence;
 import ds1.util.HashUtils;
+import ds1.util.Sequence;
+import javax.swing.text.Utilities;
 import ds1.util.ListoverLinkedList;
 
 /** 
@@ -31,7 +32,7 @@ class MPTNode
      * <p> Time complexity: O(1) </p>
      **/
     public String computeHash() {        
-        String balanceOrNull = (balance == null ? "null" : balance.toString());
+        String balanceOrNull = ( isAddress ? balance.toString() : "null" );
         String childrenHash = "";
         for (MPTNode child : children) {
             if ( child == null ) childrenHash += "0";
@@ -204,7 +205,30 @@ public class StateMPT
 
     // SMT is a trie where hashes of parent nodes
     // is the sum of hashes of their childreen.
-    public boolean repOK() {
-        return true;
+    public boolean repOK() { return checkMPTNodesInvariantRecursivly(root); }
+
+    private boolean checkMPTNodesInvariantRecursivly(MPTNode node) {
+        boolean nodesInvariant = true;
+        nodesInvariant = checkMPTNodeInvariant(node) && nodesInvariant;
+        for (MPTNode child : node.children)
+            if ( child != null ) nodesInvariant = checkMPTNodeInvariant(child) && nodesInvariant;
+        return nodesInvariant;
+    }
+
+    private boolean checkMPTNodeInvariant(MPTNode node) {
+        return node.nodeHash.equals( HashUtils.hash(getBalanceHash(node) + getChildrenHash(node)) );
+    }
+
+    private String getChildrenHash(MPTNode node) {
+        String childrenHash = "";
+        for ( MPTNode child : node.children ) {
+            if ( child == null ) childrenHash += "0";
+            else childrenHash += child.nodeHash;
+        }
+        return childrenHash;
+    }
+
+    private String getBalanceHash(MPTNode node) {
+        return node.isAddress ? node.balance.toString() : "null";
     }
 }

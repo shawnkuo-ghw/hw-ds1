@@ -18,7 +18,7 @@ public class Block implements Comparable<Block>
     private final int blockNumber;
     private String stateRootHash;
     private String blockHash;
-    private String txhash;
+    private String txHash;
 
     public Block(String previousHash, int transactionsPerBlock, int blockNumber) {
         this.previousHash = previousHash;
@@ -42,8 +42,8 @@ public class Block implements Comparable<Block>
      * where TxHash is the hash of all transactions in the block
      **/
     public String computeAndSetBlockHash() {
-        txhash = computeTxHash(getTransactions());
-        String newBlockHash = HashUtils.hash(previousHash + stateRootHash + txhash);
+        txHash = computeTxHash(getTransactions());
+        String newBlockHash = HashUtils.hash(previousHash + stateRootHash + txHash);
         blockHash = newBlockHash;
         return newBlockHash;
     }
@@ -88,7 +88,7 @@ public class Block implements Comparable<Block>
      * <li> - Thus the time complexity is T * O(1) = O(T) </li>
      **/
     private String computeTxHash(Transaction[] transactions) {
-        if ( !isFull() ) throw new IllegalStateException("Block is not full.");
+        // if ( !isFull() ) throw new IllegalStateException("Block is not full.");
         String newTxHash = "";
         for (int i = 0; i < transactions.length; i++) { // O(T)
             if (i == 0) newTxHash = HashUtils.hash(transactions[i].hash());

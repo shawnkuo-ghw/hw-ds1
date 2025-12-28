@@ -77,8 +77,9 @@ public class ABlockchain implements Blockchain {
 
     protected void createNewBlock() {
         // Create new current block
-        Block newBlock = new Block(currentBlock.getBlockHash(), 
-                                 transactionsPerBlock, blockCounter++);
+        Block newBlock = new Block(
+            currentBlock.getBlockHash(), transactionsPerBlock, blockCounter++
+        );
         chain.insertRear(newBlock);
         // also insert into blocksTree
         blocksTree.insert(newBlock);

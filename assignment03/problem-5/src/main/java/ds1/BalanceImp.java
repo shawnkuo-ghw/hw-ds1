@@ -8,7 +8,7 @@ import ds1.util.StateMPT;
  */
 public class BalanceImp implements Balance {
     // implement use StateMPT
-    private StateMPT stateMPT ;
+    private final StateMPT stateMPT ;
     private int totalSupply;
     
     public BalanceImp() {
@@ -27,24 +27,23 @@ public class BalanceImp implements Balance {
      */
     @Override
     public void updateBalance(String address, int newBalance) {
-        if ( address == null || newBalance < 0) throw new IllegalArgumentException(
-            "BalanceImp.updateBalance(): param address is null or param newBalance < 0."
+        if ( address == null ) throw new IllegalArgumentException(
+            "BalanceImp.updateBalance(): param address is null."
         );
         int oldBalance = stateMPT.search(address); // O(L)
         if ( address.equals("0") && stateMPT.adddressesCount() == 0 ) {
             // initiate `totalSupply` with the amount of BB-coins of 
-            // the address "0" in the genesis block
+            // the address "0" in the genesis block`
             stateMPT.insert(address, newBalance); // O(1)
             totalSupply = newBalance;
         } else if ( oldBalance == -1 ) {
             // address does not exist in stateMPT
             stateMPT.insert(address, newBalance); // O(L)
-            totalSupply += newBalance;
         } else {
             // address exists in stateMPT
             stateMPT.update(address, newBalance); // O(L)
-            totalSupply += (newBalance - oldBalance);
         }
+        totalSupply = getSumOfBalances(); // update total supply
     }
     
     /* ============================= Getters ================================ */
@@ -57,7 +56,11 @@ public class BalanceImp implements Balance {
     public String getStateHash() { return stateMPT.getRoothash(); }
     
     @Override
-    public int getBalance(String address) { return stateMPT.search(address); }
+    public int getBalance(String address) {
+        int balance = stateMPT.search(address);
+        if ( balance == - 1) return 0;
+        else return balance;
+    }
 
     @Override
     public String[] getAllAddresses() { return stateMPT.getAllAdressesSequence().toArray(); }
@@ -68,7 +71,9 @@ public class BalanceImp implements Balance {
      * repOK method to check class invariants 
      * remember to check also the StateMPT repOK
      */
-    public boolean repOK() { return totalSupply == getSumOfBalances() && stateMPT.repOK(); }
+    public boolean repOK() {
+        return totalSupply >= 0 && totalSupply == getSumOfBalances() && stateMPT.repOK();
+    }
 
     /* ========================== Private Utilities ========================= */
 
@@ -85,7 +90,7 @@ public class BalanceImp implements Balance {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("BalanceImp[totalSupply=").append(totalSupply).append(", addresses={");
+        sb.append("BalanceImp [totalSupply=").append(totalSupply).append(", addresses={");
         String[] addresses = getAllAddresses();
         for (int i = 0; i < addresses.length; i++) {
             String address = addresses[i];
