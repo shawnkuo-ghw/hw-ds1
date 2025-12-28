@@ -34,6 +34,8 @@ class PatriciaTrieNode {
 
    // return the only child
     public PatriciaTrieNode getOnlyChild() {
+        if (countChildren() != 1)
+            return null;
         for (PatriciaTrieNode child : children) {
             if (child != null) {
                 return child;
