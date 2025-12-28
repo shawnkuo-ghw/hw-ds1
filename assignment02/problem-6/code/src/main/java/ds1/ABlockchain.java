@@ -22,9 +22,9 @@ public class ABlockchain implements Blockchain
         blocks = new AVLTreeImp<Integer, Block>(AVLNode.class, Block.class);
         this.transactionsPerBlock = transactionsPerBlock;
         this.initialBalance = initialBalance;
-        this.transactionsCounter = 0;
         this.successfulTransactionsCount = 0;
         this.revertedTransactionsCount = 0;
+        this.transactionsCounter = 0;
         this.returnedFees = 0;
         // genesis block (hash = 1, number = 0)
         this.currBlock = new Block(0, 1, 0);
