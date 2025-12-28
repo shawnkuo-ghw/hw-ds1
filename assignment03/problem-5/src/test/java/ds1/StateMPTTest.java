@@ -49,4 +49,16 @@ public class StateMPTTest {
         assertEquals(13700, smt.search("137"));
         assertEquals(1500, smt.search("15"));
     }
+
+    @Test
+    void testUnsuccessfulSearch() {
+        smt.insert("0", 1000);
+        smt.insert("1", 10);
+        smt.insert("11", 110);
+        smt.insert("22", 220);
+        assertEquals(-1, smt.search("2"));
+        smt.insert("2", 20);
+        assertEquals(20, smt.search("2"));
+        assertEquals(220, smt.search("22"));
+    }
 }

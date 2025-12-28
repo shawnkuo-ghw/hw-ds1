@@ -84,7 +84,10 @@ public class StateMPT
     public int search(String address) {
         MPTNode node = findPrefixNode(address);
         if ( node == null ) return -1;
-        else return node.balance;
+        else {
+            if ( node.isAddress ) return node.balance.intValue();
+            else return -1;
+        }
     }
 
     /* ============================== Modifiers ============================= */
@@ -103,7 +106,7 @@ public class StateMPT
     public void insert(String newAddress, int newBalance) {
         if ( newAddress == null || newAddress.equals("" ) || newBalance < 0) 
             throw new IllegalArgumentException("StateMPT.insert(newAdd, newBal): methods arguments illegal.");
-        if ( findPrefixNode(newAddress) != null )
+        if ( findPrefixNode(newAddress) != null && findPrefixNode(newAddress).isAddress )
             throw new IllegalArgumentException("StateMPT.insert(newAdd, newBal): duplicate key.");
         MPTNode currNode = root;
         for (int i = 0; i < newAddress.length(); i++) {

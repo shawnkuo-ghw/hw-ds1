@@ -2,6 +2,7 @@ package ds1;
 
 import ds1.util.AVLTree;
 import ds1.util.MaxHeapArray;
+import ds1.util.StateMPT;
 
 /** 
  * UBlockchain.java
@@ -21,7 +22,7 @@ public class UBlockchain extends ABlockchain
         super(transactionsPerBlock, initialBalance); 
     }
 
-    /* Getters */
+    /* ============================ Getters ================================= */
 
     public String getStateMPTHash() { return balance.getStateHash(); }
 
@@ -29,12 +30,12 @@ public class UBlockchain extends ABlockchain
 
     @Override
     protected Block createGenesisBlock(int initialBalance) {
-        Block genesis = new Block("", transactionsPerBlock, blockCounter++);
+        Block genesis = new Block(null, transactionsPerBlock, blockCounter++);
         chain.insertRear(genesis);
         blocksTree.insert(genesis);
 
         balance.updateBalance("0", initialBalance); // Infinite balance for genesis
-        genesis.computeAndSetBlockHash(); // Compute the block hash for genesis block
+        genesis.computeAndSetBlockHash(); // Hashing of genesis block is ""
 
         Block firstBlock = new Block(genesis.getBlockHash(), transactionsPerBlock, blockCounter++);
         chain.insertRear(firstBlock);
@@ -79,8 +80,13 @@ public class UBlockchain extends ABlockchain
             }
             System.out.println("Global State:        " + balance.toString());
         }
-        // Update the block hash for current block
+        // Retrieve the new stateRoot from the StateMPT
+        String newStateRootHash = balance.getStateHash();
+        // Save the new stateRoot for the Block.
+        currentBlock.setStateRootHash(newStateRootHash);
+        // Compute the hashing of current block
         currentBlock.computeAndSetBlockHash();
+        System.out.println("current block hash:  " + currentBlock.getBlockHash());
     }
 
     @Override

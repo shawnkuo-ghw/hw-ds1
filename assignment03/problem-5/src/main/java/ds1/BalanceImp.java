@@ -58,7 +58,7 @@ public class BalanceImp implements Balance {
     @Override
     public int getBalance(String address) {
         int balance = stateMPT.search(address);
-        if ( balance == - 1) return 0;
+        if ( balance == -1 ) return 0;
         else return balance;
     }
 

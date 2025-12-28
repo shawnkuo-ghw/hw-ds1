@@ -42,8 +42,15 @@ public class Block implements Comparable<Block>
      * where TxHash is the hash of all transactions in the block
      **/
     public String computeAndSetBlockHash() {
-        txHash = computeTxHash(getTransactions());
-        String newBlockHash = HashUtils.hash(previousHash + stateRootHash + txHash);
+        String newBlockHash;
+        if ( previousHash == null ) {
+            // Hashing of genesis block
+            newBlockHash = "";
+        } else {
+            // Hashing of general blocks
+            txHash = computeTxHash(getTransactions());
+            newBlockHash = HashUtils.hash(previousHash + stateRootHash + txHash);
+        }
         blockHash = newBlockHash;
         return newBlockHash;
     }
@@ -51,7 +58,7 @@ public class Block implements Comparable<Block>
     /** 
      * Set the state root hash for this block
      **/
-    public void setStateRootHash(String stateRootHash) { this.stateRootHash = stateRootHash;}
+    public void setStateRootHash(String newStateRootHash) { stateRootHash = newStateRootHash; }
 
     
     /* ============================== Getters =============================== */
