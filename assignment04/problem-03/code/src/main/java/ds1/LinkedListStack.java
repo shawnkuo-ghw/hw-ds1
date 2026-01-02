@@ -3,6 +3,7 @@ package ds1;
 class StackNode<T> {
     T data;
     StackNode<T> next;
+
     StackNode(T data) {
         this.data = data;
     }
@@ -21,8 +22,7 @@ public class LinkedListStack<T> implements Stack<T> {
         StackNode<T> newNode = new StackNode<T>(elem);
         if (isEmpty()) {
             head = newNode;
-        }
-        else {
+        } else {
             newNode.next = head;
             head = newNode;
         }
@@ -43,7 +43,9 @@ public class LinkedListStack<T> implements Stack<T> {
         return size;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return size == 0;
     }
 }
+
+

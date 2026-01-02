@@ -14,3 +14,5 @@ public interface SequenceIterator<T> {
     // Returns the next element in the iteration
     T next();
 }
+
+

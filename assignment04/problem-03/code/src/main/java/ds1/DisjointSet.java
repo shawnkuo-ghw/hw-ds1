@@ -5,3 +5,5 @@ public interface DisjointSet<K> {
     int find(K elem);
     void union(K elem1, K elem2);
 }
+
+

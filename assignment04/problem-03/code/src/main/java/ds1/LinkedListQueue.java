@@ -43,7 +43,7 @@ public class LinkedListQueue<T> implements Queue<T> {
         }
         T elem = head.data;
         head = head.next;
-        
+
         // If the queue is now empty, reset tail to null
         if (head == null) {
             tail = null;
@@ -82,3 +82,5 @@ public class LinkedListQueue<T> implements Queue<T> {
         return false;
     }
 }
+
+

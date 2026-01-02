@@ -5,7 +5,7 @@ class Node<T2> {
     Node<T2> next;
 }
 
-public class ListoverLinkedList<T> implements Sequence<T>{
+public class ListoverLinkedList<T> implements Sequence<T> {
     // implement Sequence using LinkedList
     Node<T> head;
 
@@ -50,7 +50,7 @@ public class ListoverLinkedList<T> implements Sequence<T>{
 
     private Node<T> findPrev(int i) {
         Node<T> curr = head;
-        for (int j = 0; j < i-1; j++) {
+        for (int j = 0; j < i - 1; j++) {
             curr = curr.next;
         }
         return curr;
@@ -107,41 +107,29 @@ public class ListoverLinkedList<T> implements Sequence<T>{
     }
 
     // insert elem in sorted order
-    public void insertSorted(T elem) {        
+    public void insertSorted(T elem) {
         Node<T> insert = new Node<T>();
         insert.data = elem;
         if (head == null) {
             head = insert;
         } else {
-            // You dont need to create a node again 
-            // you have newNode, I renamed it to insert
-            // Node<T> insert = new Node<T>();
-            // insert.data = elem;
             Node<T> curr = head;
-            // prev is the previos one, at the beguining it is null 
-            // not curr
             Node<T> prev = null;
-            while (curr != null && (Integer) elem >= (Integer) curr.data){
+            while (curr != null && (Integer) elem >= (Integer) curr.data) {
                 prev = curr;
                 curr = curr.next;
             }
-            // now I know that elem < curr.data
-            // or curr == null 
-            // and prev is the previous one
-            // Case 1: prev is null => insert at the front
             if (prev == null) {
                 insert.next = head;
-                head = insert;                
-            }
-            // Case 2 : prev is not null => insert after prev
-            else {
+                head = insert;
+            } else {
                 insert.next = prev.next;
                 prev.next = insert;
             }
         }
     }
 
-    public Boolean containsAll(Sequence<T> seq){
+    public Boolean containsAll(Sequence<T> seq) {
         Boolean seq1_in_seq2 = true;
         SequenceIterator<T> iter_seq1 = this.getIterator();
         while (iter_seq1.hasNext() && seq1_in_seq2) {
@@ -159,7 +147,7 @@ public class ListoverLinkedList<T> implements Sequence<T>{
         return seq1_in_seq2;
     }
 
-    public int indexOf(T elem){
+    public int indexOf(T elem) {
         SequenceIterator<T> iter_seq = this.getIterator();
         int index = -1;
         T curr_elem = null;
@@ -170,3 +158,5 @@ public class ListoverLinkedList<T> implements Sequence<T>{
         return index;
     }
 }
+
+

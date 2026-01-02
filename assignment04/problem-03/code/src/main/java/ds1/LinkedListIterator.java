@@ -24,3 +24,5 @@ public class LinkedListIterator<T> implements SequenceIterator<T> {
         return data;
     }
 }
+
+

@@ -13,3 +13,5 @@ interface Sequence<T> {
     int indexOf(T elem);
     SequenceIterator<T> getIterator(); // Returns an iterator for the sequence
 }
+
+

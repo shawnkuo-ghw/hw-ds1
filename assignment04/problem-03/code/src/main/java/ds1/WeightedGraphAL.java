@@ -92,6 +92,10 @@ public class WeightedGraphAL {
         }
     }
 
+    public int vertexCount() {
+        return numVertices;
+    }
+
     public void setUndirected() {
         undirected = true;
     }
@@ -127,7 +131,7 @@ public class WeightedGraphAL {
             System.out.println();
         }
     }
-    
+
     // implement dijkstra's algorithm using a priority queue
     // use a map vDist to store the distance of each vertex from the source
     // use a map edgeTo to store the edge that connects each vertex to the source
@@ -144,7 +148,8 @@ public class WeightedGraphAL {
             }
         }
         position.put(source, 0);
-        PriorityQueue<Integer> queue = new PriorityQueue<Integer>(numVertices, (v1, v2) -> vDist.get(v1) - vDist.get(v2));
+        PriorityQueue<Integer> queue = new PriorityQueue<Integer>(numVertices,
+                (v1, v2) -> vDist.get(v1) - vDist.get(v2));
         queue.add(source);
 
         // Continue the implementation here
@@ -162,8 +167,8 @@ public class WeightedGraphAL {
                 while (iter.hasNext()) {
                     Edge edge = iter.next();
                     int v = edge.getDest();
-                    int weight = edge.getWeight(); 
-                    int oldDist = vDist.get(v);         
+                    int weight = edge.getWeight();
+                    int oldDist = vDist.get(v);
                     int newDist = distU + weight;
                     if (newDist < oldDist) {
                         vDist.put(v, newDist);
@@ -173,7 +178,7 @@ public class WeightedGraphAL {
                 }
             }
         }
-        
+
         return new DijkstraResult(edgeTo, vDist);
     }
 
@@ -191,7 +196,8 @@ public class WeightedGraphAL {
             }
         }
         // create a priority queue to store the edges sorted by weight
-        PriorityQueue<Edge> edgesPriorityQueue = new PriorityQueue<Edge>(edges.size(), (e1, e2) -> e1.getWeight() - e2.getWeight());
+        PriorityQueue<Edge> edgesPriorityQueue = new PriorityQueue<Edge>(edges.size(),
+                (e1, e2) -> e1.getWeight() - e2.getWeight());
         for (Edge edge : edges) {
             edgesPriorityQueue.add(edge);
         }
@@ -213,6 +219,6 @@ public class WeightedGraphAL {
         }
         return mst;
     }
-
-    
 }
+
+
