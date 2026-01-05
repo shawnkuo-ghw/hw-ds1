@@ -9,7 +9,8 @@ Objective: Find the node $R$ such that the time it takes for both teams is minim
    Solution
 
    ```java
-   findRendezvousPoint（n1, n2)
+   findRendezvousPoint(n1, n2)
+	assert n1 and n2 not null
    	Map distTo1 = new_map()
    	Map distTo2 = new_map()
    	call dijkstraShortestPath(Graph G, n1)
@@ -36,7 +37,8 @@ Objective: Find the node $R$ such that the time it takes for both teams is minim
    Then
 
    ```java
-   findRendezvousPoint（n1, n2)
+   findRendezvousPoint(n1, n2)
+    assert n1 and n2 not null
    	//O(1) since we can build hash map
    	Map distTo1 = new_map()
    	Map distTo2 = new_map()

@@ -8,7 +8,6 @@ public class RendezvousPointFinderTest {
     @Test
     void findRendezvousPointPositiveTest() {
         WeightedGraphAL graph = new WeightedGraphAL(5);
-        graph.setUndirected();
         graph.addEdge(0, 2, 2);
         graph.addEdge(1, 2, 2);
         graph.addEdge(2, 3, 1);
@@ -19,6 +18,17 @@ public class RendezvousPointFinderTest {
         RendezvousPoint rgraph = new RendezvousPoint(graph);
         //the input are n1 and n2
         Integer r = rgraph.findRendezvousPoint(0, 1);
+        assertEquals(2, r);
+    }
+
+    @Test
+    void findRendezvousPointNegativeTest3() {
+        WeightedGraphAL graph = new WeightedGraphAL(5);
+        graph.addEdge(0, 1, 1);
+        graph.addEdge(1, 2, 3);
+        RendezvousPoint rgraph = new RendezvousPoint(graph);
+        //the input are n1 and n2
+        Integer r = rgraph.findRendezvousPoint(0, 2);
         assertEquals(2, r);
     }
 
