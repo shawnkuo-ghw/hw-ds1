@@ -14,7 +14,6 @@ class AVLNode<T extends Comparable<T>> {
     T getValue() {
         return val;
     }
-
 }
 
 public class AVLTree<T extends Comparable<T>> {

@@ -105,5 +105,4 @@ public interface Blockchain {
      * @return total returned fees
      */
     int getReturnedFees();
-    
 }

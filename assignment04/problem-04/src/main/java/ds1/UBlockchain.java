@@ -1,5 +1,8 @@
 package ds1;
 
+import ds1.util.Sequence;
+import ds1.util.SequenceIterator;
+
 public class UBlockchain extends ABlockchain {
 
     public UBlockchain(int transactionsPerBlock, int initialBalance) {
@@ -93,5 +96,22 @@ public class UBlockchain extends ABlockchain {
     /** 
      * Extend here with methods to support BlockchainAnalytics
      **/
+   
+    public String[] getAllAdresses() {
+        return balance.getAllAddresses();
+    }
     
+    public Transaction[] getSuccessfulTransactions() {
+        SequenceIterator<Block> blockItr = chain.getIterator();
+        Transaction[] successfulTransactions = new Transaction[getSuccessfulTransactionsCount()];
+        int i = 0;
+        while ( blockItr.hasNext() ) {
+            Block currBlock = blockItr.next();
+            Transaction[] currTransactions = currBlock.getTransactions();
+            for (Transaction t : currTransactions) {
+                if ( !t.isReverted() ) { successfulTransactions[i++] = t; }
+            }
+        }
+        return successfulTransactions;
+    }
 }

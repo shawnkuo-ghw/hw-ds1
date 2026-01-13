@@ -1,9 +1,12 @@
 package ds1.analytics;
-
 import ds1.*;
-import ds1.util.Sequence;
+import ds1.util.*;
+
 
 public class BlockchainAnalytics {
+
+    private GraphAL graph;
+    private IndexAddressMap map;
 
     /**
      * Constructs a BlockchainAnalytics object from the given UBlockchain instance.
@@ -16,19 +19,38 @@ public class BlockchainAnalytics {
         // You may need need to use (and extend) the GraphAL class 
         // The class already implements a directed weighted graph
         // You may need to map addresses to vertex IDs or modify GraphAL to handle string addresses directly
-        throw new UnsupportedOperationException("Not implemented yet");
+        
+        // 1. Get the number of addresses in block chain
+        String[] addresses = bc.getAllAdresses(); // O(V)
+        Transaction[] transactions = bc.getSuccessfulTransactions(); // O(T)
+        // 2. Map every address with a unique index
+        map = new IndexAddressMap();
+        for(int i = 0; i < addresses.length; i++) { // V * O(log V) = O(V * log V) ???
+            String address = addresses[i];
+            map.insert(i, address); // O(log V)
+        }
+        // 3. Add weighted edges to the graph
+        graph = new GraphAL(addresses.length);
+        for (Transaction t : transactions) { // V * O(1) = O(V)
+            graph.addEdge(
+                map.getIndex(t.getFromAddress()),
+                map.getIndex(t.getToAddress()),
+                t.getAmount()
+            ); // O(1)
+        }
     }
     
     /**
      * Detects if there is a money laundering loop (e.g., A  B  C  A).
      * Return the list of addresses involved in the cycle (e.g., `["Alice", "Bob", "Charlie", "Alice"]`).
      * Expected complexity: O(V+E)
-    */
+     */
     public Sequence<String> detectCycle() {
         // Hint. You can use DFS to detect cycles in a directed graph
         // You implemented that in the tutorial.
         throw new UnsupportedOperationException("Not implemented yet");
     }
+    
     /**
      * Similar to the previous one but in case of existing more than one loop, 
      * select the one with less cost. 
@@ -46,10 +68,10 @@ public class BlockchainAnalytics {
     }
 
     /** 
-     *   findMoneyMule()
-     *   A "Money Mule" is defined here as an account that receives funds 
+     * findMoneyMule()
+     * A "Money Mule" is defined here as an account that receives funds 
      * from many different sources but sends funds to very few.
-     *   Expected complexity: O(V+E)
+     * Expected complexity: O(V+E)
     */
     public String findMoneyMule() {
         throw new UnsupportedOperationException("Not implemented yet");

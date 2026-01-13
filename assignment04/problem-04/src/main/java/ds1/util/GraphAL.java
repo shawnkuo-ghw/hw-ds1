@@ -5,29 +5,12 @@ package ds1.util;
  */
 class AdjacencyList {
     private Sequence<NodeWeight> elems;
-    AdjacencyList() {
-        elems = new ListoverLinkedList<NodeWeight>();
-    }
-
-    void add(int dest, float weight) {
-        elems.insertFront(new NodeWeight(dest, weight));
-    }
-
-    void add(int dest) {
-        elems.insertFront(new NodeWeight(dest, 0));
-    }
-
-    Sequence<NodeWeight> getList() {
-        return elems;
-    }
-
-    NodeWeight get(int index) {
-        return elems.at(index);
-    }
-
-    int size() {
-        return elems.length();
-    }
+    AdjacencyList()                  { elems = new ListoverLinkedList<NodeWeight>(); }
+    void add(int dest, float weight) { elems.insertFront(new NodeWeight(dest, weight)); }
+    void add(int dest)               { elems.insertFront(new NodeWeight(dest, 0)); }
+    Sequence<NodeWeight> getList()   { return elems; }
+    NodeWeight get(int index)        { return elems.at(index); }
+    int size()                       { return elems.length(); }
 
     /** 
      * Creates and returns a deep copy of this AdjacencyList.
@@ -82,12 +65,11 @@ public class GraphAL {
      * @param src source vertex
      * @param dest destination vertex
      * @param weight weight of the edge
+     * O(1)
      */
     public void addEdge(int src, int dest, float weight) {
         adjLists[src].add(dest,weight);
-        if(undirected)
-            adjLists[dest].add(src,weight);
-        
+        if(undirected) adjLists[dest].add(src,weight);
     }
 
     /**
@@ -98,9 +80,7 @@ public class GraphAL {
      */
     public void addEdge(int src, int dest) {
         adjLists[src].add(dest);
-        if(undirected)
-            adjLists[dest].add(src);
-        
+        if(undirected) adjLists[dest].add(src);
     }
 
     /** 
@@ -118,11 +98,8 @@ public class GraphAL {
         // Find the index of the edge to be removed
         while (iter.hasNext() && !found) {
             NodeWeight neighbor = iter.next();
-            if (neighbor.getDest() == dest) {
-                found = true;
-            }
-            else 
-                index++;
+            if (neighbor.getDest() == dest) { found = true; }
+            else index++;
         }
         // remove the edge
         neighbors.removeAt(index);

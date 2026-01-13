@@ -4,6 +4,7 @@ import ds1.util.AVLTree;
 import ds1.util.ListoverLinkedList;
 import ds1.util.MaxHeapArray;
 import ds1.util.Sequence;
+import ds1.util.SequenceIterator;
 
 public class ABlockchain implements Blockchain {
     // The blockchain is represented as a sequence of blocks
@@ -43,7 +44,6 @@ public class ABlockchain implements Blockchain {
         orderCounter = 0;
     }
 
-    
     protected Block createGenesisBlock(int initialBalance) {
         Block genesis = new Block("-1", transactionsPerBlock, blockCounter++);
         chain.insertRear(genesis);
@@ -57,9 +57,7 @@ public class ABlockchain implements Blockchain {
         currentBlock = firstBlock;
         return genesis;
     }
-
     
-
     public void requestTransaction(String fromAddress, String toAddress, int amount, int fee) {
         if (amount <= 0 || fee < 0) {
             throw new IllegalArgumentException("Amount must be positive and fee non-negative");
@@ -132,7 +130,7 @@ public class ABlockchain implements Blockchain {
         return false;
     }
 
-        @Override
+    @Override
     public Block getBlock(int index) {
         if (index < 0 || index >= chain.length()) {
             throw new IndexOutOfBoundsException("Invalid block index");
@@ -176,10 +174,10 @@ public class ABlockchain implements Blockchain {
     public int getRevertedTransactionsCount() {
         return revertedTransactionsCount;
     }
+    
     public int getReturnedFees() {
         return returnedFees;
     }
-
 
 	public boolean repOK() {
         // Check basic invariants
