@@ -28,6 +28,8 @@ public class IndexAddressMap
         map = new AVLTree<IndexAddressPair>();
     }
     
+    // Insert index-address pair into map
+    // O(log V)
     public void insert(Integer index, String address) {
         map.insert(
             new IndexAddressPair(address, index)

@@ -1,13 +1,18 @@
 package ds1.analytics;
+import java.util.Stack;
+
 import ds1.*;
 import ds1.util.*;
 
 
 public class BlockchainAnalytics {
 
-    private GraphAL graph;
-    private IndexAddressMap map;
-
+    private final GraphAL graph;
+    private final IndexAddressMap map;
+    private final int numVertices; // V
+    private final int numEdges;    // T
+    private boolean[] visited;
+    
     /**
      * Constructs a BlockchainAnalytics object from the given UBlockchain instance.
      * It builds a directed graph where vertices represent unique addresses and edges represent transactions.
@@ -20,23 +25,25 @@ public class BlockchainAnalytics {
         // The class already implements a directed weighted graph
         // You may need to map addresses to vertex IDs or modify GraphAL to handle string addresses directly
         
-        // 1. Get the number of addresses in block chain
-        String[] addresses = bc.getAllAdresses(); // O(V)
+        // 1. Get addresses and transations in block chain
+        String[] allAddresses = bc.getAllAdresses(); // O(V)
         Transaction[] transactions = bc.getSuccessfulTransactions(); // O(T)
+        numVertices = allAddresses.length;
+        numEdges = transactions.length;
         // 2. Map every address with a unique index
         map = new IndexAddressMap();
-        for(int i = 0; i < addresses.length; i++) { // V * O(log V) = O(V * log V) ???
-            String address = addresses[i];
+        for(int i = 0; i < allAddresses.length; i++) { // V * O(log V) = O(V * log V) ???
+            String address = allAddresses[i];
             map.insert(i, address); // O(log V)
         }
         // 3. Add weighted edges to the graph
-        graph = new GraphAL(addresses.length);
-        for (Transaction t : transactions) { // V * O(1) = O(V)
+        graph = new GraphAL(allAddresses.length);
+        for (Transaction t : transactions) { // T * O(log V) = O(T * log V) ???
             graph.addEdge(
-                map.getIndex(t.getFromAddress()),
-                map.getIndex(t.getToAddress()),
+                map.getIndex(t.getFromAddress()), // O(log V)
+                map.getIndex(t.getToAddress()), // O(log V)
                 t.getAmount()
-            ); // O(1)
+            ); // O(log V)
         }
     }
     
@@ -47,8 +54,53 @@ public class BlockchainAnalytics {
      */
     public Sequence<String> detectCycle() {
         // Hint. You can use DFS to detect cycles in a directed graph
-        // You implemented that in the tutorial.
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        // for (int i = 0; i < numVertices; i++) visited[i] = false;        
+        // Sequence<String> cycle = new ListoverLinkedList<String>();
+        // for (int i = 0; i < numVertices; i++) {
+        //     Sequence<Integer> elements = new ListoverLinkedList<Integer>();
+        //     if ( detectCycleDFS(i, elements) ) {
+        //         SequenceIterator<Integer> itr = elements.getIterator();
+        //         while ( itr.hasNext() ) {
+        //             Integer currIndex = itr.next();
+        //             cycle.insertRear(map.getAddress(currIndex));
+        //         }
+        //     }
+        // }
+        // return cycle;
+
+        // mark all vertices as not visited
+        for (int i = 0; i < numVertices; i++) {
+            visited[i] = false;
+        }
+        Sequence<Integer> elements = new ListoverLinkedList<Integer>();
+        Sequence<Integer> stack = new ListoverLinkedList<Integer>();
+        stack.push(vertex);
+        while (!stack.isEmpty()) {
+            int v = stack.pop();
+            if (!visited[v]) {
+                visited[v] = true;
+                elements.insertFront(v);
+                SequenceIterator<Integer> iter = neighbors(v).getIterator();
+                while (iter.hasNext()) {
+                    Integer u = iter.next();
+                    stack.push(u);
+                }
+            }
+        }
+        return elements;        
+    }
+
+    private boolean detectCycleDFS(Integer vertex, Sequence<Integer> elements) {
+        
+        // a cycle has been detected
+        if ( visited[vertex] ) {
+            elements.insertFront(vertex);
+            return true;
+        } else {
+
+        }
+        return false;
     }
     
     /**
