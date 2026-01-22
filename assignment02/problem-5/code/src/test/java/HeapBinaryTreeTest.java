@@ -123,11 +123,6 @@ public class HeapBinaryTreeTest {
 
     @Test
     public void isMaxHeapPositiveTest3() {
-        //        50
-        //      /    \
-        //     40     30
-        //    /
-        //   20
         HeapNode root = new HeapNode(50);
         root.left = new HeapNode(40);
         root.right = new HeapNode(30);
